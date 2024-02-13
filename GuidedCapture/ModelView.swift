@@ -12,62 +12,62 @@ import SwiftUI
 import UIKit
 import os
 
-struct ModelView: View {
+public struct ModelView: View {
     let modelFile: URL
     let endCaptureCallback: () -> Void
 
-    var body: some View {
+    public var body: some View {
         ARQuickLookController(modelFile: modelFile, endCaptureCallback: endCaptureCallback)
     }
 }
 
-private struct ARQuickLookController: UIViewControllerRepresentable {
+public struct ARQuickLookController: UIViewControllerRepresentable {
     static let logger = Logger(subsystem: GuidedCaptureSampleApp.subsystem,
                                 category: "ARQuickLookController")
 
     let modelFile: URL
     let endCaptureCallback: () -> Void
 
-    func makeUIViewController(context: Context) -> QLPreviewControllerWrapper {
+    public func makeUIViewController(context: Context) -> QLPreviewControllerWrapper {
         let controller = QLPreviewControllerWrapper()
         controller.qlvc.dataSource = context.coordinator
         controller.qlvc.delegate = context.coordinator
         return controller
     }
 
-    func makeCoordinator() -> ARQuickLookController.Coordinator {
+    public func makeCoordinator() -> ARQuickLookController.Coordinator {
         return Coordinator(parent: self)
     }
 
-    func updateUIViewController(_ uiViewController: QLPreviewControllerWrapper, context: Context) {}
+    public func updateUIViewController(_ uiViewController: QLPreviewControllerWrapper, context: Context) {}
 
-    class Coordinator: NSObject, QLPreviewControllerDataSource, QLPreviewControllerDelegate {
+    public class Coordinator: NSObject, QLPreviewControllerDataSource, QLPreviewControllerDelegate {
         let parent: ARQuickLookController
 
         init(parent: ARQuickLookController) {
             self.parent = parent
         }
 
-        func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
+        public func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
             return 1
         }
 
-        func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
+        public func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
             return parent.modelFile as QLPreviewItem
         }
 
-        func previewControllerWillDismiss(_ controller: QLPreviewController) {
+        public func previewControllerWillDismiss(_ controller: QLPreviewController) {
             ARQuickLookController.logger.log("Exiting ARQL ...")
             parent.endCaptureCallback()
         }
     }
 }
 
-private class QLPreviewControllerWrapper: UIViewController {
+public class QLPreviewControllerWrapper: UIViewController {
     let qlvc = QLPreviewController()
     var qlPresented = false
 
-    override func viewDidAppear(_ animated: Bool) {
+    public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if !qlPresented {
             present(qlvc, animated: false, completion: nil)

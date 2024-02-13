@@ -26,8 +26,8 @@ struct CaptureOverlayView: View {
         VStack(spacing: 20) {
             HStack {
                 CancelButton()
-                    .opacity(!shouldShowTutorial ? 1 : 0)
-                    .disabled(shouldDisableCancelButton ? true : false)
+                    .opacity(1)
+                    .disabled(false)
                 Spacer()
                 NextButton()
                     .opacity(shouldShowNextButton ? 1 : 0)
@@ -59,11 +59,7 @@ struct CaptureOverlayView: View {
                     } else if case .detecting = session.state {
                         ResetBoundingBoxButton(session: session)
                             .transition(.opacity)
-                    } else if case .ready = session.state {
-                        FilesButton()
-                            .transition(.opacity)
                     }
-
                     Spacer()
                 }
                 .frame(maxWidth: .infinity)

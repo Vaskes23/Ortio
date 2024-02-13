@@ -139,32 +139,6 @@ extension CaptureOverlayView {
             context: UIViewControllerRepresentableContext<DocumentBrowser>) {}
     }
 
-    @available(iOS 17.0, *)
-    struct FilesButton: View {
-        @EnvironmentObject var appModel: AppDataModel
-        @State private var showDocumentBrowser = false
-
-        var body: some View {
-            Button(
-                action: {
-                    logger.log("Files button clicked!")
-                    showDocumentBrowser = true
-                },
-                label: {
-                    Image(systemName: "folder")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 22)
-                        .foregroundColor(.white)
-                })
-            .padding(.bottom, 20)
-            .padding(.horizontal, 10)
-            .sheet(isPresented: $showDocumentBrowser,
-                   onDismiss: { showDocumentBrowser = false },
-                   content: { DocumentBrowser(startingDir: appModel.scanFolderManager.rootScanFolder) })
-        }
-    }
-
     struct HelpButton: View {
         // This sample passes this binding in from the parent to allow the button to stop showing the panel.
         @Binding var showInfo: Bool
@@ -191,15 +165,17 @@ extension CaptureOverlayView {
             })
         }
     }
-
+    
     @available(iOS 17.0, *)
     struct CancelButton: View {
         @EnvironmentObject var appModel: AppDataModel
+        @Environment(\.presentationMode) var presentationMode
 
         var body: some View {
             Button(action: {
                 logger.log("\(LocalizedString.cancel) button clicked!")
                 appModel.objectCaptureSession?.cancel()
+                presentationMode.wrappedValue.dismiss() 
             }, label: {
                 Text(LocalizedString.cancel)
                     .modifier(VisualEffectRoundedCorner())

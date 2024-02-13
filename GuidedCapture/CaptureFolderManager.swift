@@ -8,12 +8,27 @@ A class that supports the creation, listing, and filename support of a capture f
 import Dispatch
 import Foundation
 import os
+import SwiftData
+
+@Model final class CreatedModels{
+    @Attribute(.unique) var name: String
+    var date: Date
+    @Attribute(.unique) var model: URL
+    
+    init(name: String,  date: Date, model: URL) {
+        self.name = name
+        self.date = date
+        self.model = model
+    }
+}
 
 class CaptureFolderManager: ObservableObject {
     static let logger = Logger(subsystem: GuidedCaptureSampleApp.subsystem,
                                 category: "CaptureFolderManager")
 
     private let logger = CaptureFolderManager.logger
+    
+//    @Query(sort: \CreatedModels.date, order: .reverse) var storedModels: [CreatedModels]
 
     // The top-level capture directory that contains Images and Snapshots subdirectories.
     // This sample automatically creates this directory at `init()` with timestamp.
