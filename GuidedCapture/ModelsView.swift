@@ -9,6 +9,7 @@ import Foundation
 import TipKit
 import SwiftUI
 import SwiftData
+import QuickLookThumbnailing
  
 struct ModelsView: View {
     @State private var searchText = ""
@@ -21,46 +22,41 @@ struct ModelsView: View {
     ]
 
     var body: some View {
-        NavigationView {
-            VStack {
-                SearchBar(text: $searchText)
-                    .padding()
-                
-                ScrollView {
-                    LazyVGrid(columns: columns, spacing: 10) {
-                        ObjectCaptureButtonView()
-                        HelpView()
-                        
-                        ForEach(models.filter { $0.url.pathExtension == "usdz" }) { model in
-                            // Replace BlueSquare with a view that previews the model
-                            Button(action: {
-                                self.selectedModelForPreview = model
-                            }) {
-                                Image(systemName: "photo")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 100, height: 100)
-                                    .cornerRadius(10)
-                            }
-                            .buttonStyle(PlainButtonStyle())
-                        }
-                    }
-                    .padding(.horizontal)
-                }
+         NavigationView {
+             VStack {
+                 SearchBar(text: $searchText)
+                     .padding()
+                 
+                 ScrollView {
+                     LazyVGrid(columns: columns, spacing: 10) {
+                         ObjectCaptureButtonView()
+                         HelpView()
+                         
+                         ForEach(models.filter { $0.url.pathExtension == "usdz" }) { model in
+                             ThumbnailView(modelURL: model.url)
+                                 .onTapGesture {
+                                     self.selectedModelForPreview = model
+                                 }
+                                 .frame(width: 100, height: 100)
+                                 .cornerRadius(10)
+                         }
+                     }
+                     .padding(.horizontal)
+                 }
 
-                Spacer()
-            }
-            .navigationTitle("Models")
-            .onAppear(perform: loadModelsFromDirectories)
-            .sheet(item: $selectedModelForPreview, onDismiss: {
-                self.selectedModelForPreview = nil
-            }) { item in
-                ModelView(modelFile: item.url, endCaptureCallback: {
-                    self.selectedModelForPreview = nil
-                })
-            }
-        }
-    }
+                 Spacer()
+             }
+             .navigationTitle("Models")
+             .onAppear(perform: loadModelsFromDirectories)
+             .sheet(item: $selectedModelForPreview, onDismiss: {
+                 self.selectedModelForPreview = nil
+             }) { item in
+                 ModelView(modelFile: item.url, endCaptureCallback: {
+                     self.selectedModelForPreview = nil
+                 })
+             }
+         }
+     }
         
 
     
@@ -166,6 +162,40 @@ struct BlueSquare: View {
             .fill(Color.blue)
             .aspectRatio(1.5, contentMode: .fit)
             .cornerRadius(10)
+    }
+}
+
+struct ThumbnailView: View {
+    var modelURL: URL
+    @State private var thumbnailImage: UIImage?
+
+    var body: some View {
+        Group {
+            if let thumbnailImage = thumbnailImage {
+                Image(uiImage: thumbnailImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+            } else {
+                Image(systemName: "photo")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .onAppear(perform: generateThumbnail)
+            }
+        }
+    }
+    
+    private func generateThumbnail() {
+        let request = QLThumbnailGenerator.Request(fileAt: modelURL, size: CGSize(width: 100, height: 100), scale: UIScreen.main.scale, representationTypes: .thumbnail)
+        let generator = QLThumbnailGenerator.shared
+        generator.generateBestRepresentation(for: request) { (thumbnail, error) in
+            DispatchQueue.main.async {
+                if let thumbnail = thumbnail {
+                    self.thumbnailImage = thumbnail.uiImage
+                } else {
+                    print("Thumbnail generation error: \(error?.localizedDescription ?? "Unknown error")")
+                }
+            }
+        }
     }
 }
 
