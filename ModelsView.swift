@@ -6,15 +6,13 @@
 //
 
 import Foundation
-import TipKit
 import SwiftUI
 import SwiftData
 import QuickLookThumbnailing
  
 struct ModelsView: View {
     @State private var searchText = ""
-    @State private var models: [IdentifiableCaptureURL] = [] 
-    @State private var selectedModelForPreview: IdentifiableCaptureURL?
+    @ObservedObject var viewModel: ModelsViewModel
     
     let columns: [GridItem] = [
         GridItem(.flexible(), spacing: 10),
@@ -32,10 +30,10 @@ struct ModelsView: View {
                          ObjectCaptureButtonView()
                          HelpView()
                          
-                         ForEach(models.filter { $0.url.pathExtension == "usdz" }) { model in
+                         ForEach(viewModel.models.filter { $0.url.pathExtension == "usdz" }) { model in
                              ThumbnailView(modelURL: model.url)
                                  .onTapGesture {
-                                     self.selectedModelForPreview = model
+                                     viewModel.selectedModelForPreview = model
                                  }
                                  .frame(width: 100, height: 100)
                                  .cornerRadius(10)
@@ -47,60 +45,17 @@ struct ModelsView: View {
                  Spacer()
              }
              .navigationTitle("Models")
-             .onAppear(perform: loadModelsFromDirectories)
-             .sheet(item: $selectedModelForPreview, onDismiss: {
-                 self.selectedModelForPreview = nil
+             .onAppear(perform: viewModel.loadModelsFromDirectories)
+             .sheet(item: $viewModel.selectedModelForPreview, onDismiss: {
+                 viewModel.selectedModelForPreview = nil
              }) { item in
                  ModelView(modelFile: item.url, endCaptureCallback: {
-                     self.selectedModelForPreview = nil
+                     viewModel.selectedModelForPreview = nil
                  })
              }
          }
      }
-        
-
-    
-    private func loadModelsFromDirectories() {
-        DispatchQueue.global(qos: .userInitiated).async {
-            do {
-                let modelURLs = try self.urlsInAllModelsFolders()
-                let filteredModelURLs = modelURLs.filter { $0.pathExtension == "usdz" } // Filter for .usdz files if needed
-                DispatchQueue.main.async {
-                    self.models = filteredModelURLs.map { IdentifiableCaptureURL(url: $0) }
-                }
-            } catch {
-                print("Error loading models: \(error.localizedDescription)")
-                // Handle errors appropriately
-            }
-        }
-    }
-
-    private func urlsInAllModelsFolders() throws -> [URL] {
-        let fileManager = FileManager.default
-        let documentsDirectory = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-        let scansFolder = documentsDirectory.appendingPathComponent("Scans", isDirectory: true)
-
-        var allModelURLs: [URL] = []
-        let sessionDirectories = try fileManager.contentsOfDirectory(at: scansFolder, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
-
-        for sessionDir in sessionDirectories {
-            let modelsFolder = sessionDir.appendingPathComponent("Models", isDirectory: true)
-            let exists = fileManager.fileExists(atPath: modelsFolder.path, isDirectory: nil)
-            if exists {
-                let modelURLs = try fileManager.contentsOfDirectory(at: modelsFolder, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
-                allModelURLs.append(contentsOf: modelURLs)
-            }
-        }
-
-        return allModelURLs
-    }
 }
-
-struct IdentifiableCaptureURL: Identifiable {
-    let id = UUID()
-    let url: URL
-}
-
 
 struct SearchBar: View {
     @Binding var text: String
@@ -156,15 +111,6 @@ struct ObjectCaptureButtonView: View {
     }
 }
 
-struct BlueSquare: View {
-    var body: some View {
-        Rectangle()
-            .fill(Color.blue)
-            .aspectRatio(1.5, contentMode: .fit)
-            .cornerRadius(10)
-    }
-}
-
 struct ThumbnailView: View {
     var modelURL: URL
     @State private var thumbnailImage: UIImage?
@@ -201,5 +147,5 @@ struct ThumbnailView: View {
 
 
 #Preview {
-    ModelsView()
+    ModelsView(viewModel: ModelsViewModel())
 }

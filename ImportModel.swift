@@ -7,3 +7,12 @@
 //
 
 import Foundation
+
+struct ImportModel{
+    
+    struct IdentifiableURL: Identifiable {
+        let id: UUID = UUID()
+        let url: URL
+    }
+}
+

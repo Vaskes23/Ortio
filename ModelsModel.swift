@@ -7,3 +7,11 @@
 //
 
 import Foundation
+
+struct ModelsModel{
+
+    struct IdentifiableCaptureURL: Identifiable {
+        let id = UUID()
+        let url: URL
+    }
+}

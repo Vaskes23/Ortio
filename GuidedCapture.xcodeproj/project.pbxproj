@@ -43,6 +43,10 @@
 		70D2F73D2A33A38900EFA0D8 /* ScanPasses-iPhone-FixedHeight-unflippable-low.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 70D2F72D2A33A37E00EFA0D8 /* ScanPasses-iPhone-FixedHeight-unflippable-low.mp4 */; };
 		70D2F73E2A33A38900EFA0D8 /* ScanPasses-iPad-FixedHeight-unflippable-high.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 70D2F7322A33A37E00EFA0D8 /* ScanPasses-iPad-FixedHeight-unflippable-high.mp4 */; };
 		70D2F73F2A33A38900EFA0D8 /* ScanPasses-iPad-FixedHeight-1.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 70D2F7342A33A37E00EFA0D8 /* ScanPasses-iPad-FixedHeight-1.mp4 */; };
+		7A2F65F92BEA7BD80075EA8D /* ModelsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2F65F82BEA7BD80075EA8D /* ModelsViewModel.swift */; };
+		7A2F65FB2BEA7BE80075EA8D /* ModelsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2F65FA2BEA7BE80075EA8D /* ModelsModel.swift */; };
+		7A2F65FD2BEA96490075EA8D /* ImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2F65FC2BEA96490075EA8D /* ImportViewModel.swift */; };
+		7A2F65FF2BEA96590075EA8D /* ImportModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2F65FE2BEA96590075EA8D /* ImportModel.swift */; };
 		7A97A5E92B792BE900DCA681 /* ImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A97A5E82B792BE900DCA681 /* ImportView.swift */; };
 		7A97A5EB2B792C1F00DCA681 /* ModelsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A97A5EA2B792C1F00DCA681 /* ModelsView.swift */; };
 		7A97A5ED2B79390500DCA681 /* LoadGuidedCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A97A5EC2B79390500DCA681 /* LoadGuidedCaptureView.swift */; };
@@ -92,6 +96,10 @@
 		70D2F7342A33A37E00EFA0D8 /* ScanPasses-iPad-FixedHeight-1.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ScanPasses-iPad-FixedHeight-1.mp4"; sourceTree = "<group>"; };
 		70D2F7352A33A37E00EFA0D8 /* ScanPasses-iPhone-FixedHeight-3.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ScanPasses-iPhone-FixedHeight-3.mp4"; sourceTree = "<group>"; };
 		70E33ED32ABA3F70002E9A3C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		7A2F65F82BEA7BD80075EA8D /* ModelsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsViewModel.swift; sourceTree = "<group>"; };
+		7A2F65FA2BEA7BE80075EA8D /* ModelsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsModel.swift; sourceTree = "<group>"; };
+		7A2F65FC2BEA96490075EA8D /* ImportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportViewModel.swift; sourceTree = "<group>"; };
+		7A2F65FE2BEA96590075EA8D /* ImportModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportModel.swift; sourceTree = "<group>"; };
 		7A97A5E82B792BE900DCA681 /* ImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportView.swift; sourceTree = "<group>"; };
 		7A97A5EA2B792C1F00DCA681 /* ModelsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsView.swift; sourceTree = "<group>"; };
 		7A97A5EC2B79390500DCA681 /* LoadGuidedCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadGuidedCaptureView.swift; sourceTree = "<group>"; };
@@ -124,6 +132,12 @@
 		70D2F6E22A339DD500EFA0D8 = {
 			isa = PBXGroup;
 			children = (
+				7A97A5E82B792BE900DCA681 /* ImportView.swift */,
+				7A2F65FC2BEA96490075EA8D /* ImportViewModel.swift */,
+				7A2F65FE2BEA96590075EA8D /* ImportModel.swift */,
+				7A97A5EA2B792C1F00DCA681 /* ModelsView.swift */,
+				7A2F65F82BEA7BD80075EA8D /* ModelsViewModel.swift */,
+				7A2F65FA2BEA7BE80075EA8D /* ModelsModel.swift */,
 				7028C8442A33C1F900381BF1 /* README.md */,
 				70D2F6ED2A339DD500EFA0D8 /* GuidedCapture */,
 				70D2F6EC2A339DD500EFA0D8 /* Products */,
@@ -154,8 +168,6 @@
 				EB20D5642A40363D00992055 /* CaptureOverlayView+Buttons.swift */,
 				EB20D5662A40387800992055 /* CaptureOverlayView+LocalizedString.swift */,
 				70D2F7132A339E4A00EFA0D8 /* CapturePrimaryView.swift */,
-				7A97A5E82B792BE900DCA681 /* ImportView.swift */,
-				7A97A5EA2B792C1F00DCA681 /* ModelsView.swift */,
 				70D2F7062A339E4A00EFA0D8 /* ContentView.swift */,
 				7A97A5EC2B79390500DCA681 /* LoadGuidedCaptureView.swift */,
 				70D2F7072A339E4A00EFA0D8 /* FeedbackMessages.swift */,
@@ -298,9 +310,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				70D2F71A2A339E4A00EFA0D8 /* ReconstructionPrimaryView.swift in Sources */,
+				7A2F65FB2BEA7BE80075EA8D /* ModelsModel.swift in Sources */,
+				7A2F65FD2BEA96490075EA8D /* ImportViewModel.swift in Sources */,
 				70D2F7172A339E4A00EFA0D8 /* OnboardingStateMachine.swift in Sources */,
 				70D2F71C2A339E4A00EFA0D8 /* CaptureFolderManager.swift in Sources */,
 				70D2F7292A339E4A00EFA0D8 /* PlayerView.swift in Sources */,
+				7A2F65FF2BEA96590075EA8D /* ImportModel.swift in Sources */,
 				70D2F7222A339E4A00EFA0D8 /* OnboardingButtonView+LocalizedString.swift in Sources */,
 				70D2F7202A339E4A00EFA0D8 /* TimedMessageList.swift in Sources */,
 				EB20D5652A40363D00992055 /* CaptureOverlayView+Buttons.swift in Sources */,
@@ -309,6 +324,7 @@
 				70D2F7192A339E4A00EFA0D8 /* HelpPageView.swift in Sources */,
 				70D2F7152A339E4A00EFA0D8 /* OnboardingTutorialView+LocalizedString.swift in Sources */,
 				EB20D5672A40387800992055 /* CaptureOverlayView+LocalizedString.swift in Sources */,
+				7A2F65F92BEA7BD80075EA8D /* ModelsViewModel.swift in Sources */,
 				EB20D5602A40331F00992055 /* AppDataModel+Orbit.swift in Sources */,
 				70D2F7282A339E4A00EFA0D8 /* OnboardingTutorialView.swift in Sources */,
 				70D2F71D2A339E4A00EFA0D8 /* ContentView.swift in Sources */,

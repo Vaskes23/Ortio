@@ -18,13 +18,13 @@ import SwiftData
 struct ContentView : View {
     var body: some View {
         TabView{
-            ModelsView()
+            ModelsView(viewModel: ModelsViewModel())
                 .tabItem{
                     Image(systemName: "house.lodge.fill")
                     Text("Models")
                 }
             
-            ImportView()
+            ImportView(viewModel: ImportViewModel())
                 .modelContainer(for: Models.self)
                 .tabItem{
                     Image(systemName: "folder.fill")
