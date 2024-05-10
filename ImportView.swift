@@ -80,6 +80,7 @@ struct ImportView: View {
             .navigationBarTitle("Import objects")
             .navigationBarItems(trailing: EditButton())
             .sheet(item: $selectedModelForPreview, onDismiss: {
+                
                 self.selectedModelForPreview = nil
             }) { item in
                 ModelView(modelFile: item.url, endCaptureCallback: {
