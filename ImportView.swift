@@ -30,6 +30,10 @@ import UniformTypeIdentifiers
     }
 }
 
+//This is a git tests
+//For bigger change ive added another
+//two lines of comments
+
 struct ImportView: View {
     @ObservedObject var viewModel: ImportViewModel
     @State private var presentImporter = false
