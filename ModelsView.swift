@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import SwiftData
 import QuickLookThumbnailing
- 
+
 struct ModelsView: View {
     @State private var searchText = ""
     @ObservedObject var viewModel: ModelsViewModel
@@ -114,19 +114,32 @@ struct ObjectCaptureButtonView: View {
 struct ThumbnailView: View {
     var modelURL: URL
     @State private var thumbnailImage: UIImage?
+    @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
-        Group {
-            if let thumbnailImage = thumbnailImage {
-                Image(uiImage: thumbnailImage)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            } else {
-                Image(systemName: "photo")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .onAppear(perform: generateThumbnail)
+        ZStack {
+            Group {
+                if let thumbnailImage = thumbnailImage {
+                    Image(uiImage: thumbnailImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .if(colorScheme == .dark) { view in
+                            view.colorInvert()
+                        }
+                } else {
+                    Image(systemName: "photo")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .onAppear(perform: generateThumbnail)
+                        .if(colorScheme == .dark) { view in
+                            view.colorInvert()
+                        }
+                }
             }
+            .cornerRadius(10)
+
+            StarButton()
+                .offset(x: -40, y: 40)
         }
     }
     
@@ -145,6 +158,28 @@ struct ThumbnailView: View {
     }
 }
 
+struct StarButton: View {
+    @State private var isStarred = false
+    @Environment(\.colorScheme) var colorScheme
+
+    var body: some View {
+        Button(action: {
+            isStarred.toggle()
+        }) {
+            if(colorScheme == .light) {
+                Image(systemName: isStarred ? "star.fill" : "star")
+                    .foregroundColor(isStarred ? .yellow : .gray)
+                    .padding(5)
+                    .background(Color.white)
+            } else {
+                Image(systemName: isStarred ? "star.fill" : "star")
+                    .foregroundColor(isStarred ? .yellow : .gray)
+                    .padding(5)
+                    .background(Color.black )
+            }
+        }
+    }
+}
 
 #Preview {
     ModelsView(viewModel: ModelsViewModel())
