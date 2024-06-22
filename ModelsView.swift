@@ -20,41 +20,66 @@ struct ModelsView: View {
     ]
 
     var body: some View {
-         NavigationView {
-             VStack {
-                 SearchBar(text: $searchText)
-                     .padding()
-                 
-                 ScrollView {
-                     LazyVGrid(columns: columns, spacing: 10) {
-                         ObjectCaptureButtonView()
-                         HelpView()
-                         
-                         ForEach(viewModel.models.filter { $0.url.pathExtension == "usdz" }) { model in
-                             ThumbnailView(modelURL: model.url)
-                                 .onTapGesture {
-                                     viewModel.selectedModelForPreview = model
-                                 }
-                                 .frame(width: 100, height: 100)
-                                 .cornerRadius(10)
-                         }
-                     }
-                     .padding(.horizontal)
-                 }
+        NavigationView {
+            VStack {
+                SearchBar(text: $searchText)
+                    .padding()
+                
+                ScrollView {
+                    LazyVGrid(columns: columns, spacing: 10) {
+                        ObjectCaptureButtonView()
+                        HelpView()
+                        
+                        ForEach(viewModel.models.filter { $0.url.pathExtension == "usdz" }) { model in
+                            ThumbnailView(modelURL: model.url)
+                                .onTapGesture {
+                                    viewModel.selectedModelForPreview = model
+                                }
+                                .frame(width: 100, height: 100)
+                                .cornerRadius(10)
+                        }
+                    }
+                    .padding(.horizontal)
+                }
 
-                 Spacer()
-             }
-             .navigationTitle("Models")
-             .onAppear(perform: viewModel.loadModelsFromDirectories)
-             .sheet(item: $viewModel.selectedModelForPreview, onDismiss: {
-                 viewModel.selectedModelForPreview = nil
-             }) { item in
-                 ModelView(modelFile: item.url, endCaptureCallback: {
-                     viewModel.selectedModelForPreview = nil
-                 })
-             }
-         }
-     }
+                Spacer()
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    HStack {
+                        Text("Models")
+                            .font(.largeTitle)
+                            .bold()
+                            .padding(.top, 10) // Adjust padding as needed
+                        Spacer()
+                        profileButton
+                    }
+                }
+            }
+            .onAppear(perform: viewModel.loadModelsFromDirectories)
+            .sheet(item: $viewModel.selectedModelForPreview, onDismiss: {
+                viewModel.selectedModelForPreview = nil
+            }) { item in
+                ModelView(modelFile: item.url, endCaptureCallback: {
+                    viewModel.selectedModelForPreview = nil
+                })
+            }
+        }
+    }
+
+    var profileButton: some View {
+        Button(action: {
+            // Action for profile button tap
+        }) {
+            Image(systemName: "person.crop.circle") // Use your own profile image name here
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 40, height: 40)
+                .clipShape(Circle())
+                .overlay(Circle().stroke(Color.white, lineWidth: 2))
+        }
+    }
 }
 
 struct SearchBar: View {
