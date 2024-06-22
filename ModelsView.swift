@@ -121,7 +121,6 @@ struct ProfileView: View {
                 .listStyle(InsetGroupedListStyle())
 
                 Spacer()
-                
             }
             .navigationBarItems(trailing: Button("Done") {
                 presentationMode.wrappedValue.dismiss()
@@ -133,6 +132,7 @@ struct ProfileView: View {
         }
     }
 }
+
 
 struct ThemePicker: View {
     @State private var selectedTheme: Theme = .system
@@ -152,15 +152,18 @@ struct ThemePicker: View {
 struct SettingsView: View {
     @State private var notificationsEnabled = UserDefaults.standard.bool(forKey: "notificationsEnabled")
     @State private var soundEffectsEnabled = UserDefaults.standard.bool(forKey: "soundEffectsEnabled")
+    @State private var recieveEmailsEnabled = UserDefaults.standard.bool(forKey: "recieveEmailsEnabled")
 
     var body: some View {
-                Toggle("Enable Notifications", isOn: $notificationsEnabled.onChange(saveSettings))
-                Toggle("Enable Sound Effects", isOn: $soundEffectsEnabled.onChange(saveSettings))
+            Toggle("Enable Notifications", isOn: $notificationsEnabled.onChange(saveSettings))
+            Toggle("Enable Sound Effects", isOn: $soundEffectsEnabled.onChange(saveSettings))
+            Toggle("Receive Emails", isOn: $recieveEmailsEnabled.onChange(saveSettings))
     }
 
     private func saveSettings() {
         UserDefaults.standard.set(notificationsEnabled, forKey: "notificationsEnabled")
         UserDefaults.standard.set(soundEffectsEnabled, forKey: "soundEffectsEnabled")
+        UserDefaults.standard.set(recieveEmailsEnabled, forKey: "recieveEmailsEnabled")
     }
 }
 
@@ -175,7 +178,6 @@ extension Binding {
         )
     }
 }
-
 
 struct ProfileItemView: View {
     var title: String
