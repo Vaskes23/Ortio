@@ -11,77 +11,33 @@ import SwiftUI
 import SwiftData
 import PhotosUI
 
-#if canImport(AppKit)
-import AppKit
-
-extension NSImage {
-    public func pngData() -> Data? {
-        guard let cgImage = self.cgImage(forProposedRect: nil, context: nil, hints: nil) else {
-            return nil
-        }
-        let bitmapRepresentation = NSBitmapImageRep(cgImage: cgImage)
-        return bitmapRepresentation.representation(using: .png, properties: [:])
-    }
-}
-#elseif canImport(UIKit)
-import UIKit
-
-extension UIImage {
-    public func pngData() -> Data? {
-        return self.pngData()
-    }
-}
-#endif
-
-enum ImageError: Error {
-    case conversionFailed(String)
-}
-
-@Model
-final class ImageModel {
-    var type: String = "profile"  // Define different types if needed
-    @Attribute(.externalStorage) var pngData: Data? = nil
-
-    init(type: String, pngData: Data) {
-        self.type = type
-        self.pngData = pngData
-    }
-
-    #if canImport(AppKit)
-    convenience init(type: String, image: NSImage) throws {
-        guard let pngData = image.pngData() else {
-            throw ImageError.conversionFailed("Unable to get PNG data for image")
-        }
-        self.init(type: type, pngData: pngData)
-    }
-    #elseif canImport(UIKit)
-    convenience init(type: String, image: UIImage) throws {
-        guard let pngData = image.pngData() else {
-            throw ImageError.conversionFailed("Unable to get PNG data for image")
-        }
-        self.init(type: type, pngData: pngData)
-    }
-    #endif
-}
-
 @Model
 final class User {
     @Attribute(.unique) var username: String
     @Attribute var name: String
     var appearance: Int
-    @Relationship(deleteRule: .cascade) var profileImage: ImageModel?
+    @Attribute(.externalStorage) var profileImage: Data?
 
-    // Existing initializer
-    init(username: String, name: String, appearance: Int, profileImage: ImageModel? = nil) {
+    init(username: String, name: String, appearance: Int, profileImage: Data?) {
         self.username = username
         self.name = name
         self.appearance = appearance
         self.profileImage = profileImage
     }
     
-    // Default initializer
     convenience init() {
-        self.init(username: "placeholder", name: "Placeholder User", appearance: 0)
+        self.init(username: "placeholder", name: "Placeholder User", appearance: 0, profileImage: Data())
+    }
+
+    var profileUIImage: UIImage? {
+        if let data = profileImage {
+            return UIImage(data: data)
+        }
+        return nil
+    }
+
+    func updateProfileImage(_ image: UIImage) {
+        self.profileImage = image.jpegData(compressionQuality: 0.8)
     }
 }
 
@@ -113,7 +69,7 @@ struct SettingsView: View {
             VStack {
                 Form {
                     NavigationLink(destination: EditProfileView(name: $name)) {
-                        ProfileItemView(title: name, subtitle: "View Profile", imageName: "yourProfileImage")
+                        ProfileItemView(title: name, subtitle: "View Profile", profileImage: user.profileUIImage)
                     }
                     Toggle("Enable Notifications", isOn: $notificationsEnabled.onChange(saveSettings))
                     Toggle("Enable Sound Effects", isOn: $soundEffectsEnabled.onChange(saveSettings))
@@ -155,7 +111,6 @@ struct SettingsView: View {
     }
 }
 
-
 extension Binding {
     func onChange(_ handler: @escaping () -> Void) -> Binding<Value> {
         return Binding(
@@ -171,14 +126,21 @@ extension Binding {
 struct ProfileItemView: View {
     var title: String
     var subtitle: String
-    var imageName: String
+    var profileImage: UIImage?
 
     var body: some View {
         HStack {
-            Image(imageName)
-                .resizable()
-                .frame(width: 50, height: 50)
-                .clipShape(Circle())
+            if let profileImage = profileImage {
+                Image(uiImage: profileImage)
+                    .resizable()
+                    .frame(width: 50, height: 50)
+                    .clipShape(Circle())
+            } else {
+                Image(systemName: "person.crop.circle.fill")
+                    .resizable()
+                    .frame(width: 50, height: 50)
+                    .clipShape(Circle())
+            }
             VStack(alignment: .leading) {
                 Text(title)
                     .font(.headline)
@@ -197,7 +159,7 @@ struct EditProfileView: View {
     @Query var users: [User]
 
     @State private var user: User = User()
-    @State private var selectedImage: UIImage? = nil // or NSImage for macOS
+    @State private var selectedImage: UIImage? = nil
     @State private var selectedPhotosPickerItem: PhotosPickerItem? = nil
     @Binding var name: String
     @State private var username: String = ""
@@ -205,17 +167,17 @@ struct EditProfileView: View {
     var body: some View {
         Form {
             Section(header: Text("Profile Picture")) {
-                HStack {
+                VStack {
                     if let image = selectedImage {
-                        Image(uiImage: image)  // or Image(nsImage: image) for macOS
+                        Image(uiImage: image)
                             .resizable()
-                            .frame(width: 100, height: 100)
+                            .frame(width: 150, height: 150)
                             .clipShape(Circle())
                             .padding()
                     } else {
                         Image(systemName: "person.crop.circle.fill")
                             .resizable()
-                            .frame(width: 100, height: 100)
+                            .frame(width: 150, height: 150)
                             .clipShape(Circle())
                             .padding()
                     }
@@ -223,6 +185,7 @@ struct EditProfileView: View {
                         Text("Change")
                     }
                 }
+                .frame(maxWidth: .infinity, alignment: .center)
             }
             Section(header: Text("User Info")) {
                 TextField("Name", text: $name)
@@ -245,23 +208,14 @@ struct EditProfileView: View {
         .navigationTitle("Edit Profile")
         .navigationBarTitleDisplayMode(.inline)
     }
-
+    
     private func saveUser() {
-        // Update the user
         user.name = name
         user.username = username
         if let selectedImage = selectedImage {
-            do {
-                let imageModel = try ImageModel(type: "profile", image: selectedImage)
-                user.profileImage = imageModel
-                modelContext.insert(imageModel)
-            } catch {
-                // Handle error
-                print("Failed to save image: \(error)")
-            }
+            user.updateProfileImage(selectedImage)
         }
 
-        // Save the context
         do {
             modelContext.insert(user)  // Ensure the user is in the context
             try modelContext.save()
@@ -276,21 +230,18 @@ struct EditProfileView: View {
             user = existingUser
             name = user.name
             username = user.username
-            if let profileImage = user.profileImage, let data = profileImage.pngData, let image = UIImage(data: data) {
-                selectedImage = image
-            }
+            selectedImage = user.profileUIImage
         } else {
-            // Insert a default user if no users are found
             user = User()
             modelContext.insert(user)
             do {
                 try modelContext.save()
                 name = user.name
                 username = user.username
+                selectedImage = user.profileUIImage
             } catch {
                 print("Failed to save default user: \(error)")
             }
         }
     }
 }
-

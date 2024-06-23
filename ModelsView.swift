@@ -32,6 +32,11 @@ enum Theme: String, CaseIterable, Identifiable {
 struct ModelsView: View {
     @State private var searchText = ""
     @ObservedObject var viewModel: ModelsViewModel
+    @Query var users: [User]
+    
+    var user: User? {
+        users.first
+    }
 
     let columns: [GridItem] = [
         GridItem(.flexible(), spacing: 10),
@@ -73,12 +78,21 @@ struct ModelsView: View {
                             .padding(.top, 10) // Adjust padding as needed
                         Spacer()
                         NavigationLink(destination: SettingsView()) {
-                            Image(systemName: "person.crop.circle") // Use your own profile image name here
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 40, height: 40)
-                                .clipShape(Circle())
-                                .overlay(Circle().stroke(Color.white, lineWidth: 2))
+                            if let profileImage = user?.profileUIImage {
+                                Image(uiImage: profileImage)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 40, height: 40)
+                                    .clipShape(Circle())
+                                    .overlay(Circle().stroke(Color.white, lineWidth: 2))
+                            } else {
+                                Image(systemName: "person.crop.circle")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 40, height: 40)
+                                    .clipShape(Circle())
+                                    .overlay(Circle().stroke(Color.white, lineWidth: 2))
+                            }
                         }
                     }
                 }
