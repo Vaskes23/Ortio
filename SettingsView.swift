@@ -11,6 +11,25 @@ import SwiftUI
 import SwiftData
 import PhotosUI
 
+enum Theme: String, CaseIterable, Identifiable, Codable {
+    case light
+    case dark
+    case system
+
+    var id: String { self.rawValue }
+
+    var description: String {
+        switch self {
+        case .light:
+            return "Light"
+        case .dark:
+            return "Dark"
+        case .system:
+            return "System"
+        }
+    }
+}
+
 @Model
 final class User {
     @Attribute(.unique) var username: String

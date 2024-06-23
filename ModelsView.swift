@@ -10,25 +10,6 @@ import SwiftUI
 import SwiftData
 import QuickLookThumbnailing
 
-enum Theme: String, CaseIterable, Identifiable {
-    case light
-    case dark
-    case system
-
-    var id: String { self.rawValue }
-
-    var description: String {
-        switch self {
-        case .light:
-            return "Light"
-        case .dark:
-            return "Dark"
-        case .system:
-            return "System"
-        }
-    }
-}
-
 struct ModelsView: View {
     @State private var searchText = ""
     @ObservedObject var viewModel: ModelsViewModel
