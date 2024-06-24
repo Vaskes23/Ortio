@@ -25,7 +25,6 @@ struct ContentView : View {
                 }
             
             ImportView(viewModel: ImportViewModel())
-                .modelContainer(for: Models.self)
                 .tabItem{
                     Image(systemName: "folder.fill")
                     Text("Import")
