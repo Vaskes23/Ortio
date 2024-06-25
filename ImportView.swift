@@ -14,7 +14,7 @@ import QuickLook
 import ARKit
 import UniformTypeIdentifiers
 
-@Model final class Models{
+@Model final class Models: Identifiable {
     @Attribute(.unique) var name: String
     var date: Date
     var imported: Bool
@@ -31,7 +31,6 @@ import UniformTypeIdentifiers
         self.model = model
     }
 }
-
 
 struct ImportView: View {
     @ObservedObject var viewModel: ImportViewModel

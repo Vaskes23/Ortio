@@ -9,11 +9,10 @@
 import Foundation
 import Combine
 
-class ModelsViewModel: ObservableObject{
-    
+class ModelsViewModel: ObservableObject {
     @Published var models: [ModelsModel.IdentifiableCaptureURL] = []
     @Published var selectedModelForPreview: ModelsModel.IdentifiableCaptureURL?
-    
+
     func loadModelsFromDirectories() {
         DispatchQueue.global(qos: .userInitiated).async {
             do {
@@ -27,7 +26,7 @@ class ModelsViewModel: ObservableObject{
             }
         }
     }
-    
+
     private func urlsInAllModelsFolders() throws -> [URL] {
         let fileManager = FileManager.default
         let documentsDirectory = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)

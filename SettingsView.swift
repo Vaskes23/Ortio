@@ -182,6 +182,9 @@ struct EditProfileView: View {
     @State private var selectedPhotosPickerItem: PhotosPickerItem? = nil
     @Binding var name: String
     @State private var username: String = ""
+    
+    @State private var rotationAngle: Double = 0
+    @State private var isFlipped: Bool = false
 
     var body: some View {
         Form {
@@ -193,12 +196,16 @@ struct EditProfileView: View {
                             .frame(width: 150, height: 150)
                             .clipShape(Circle())
                             .padding()
+                            .rotation3DEffect(.degrees(isFlipped ? 0 : 180), axis: (x: 0, y: 1, z: 0))
+                            .animation(.default, value: rotationAngle)
                     } else {
                         Image(systemName: "person.crop.circle.fill")
                             .resizable()
                             .frame(width: 150, height: 150)
                             .clipShape(Circle())
                             .padding()
+                            .rotation3DEffect(.degrees(isFlipped ? 0 : 180), axis: (x: 0, y: 1, z: 0))
+                            .animation(.default, value: rotationAngle)
                     }
                     PhotosPicker(selection: $selectedPhotosPickerItem, matching: .images) {
                         Text("Change")
@@ -220,7 +227,13 @@ struct EditProfileView: View {
         .onChange(of: selectedPhotosPickerItem) { newItem in
             Task {
                 if let newItem = newItem, let data = try? await newItem.loadTransferable(type: Data.self), let uiImage = UIImage(data: data) {
-                    selectedImage = uiImage
+                    withAnimation(.easeInOut(duration: 0.6)) {
+                        rotationAngle += 180
+                        isFlipped.toggle()
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        selectedImage = uiImage
+                    }
                 }
             }
         }

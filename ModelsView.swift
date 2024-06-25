@@ -15,6 +15,9 @@ struct ModelsView: View {
     @ObservedObject var viewModel: ModelsViewModel
     @Query var users: [User]
     
+    @State private var scaleEffect: CGFloat = 1.0
+    @State private var navigateToSettings = false
+
     var user: User? {
         users.first
     }
@@ -58,7 +61,17 @@ struct ModelsView: View {
                             .bold()
                             .padding(.top, 10) // Adjust padding as needed
                         Spacer()
-                        NavigationLink(destination: SettingsView()) {
+                        Button(action: {
+                            withAnimation(.spring()) {
+                                scaleEffect = 1.5
+                            }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                withAnimation(.spring()) {
+                                    scaleEffect = 1.0
+                                    navigateToSettings = true
+                                }
+                            }
+                        }) {
                             if let profileImage = user?.profileUIImage {
                                 Image(uiImage: profileImage)
                                     .resizable()
@@ -66,6 +79,7 @@ struct ModelsView: View {
                                     .frame(width: 40, height: 40)
                                     .clipShape(Circle())
                                     .overlay(Circle().stroke(Color.white, lineWidth: 2))
+                                    .scaleEffect(scaleEffect)
                             } else {
                                 Image(systemName: "person.crop.circle")
                                     .resizable()
@@ -73,6 +87,7 @@ struct ModelsView: View {
                                     .frame(width: 40, height: 40)
                                     .clipShape(Circle())
                                     .overlay(Circle().stroke(Color.white, lineWidth: 2))
+                                    .scaleEffect(scaleEffect)
                             }
                         }
                     }
@@ -86,6 +101,12 @@ struct ModelsView: View {
                     viewModel.selectedModelForPreview = nil
                 })
             }
+            .background(
+                NavigationLink(destination: SettingsView(), isActive: $navigateToSettings) {
+                    EmptyView()
+                }
+                .hidden()
+            )
         }
     }
 }
@@ -193,26 +214,21 @@ struct ThumbnailView: View {
 
 struct StarButton: View {
     @State private var isStarred = false
+    @State private var rotationAngle: Double = 0
     @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
         Button(action: {
             isStarred.toggle()
+            rotationAngle += 360
         }) {
-            if (colorScheme == .light) {
                 Image(systemName: isStarred ? "star.fill" : "star")
                     .foregroundColor(isStarred ? .yellow : .gray)
-                    .padding(5)
-                    .background(Color.white)
-            } else {
-                Image(systemName: isStarred ? "star.fill" : "star")
-                    .foregroundColor(isStarred ? .yellow : .gray)
-                    .padding(5)
-                    .background(Color.black)
+                    .rotationEffect(.degrees(rotationAngle))
+                    .animation(.easeInOut(duration: 0.8), value: rotationAngle)
             }
         }
     }
-}
 
 #Preview {
     ModelsView(viewModel: ModelsViewModel())
