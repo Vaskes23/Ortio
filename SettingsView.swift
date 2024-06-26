@@ -4,7 +4,6 @@
 //
 //  Created by Matyas Vascak on 22.06.2024.
 //  Copyright © 2024 Apple. All rights reserved.
-//
 
 import Foundation
 import SwiftUI
@@ -82,6 +81,8 @@ struct SettingsView: View {
     @Query var users: [User]
     @State private var user: User = User()
     @State private var name: String = "Placeholder User"
+    
+    @Environment(\.modelContext) private var modelContext
 
     var body: some View {
         NavigationStack {
@@ -112,8 +113,6 @@ struct SettingsView: View {
     }
 
     private func loadUser() {
-        @Environment(\.modelContext) var modelContext
-        
         if let existingUser = users.first {
             user = existingUser
             name = user.name

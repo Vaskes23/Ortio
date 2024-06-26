@@ -9,24 +9,16 @@
 import Foundation
 import Combine
 
-protocol FileManagerProtocol {
-    func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?, options mask: FileManager.DirectoryEnumerationOptions) throws -> [URL]
-    func fileExists(atPath path: String, isDirectory: UnsafeMutablePointer<ObjCBool>?) -> Bool
-    func url(for directory: FileManager.SearchPathDirectory, in domain: FileManager.SearchPathDomainMask, appropriateFor url: URL?, create shouldCreate: Bool) throws -> URL
-}
-
-extension FileManager: FileManagerProtocol {}
-
 class ModelsViewModel: ObservableObject {
     @Published var models: [ModelsModel.IdentifiableCaptureURL] = []
     @Published var selectedModelForPreview: ModelsModel.IdentifiableCaptureURL?
-    
+
     private let fileManager: FileManagerProtocol
-    
+
     init(fileManager: FileManagerProtocol = FileManager.default) {
         self.fileManager = fileManager
     }
-    
+
     func loadModelsFromDirectories() {
         DispatchQueue.global(qos: .userInitiated).async {
             do {
@@ -40,9 +32,8 @@ class ModelsViewModel: ObservableObject {
             }
         }
     }
-    
-    func urlsInAllModelsFolders() throws -> [URL] {
 
+    func urlsInAllModelsFolders() throws -> [URL] {
         let documentsDirectory = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
         let scansFolder = documentsDirectory.appendingPathComponent("Scans", isDirectory: true)
         
