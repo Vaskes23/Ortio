@@ -10,7 +10,8 @@ import Foundation
 import os
 import SwiftData
 
-@Model final class CreatedModels{
+@Model 
+final class CreatedModels{
     @Attribute(.unique) var name: String
     var date: Date
     @Attribute(.unique) var model: URL

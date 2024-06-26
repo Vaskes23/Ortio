@@ -9,16 +9,29 @@
 import Foundation
 import Combine
 
-class ModelsViewModel: ObservableObject{
-    
+protocol FileManagerProtocol {
+    func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?, options mask: FileManager.DirectoryEnumerationOptions) throws -> [URL]
+    func fileExists(atPath path: String, isDirectory: UnsafeMutablePointer<ObjCBool>?) -> Bool
+    func url(for directory: FileManager.SearchPathDirectory, in domain: FileManager.SearchPathDomainMask, appropriateFor url: URL?, create shouldCreate: Bool) throws -> URL
+}
+
+extension FileManager: FileManagerProtocol {}
+
+class ModelsViewModel: ObservableObject {
     @Published var models: [ModelsModel.IdentifiableCaptureURL] = []
     @Published var selectedModelForPreview: ModelsModel.IdentifiableCaptureURL?
+    
+    private let fileManager: FileManagerProtocol
+    
+    init(fileManager: FileManagerProtocol = FileManager.default) {
+        self.fileManager = fileManager
+    }
     
     func loadModelsFromDirectories() {
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 let modelURLs = try self.urlsInAllModelsFolders()
-                let filteredModelURLs = modelURLs.filter { $0.pathExtension == "usdz" } // Filter for .usdz files if needed
+                let filteredModelURLs = modelURLs.filter { $0.pathExtension == "usdz" }
                 DispatchQueue.main.async {
                     self.models = filteredModelURLs.map { ModelsModel.IdentifiableCaptureURL(url: $0) }
                 }
@@ -28,14 +41,13 @@ class ModelsViewModel: ObservableObject{
         }
     }
     
-    private func urlsInAllModelsFolders() throws -> [URL] {
-        let fileManager = FileManager.default
+    func urlsInAllModelsFolders() throws -> [URL] {
         let documentsDirectory = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
         let scansFolder = documentsDirectory.appendingPathComponent("Scans", isDirectory: true)
-
+        
         var allModelURLs: [URL] = []
         let sessionDirectories = try fileManager.contentsOfDirectory(at: scansFolder, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
-
+        
         for sessionDir in sessionDirectories {
             let modelsFolder = sessionDir.appendingPathComponent("Models", isDirectory: true)
             let exists = fileManager.fileExists(atPath: modelsFolder.path, isDirectory: nil)

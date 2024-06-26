@@ -2,35 +2,96 @@
 //  ModelsTests.swift
 //  GuidedCaptureTests
 //
-//  Created by Matyas Vascak on 26.06.2024.
+//  Created by Matyas Vascak on 23.06.2024.
 //  Copyright © 2024 Apple. All rights reserved.
 //
 
 import XCTest
+@testable import GuidedCapture
 
 final class ModelsTests: XCTestCase {
 
+    var mockFileManager: MockFileManager!
+    var viewModel: ModelsViewModel!
+    
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        mockFileManager = MockFileManager()
+        viewModel = ModelsViewModel(fileManager: mockFileManager)
     }
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        mockFileManager = nil
+        viewModel = nil
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    func testUrlsInAllModelsFolders() throws {
+        // Arrange
+        let expectedURLs = [
+            URL(string: "file:///path/to/Documents/Scans/Session1/Models/model1.usdz")!,
+            URL(string: "file:///path/to/Documents/Scans/Session1/Models/model2.usdz")!
+        ]
+        
+        mockFileManager.urlStub = { directory, domain, url, shouldCreate in
+            return URL(string: "file:///path/to/Documents")!
         }
+        
+        mockFileManager.contentsOfDirectoryStub = { url, keys, mask in
+            if url.absoluteString == "file:///path/to/Documents/Scans/" {
+                return [URL(string: "file:///path/to/Documents/Scans/Session1")!]
+            } else if url.absoluteString == "file:///path/to/Documents/Scans/Session1/Models/" {
+                return expectedURLs
+            } else {
+                return []
+            }
+        }
+        
+        mockFileManager.fileExistsStub = { path, isDirectory in
+            return path == "/path/to/Documents/Scans/Session1/Models"
+        }
+
+        // Act
+        let modelURLs = try viewModel.urlsInAllModelsFolders()
+        
+        // Assert
+        XCTAssertEqual(modelURLs, expectedURLs)
     }
 
+    func testLoadModelsFromDirectories() throws {
+        // Arrange
+        let expectedURLs = [
+            URL(string: "file:///path/to/Documents/Scans/Session1/Models/model1.usdz")!,
+            URL(string: "file:///path/to/Documents/Scans/Session1/Models/model2.usdz")!
+        ]
+        
+        mockFileManager.urlStub = { directory, domain, url, shouldCreate in
+            return URL(string: "file:///path/to/Documents")!
+        }
+        
+        mockFileManager.contentsOfDirectoryStub = { url, keys, mask in
+            if url.absoluteString == "file:///path/to/Documents/Scans/" {
+                return [URL(string: "file:///path/to/Documents/Scans/Session1")!]
+            } else if url.absoluteString == "file:///path/to/Documents/Scans/Session1/Models/" {
+                return expectedURLs
+            } else {
+                return []
+            }
+        }
+        
+        mockFileManager.fileExistsStub = { path, isDirectory in
+            return path == "/path/to/Documents/Scans/Session1/Models"
+        }
+        
+        let expectation = self.expectation(description: "Load models from directories")
+        
+        // Act
+        viewModel.loadModelsFromDirectories()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            // Assert
+            XCTAssertEqual(self.viewModel.models.map { $0.url }, expectedURLs)
+            expectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 20, handler: nil)
+    }
 }
