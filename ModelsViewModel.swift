@@ -42,6 +42,7 @@ class ModelsViewModel: ObservableObject {
     }
     
     func urlsInAllModelsFolders() throws -> [URL] {
+
         let documentsDirectory = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
         let scansFolder = documentsDirectory.appendingPathComponent("Scans", isDirectory: true)
         

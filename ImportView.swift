@@ -14,22 +14,23 @@ import QuickLook
 import ARKit
 import UniformTypeIdentifiers
 
-@Model final class Models{
+@Model final class Models: Identifiable {
     @Attribute(.unique) var name: String
     var date: Date
     var imported: Bool
+    var favorite: Bool
     var size: Double
     @Attribute(.unique) var model: URL
     
-    init(name: String, date: Date, imported: Bool, size: Double, model: URL) {
+    init(name: String, date: Date, favorite: Bool, imported: Bool, size: Double, model: URL) {
         self.name = name
         self.date = date
+        self.favorite = favorite
         self.imported = imported
         self.size = size
         self.model = model
     }
 }
-
 
 struct ImportView: View {
     @ObservedObject var viewModel: ImportViewModel
@@ -148,6 +149,7 @@ struct ImportView: View {
                let fileSize = try fileManager.attributesOfItem(atPath: destinationURL.path)[.size] as? Double ?? 0
                let newModel = Models(name: url.lastPathComponent,
                                      date: fileDate,
+                                     favorite: false,
                                      imported: true,
                                      size: fileSize,
                                      model: destinationURL)
