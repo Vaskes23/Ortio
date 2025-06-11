@@ -9,16 +9,21 @@
 import Foundation
 import Combine
 
+/// View model that loads and manages models stored on disk.
 class ModelsViewModel: ObservableObject {
+    /// URLs for models found in the scans folder.
     @Published var models: [ModelsModel.IdentifiableCaptureURL] = []
+    /// URL of the model currently selected for preview.
     @Published var selectedModelForPreview: ModelsModel.IdentifiableCaptureURL?
 
     private let fileManager: FileManagerProtocol
 
+    /// Creates a new instance using the given ``FileManagerProtocol``.
     init(fileManager: FileManagerProtocol = FileManager.default) {
         self.fileManager = fileManager
     }
 
+    /// Loads model URLs from disk and updates ``models`` on the main thread.
     func loadModelsFromDirectories() {
         DispatchQueue.global(qos: .userInitiated).async {
             do {
@@ -33,6 +38,7 @@ class ModelsViewModel: ObservableObject {
         }
     }
 
+    /// Returns URLs for all models stored in scan directories.
     func urlsInAllModelsFolders() throws -> [URL] {
         let documentsDirectory = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
         let scansFolder = documentsDirectory.appendingPathComponent("Scans", isDirectory: true)

@@ -54,6 +54,8 @@ final class User {
         return nil
     }
 
+    /// Stores the provided image as JPEG data for the user's profile picture.
+    /// - Parameter image: The new profile image.
     func updateProfileImage(_ image: UIImage) {
         self.profileImage = image.jpegData(compressionQuality: 0.8)
     }
@@ -106,12 +108,14 @@ struct SettingsView: View {
         }
     }
 
+    /// Persists the settings toggles to ``UserDefaults``.
     private func saveSettings() {
         UserDefaults.standard.set(notificationsEnabled, forKey: "notificationsEnabled")
         UserDefaults.standard.set(soundEffectsEnabled, forKey: "soundEffectsEnabled")
         UserDefaults.standard.set(recieveEmailsEnabled, forKey: "recieveEmailsEnabled")
     }
 
+    /// Loads the ``User`` from the model context or creates a default one.
     private func loadUser() {
         if let existingUser = users.first {
             user = existingUser
@@ -130,6 +134,8 @@ struct SettingsView: View {
 }
 
 extension Binding {
+    /// Returns a binding that performs the provided closure whenever it
+    /// receives a new value.
     func onChange(_ handler: @escaping () -> Void) -> Binding<Value> {
         return Binding(
             get: { self.wrappedValue },
@@ -240,6 +246,7 @@ struct EditProfileView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
     
+    /// Saves the edited user information to the model context.
     private func saveUser() {
         user.name = name
         user.username = username
@@ -256,6 +263,7 @@ struct EditProfileView: View {
         }
     }
 
+    /// Loads the existing user for editing or creates a default one.
     private func loadUser() {
         if let existingUser = users.first {
             user = existingUser

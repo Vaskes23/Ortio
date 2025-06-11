@@ -10,6 +10,7 @@ import SwiftUI
 import SwiftData
 import QuickLookThumbnailing
 
+/// Displays thumbnails for all captured models and entry points to capture new models.
 struct ModelsView: View {
     @State private var searchText = ""
     @ObservedObject var viewModel: ModelsViewModel
@@ -197,6 +198,7 @@ struct ThumbnailView: View {
         }
     }
 
+    /// Generates a Quick Look thumbnail for the model URL.
     private func generateThumbnail() {
         let request = QLThumbnailGenerator.Request(fileAt: modelURL, size: CGSize(width: 100, height: 100), scale: UIScreen.main.scale, representationTypes: .thumbnail)
         let generator = QLThumbnailGenerator.shared

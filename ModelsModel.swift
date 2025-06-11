@@ -8,10 +8,14 @@
 
 import Foundation
 
-struct ModelsModel{
+/// Model used to represent captured model URLs.
+struct ModelsModel {
 
+    /// URL wrapper for capture results.
     struct IdentifiableCaptureURL: Identifiable {
+        /// Unique identifier for the capture.
         let id = UUID()
+        /// Location of the model on disk.
         let url: URL
     }
 }

@@ -14,12 +14,19 @@ import QuickLook
 import ARKit
 import UniformTypeIdentifiers
 
+/// A persistent model representing an imported 3D asset.
 @Model final class Models: Identifiable {
+    /// The unique file name.
     @Attribute(.unique) var name: String
+    /// Date the file was imported.
     var date: Date
+    /// Flag indicating the file has been imported.
     var imported: Bool
+    /// Whether the user marked the model as a favorite.
     var favorite: Bool
+    /// File size on disk.
     var size: Double
+    /// Location of the model on disk.
     @Attribute(.unique) var model: URL
     
     init(name: String, date: Date, favorite: Bool, imported: Bool, size: Double, model: URL) {
@@ -32,10 +39,15 @@ import UniformTypeIdentifiers
     }
 }
 
+/// View that presents a list of imported models and allows new imports.
 struct ImportView: View {
+    /// The view model responsible for import actions.
     @ObservedObject var viewModel: ImportViewModel
+    /// Controls whether the system file importer is presented.
     @State private var presentImporter = false
+    /// URLs selected by the user during import.
     @State private var files: [URL] = []
+    /// Currently selected model for Quick Look preview.
     @State private var selectedModelForPreview: ImportModel.IdentifiableURL?
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Models.date, order: .reverse) var storedModels: [Models] = []
@@ -86,6 +98,8 @@ struct ImportView: View {
         }
     }
     
+    /// Deletes a model and its directory from disk and removes it from storage.
+    /// - Parameter offsets: IndexSet indicating which model to delete.
     func deleteModel(at offsets: IndexSet) {
        let fileManager = FileManager.default
        for index in offsets {
@@ -110,6 +124,8 @@ struct ImportView: View {
        }
    }
    
+   /// Handles the result from the system file importer and stores the model.
+   /// - Parameter result: The result provided by ``fileImporter``.
    func handleImport(result: Result<URL, Error>) {
        switch result {
        case .success(let url):
