@@ -9,10 +9,8 @@ import Foundation
 import SwiftData
 import SwiftUI
 import UniformTypeIdentifiers
-import Foundation
 import QuickLook
 import ARKit
-import UniformTypeIdentifiers
 
 
 struct ImportView: View {
