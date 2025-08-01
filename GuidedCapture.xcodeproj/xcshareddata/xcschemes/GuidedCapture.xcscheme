@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "70D2F6EA2A339DD500EFA0D8"
-               BuildableName = "GuidedCapture.app"
+               BuildableName = "Ortio.app"
                BlueprintName = "GuidedCapture"
                ReferencedContainer = "container:GuidedCapture.xcodeproj">
             </BuildableReference>
@@ -57,7 +57,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "70D2F6EA2A339DD500EFA0D8"
-            BuildableName = "GuidedCapture.app"
+            BuildableName = "Ortio.app"
             BlueprintName = "GuidedCapture"
             ReferencedContainer = "container:GuidedCapture.xcodeproj">
          </BuildableReference>
@@ -74,7 +74,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "70D2F6EA2A339DD500EFA0D8"
-            BuildableName = "GuidedCapture.app"
+            BuildableName = "Ortio.app"
             BlueprintName = "GuidedCapture"
             ReferencedContainer = "container:GuidedCapture.xcodeproj">
          </BuildableReference>

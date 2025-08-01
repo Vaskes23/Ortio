@@ -75,7 +75,7 @@
 /* Begin PBXFileReference section */
 		11A35A775A1C348E77CAC709 /* LICENSE.txt */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		7028C8442A33C1F900381BF1 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		70D2F6EB2A339DD500EFA0D8 /* GuidedCapture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GuidedCapture.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		70D2F6EB2A339DD500EFA0D8 /* Ortio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ortio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70D2F6F22A339DD600EFA0D8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		70D2F6F52A339DD600EFA0D8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		70D2F6FD2A339E4A00EFA0D8 /* CaptureOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureOverlayView.swift; sourceTree = "<group>"; };
@@ -182,7 +182,7 @@
 		70D2F6EC2A339DD500EFA0D8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				70D2F6EB2A339DD500EFA0D8 /* GuidedCapture.app */,
+				70D2F6EB2A339DD500EFA0D8 /* Ortio.app */,
 				7A7B1E492C1B6EAD00650AF8 /* GuidedCaptureTests.xctest */,
 			);
 			name = Products;
@@ -296,7 +296,7 @@
 			);
 			name = GuidedCapture;
 			productName = GuidedCapture;
-			productReference = 70D2F6EB2A339DD500EFA0D8 /* GuidedCapture.app */;
+			productReference = 70D2F6EB2A339DD500EFA0D8 /* Ortio.app */;
 			productType = "com.apple.product-type.application";
 		};
 		7A7B1E482C1B6EAD00650AF8 /* GuidedCaptureTests */ = {
@@ -603,7 +603,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.GuidedCapture${SAMPLE_CODE_DISAMBIGUATOR}";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Ortio;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIP_INSTALLED_PRODUCT = NO;
 				SUPPORTED_PLATFORMS = iphoneos;
@@ -644,7 +644,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.GuidedCapture${SAMPLE_CODE_DISAMBIGUATOR}";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Ortio;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIP_INSTALLED_PRODUCT = NO;
 				SUPPORTED_PLATFORMS = iphoneos;
