@@ -1,8 +1,7 @@
-You need to run this sample code project on a physical device.
+# GuidedCapture Documentation
 
-## Configure the sample code project
+This DocC catalog provides developer documentation for the **iOSModelCapture** sample.
 
-To run this sample app, you need an iPhone or iPad with the following: 
-- A LiDAR Scanner
-- An A14 Bionic chip or later
-- iOS or iPadOS 17 or later
+## Running the sample
+
+The app must be installed on a physical device equipped with a LiDAR scanner, an A14 Bionic chip or later, and iOS or iPadOS 17 or newer. Refer to the repository `README.md` for an overview of the project structure and additional information.
