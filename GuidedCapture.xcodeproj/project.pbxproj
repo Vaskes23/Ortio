@@ -56,6 +56,13 @@
 		7ACE23412C2C441A00A0D5B0 /* FileManagerMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACE23402C2C441A00A0D5B0 /* FileManagerMocks.swift */; };
 		7ACE234E2C2CC79900A0D5B0 /* ImportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACE234D2C2CC79900A0D5B0 /* ImportTests.swift */; };
 		7ACE234F2C2CC83B00A0D5B0 /* FileManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACE234B2C2CC6BE00A0D5B0 /* FileManagerProtocol.swift */; };
+		7AF0DE7C2E3E6C6700E1E6C3 /* ImportViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF0DE772E3E6C6700E1E6C3 /* ImportViewModelTests.swift */; };
+		7AF0DE7D2E3E6C6700E1E6C3 /* BindingExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF0DE752E3E6C6700E1E6C3 /* BindingExtensionTests.swift */; };
+		7AF0DE7E2E3E6C6700E1E6C3 /* SwiftDataModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF0DE7A2E3E6C6700E1E6C3 /* SwiftDataModelTests.swift */; };
+		7AF0DE7F2E3E6C6700E1E6C3 /* ModelsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF0DE792E3E6C6700E1E6C3 /* ModelsViewModelTests.swift */; };
+		7AF0DE802E3E6C6700E1E6C3 /* ModelStructTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF0DE782E3E6C6700E1E6C3 /* ModelStructTests.swift */; };
+		7AF0DE812E3E6C6700E1E6C3 /* ThemeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF0DE7B2E3E6C6700E1E6C3 /* ThemeTests.swift */; };
+		7AF0DE822E3E6C6700E1E6C3 /* FileManagerProtocolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF0DE762E3E6C6700E1E6C3 /* FileManagerProtocolTests.swift */; };
 		EB20D5602A40331F00992055 /* AppDataModel+Orbit.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20D55F2A40331F00992055 /* AppDataModel+Orbit.swift */; };
 		EB20D5622A40341C00992055 /* AppDataModel+State.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20D5612A40341C00992055 /* AppDataModel+State.swift */; };
 		EB20D5652A40363D00992055 /* CaptureOverlayView+Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20D5642A40363D00992055 /* CaptureOverlayView+Buttons.swift */; };
@@ -126,6 +133,13 @@
 		7ACE23402C2C441A00A0D5B0 /* FileManagerMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerMocks.swift; sourceTree = "<group>"; };
 		7ACE234B2C2CC6BE00A0D5B0 /* FileManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerProtocol.swift; sourceTree = "<group>"; };
 		7ACE234D2C2CC79900A0D5B0 /* ImportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportTests.swift; sourceTree = "<group>"; };
+		7AF0DE752E3E6C6700E1E6C3 /* BindingExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindingExtensionTests.swift; sourceTree = "<group>"; };
+		7AF0DE762E3E6C6700E1E6C3 /* FileManagerProtocolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerProtocolTests.swift; sourceTree = "<group>"; };
+		7AF0DE772E3E6C6700E1E6C3 /* ImportViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportViewModelTests.swift; sourceTree = "<group>"; };
+		7AF0DE782E3E6C6700E1E6C3 /* ModelStructTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelStructTests.swift; sourceTree = "<group>"; };
+		7AF0DE792E3E6C6700E1E6C3 /* ModelsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsViewModelTests.swift; sourceTree = "<group>"; };
+		7AF0DE7A2E3E6C6700E1E6C3 /* SwiftDataModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataModelTests.swift; sourceTree = "<group>"; };
+		7AF0DE7B2E3E6C6700E1E6C3 /* ThemeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeTests.swift; sourceTree = "<group>"; };
 		B63694814766022DF0079B53 /* SampleCode.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = SampleCode.xcconfig; path = Configuration/SampleCode.xcconfig; sourceTree = "<group>"; };
 		EB20D55F2A40331F00992055 /* AppDataModel+Orbit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDataModel+Orbit.swift"; sourceTree = "<group>"; };
 		EB20D5612A40341C00992055 /* AppDataModel+State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDataModel+State.swift"; sourceTree = "<group>"; };
@@ -255,6 +269,13 @@
 		7A7B1E4A2C1B6EAD00650AF8 /* GuidedCaptureTests */ = {
 			isa = PBXGroup;
 			children = (
+				7AF0DE752E3E6C6700E1E6C3 /* BindingExtensionTests.swift */,
+				7AF0DE762E3E6C6700E1E6C3 /* FileManagerProtocolTests.swift */,
+				7AF0DE772E3E6C6700E1E6C3 /* ImportViewModelTests.swift */,
+				7AF0DE782E3E6C6700E1E6C3 /* ModelStructTests.swift */,
+				7AF0DE792E3E6C6700E1E6C3 /* ModelsViewModelTests.swift */,
+				7AF0DE7A2E3E6C6700E1E6C3 /* SwiftDataModelTests.swift */,
+				7AF0DE7B2E3E6C6700E1E6C3 /* ThemeTests.swift */,
 				7A7B1E522C1B7A8C00650AF8 /* mocks */,
 				7A7B1E4B2C1B6EAD00650AF8 /* GuidedCaptureTests.swift */,
 				7ACE233E2C2C424800A0D5B0 /* ModelsTests.swift */,
@@ -438,6 +459,13 @@
 			files = (
 				7ACE23412C2C441A00A0D5B0 /* FileManagerMocks.swift in Sources */,
 				7A7B1E4C2C1B6EAD00650AF8 /* GuidedCaptureTests.swift in Sources */,
+				7AF0DE7C2E3E6C6700E1E6C3 /* ImportViewModelTests.swift in Sources */,
+				7AF0DE7D2E3E6C6700E1E6C3 /* BindingExtensionTests.swift in Sources */,
+				7AF0DE7E2E3E6C6700E1E6C3 /* SwiftDataModelTests.swift in Sources */,
+				7AF0DE7F2E3E6C6700E1E6C3 /* ModelsViewModelTests.swift in Sources */,
+				7AF0DE802E3E6C6700E1E6C3 /* ModelStructTests.swift in Sources */,
+				7AF0DE812E3E6C6700E1E6C3 /* ThemeTests.swift in Sources */,
+				7AF0DE822E3E6C6700E1E6C3 /* FileManagerProtocolTests.swift in Sources */,
 				7ACE233F2C2C424800A0D5B0 /* ModelsTests.swift in Sources */,
 				7ACE234E2C2CC79900A0D5B0 /* ImportTests.swift in Sources */,
 			);
@@ -672,7 +700,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GuidedCapture.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GuidedCapture";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Ortio.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Ortio";
 			};
 			name = Debug;
 		};
@@ -692,7 +720,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GuidedCapture.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GuidedCapture";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Ortio.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Ortio";
 			};
 			name = Release;
 		};
