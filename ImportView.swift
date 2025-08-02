@@ -21,7 +21,7 @@ import UniformTypeIdentifiers
     var favorite: Bool
     var size: Double
     @Attribute(.unique) var model: URL
-    
+
     init(name: String, date: Date, favorite: Bool, imported: Bool, size: Double, model: URL) {
         self.name = name
         self.date = date
@@ -46,14 +46,14 @@ struct ImportView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.editMode) private var editMode
     @Query(sort: \Models.date, order: .reverse) var storedModels: [Models] = []
-    
+
     var filteredModels: [Models] {
         guard !searchQuery.isEmpty else { return storedModels }
         return storedModels.filter { model in
             model.name.localizedCaseInsensitiveContains(searchQuery)
         }
     }
-    
+
     var body: some View {
         NavigationStack {
             List {
@@ -78,7 +78,7 @@ struct ImportView: View {
                     }
                     .sensoryFeedback(.impact, trigger: presentImporter)
                     .accessibilityLabel("Import new 3D model")
-            }
+                }
             }
             .fileImporter(
                 isPresented: $presentImporter,
@@ -95,7 +95,7 @@ struct ImportView: View {
             }
         }
     }
-    
+
     // MARK: - Storage Section
     private var storageSection: some View {
         Section("Storage location") {
@@ -107,7 +107,7 @@ struct ImportView: View {
         }
         .headerProminence(.increased)
     }
-    
+
     // MARK: - Imported Files Section
     private var importedSection: some View {
         Section("Imported objects") {
@@ -119,16 +119,16 @@ struct ImportView: View {
             .onDelete(perform: deleteModel)
         }
     }
-    
+
     func deleteModel(at offsets: IndexSet) {
        let fileManager = FileManager.default
        for index in offsets {
            let modelToDelete = storedModels[index]
-           
+
            //Get the parent directory
            let fileURL = modelToDelete.model
            let parentDirectory = fileURL.deletingLastPathComponent()
-           
+
            //Delete parent directory with it contents
            do {
                if fileManager.fileExists(atPath: parentDirectory.path) {
@@ -138,12 +138,12 @@ struct ImportView: View {
            } catch {
                print("Error deleting parent directory: \(error)")
            }
-           
+
            //Delete from the model context
            modelContext.delete(modelToDelete)
        }
    }
-   
+
     func handleImport(result: Result<[URL], Error>) {
         switch result {
         case .success(let urls):
@@ -154,13 +154,13 @@ struct ImportView: View {
             print("Import error: \(error)")
         }
     }
-    
+
     private func importSingleFile(_ url: URL) {
         guard url.startAccessingSecurityScopedResource() else {
             print("Failed to get access to the file")
             return
         }
-        
+
         // Check if the model has already been imported
         let alreadyImported = storedModels.contains { $0.model == url }
         if alreadyImported {
@@ -168,26 +168,26 @@ struct ImportView: View {
             url.stopAccessingSecurityScopedResource()
             return
         }
-        
+
         do {
             let fileManager = FileManager.default
-            
+
             let documentsDirectory = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
             let rootDirectory = documentsDirectory.appendingPathComponent("Imports", isDirectory: true)
-            
+
             if !fileManager.fileExists(atPath: rootDirectory.path) {
                 try fileManager.createDirectory(at: rootDirectory, withIntermediateDirectories: true)
             }
-            
+
             // Unique folder for the model
             let creationDate = try url.resourceValues(forKeys: [.creationDateKey]).creationDate
             let uniqueFolderName = ImportViewModel.createUniqueFolderName(from: creationDate)
             let modelFolderURL = rootDirectory.appendingPathComponent(uniqueFolderName, isDirectory: true)
             try fileManager.createDirectory(at: modelFolderURL, withIntermediateDirectories: true)
-            
+
             let destinationURL = modelFolderURL.appendingPathComponent(url.lastPathComponent)
             try fileManager.copyItem(at: url, to: destinationURL)
-            
+
             let fileDate = creationDate ?? Date()
             let fileSize = try fileManager.attributesOfItem(atPath: destinationURL.path)[.size] as? Double ?? 0
             let newModel = Models(name: url.lastPathComponent,
@@ -196,13 +196,13 @@ struct ImportView: View {
                                   imported: true,
                                   size: fileSize,
                                   model: destinationURL)
-            
+
             modelContext.insert(newModel)
-            
+
         } catch {
             print("File handling error: \(error)")
         }
-        
+
         url.stopAccessingSecurityScopedResource()
     }
 }
@@ -212,7 +212,7 @@ struct ImportView: View {
 struct FileRow: View {
     let model: Models
     let onPreview: () -> Void
-    
+
     var body: some View {
         HStack {
             Label(model.name, systemImage: "cube.transparent")
