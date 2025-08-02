@@ -67,9 +67,18 @@ struct ImportView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
+                ToolbarItemGroup(placement: .bottomBar) {
+                    Spacer()
+                    Button {
+                        presentImporter = true
+                    } label: {
+                        Image(systemName: "plus")
+                            .font(.title2.weight(.semibold))
+                            .foregroundStyle(.primary)
+                    }
+                    .sensoryFeedback(.impact, trigger: presentImporter)
+                    .accessibilityLabel("Import new 3D model")
             }
-            .overlay(alignment: .bottomTrailing) {
-                ImportButton(isPresented: $presentImporter)
             }
             .fileImporter(
                 isPresented: $presentImporter,
@@ -229,28 +238,6 @@ struct FileRow: View {
                 // Handle individual delete - could be implemented later
             }
         }
-    }
-}
-
-// MARK: - ImportButton Component
-struct ImportButton: View {
-    @Binding var isPresented: Bool
-    
-    var body: some View {
-        Button {
-            isPresented = true
-        } label: {
-            Image(systemName: "plus")
-                .font(.title2.weight(.semibold))
-                .foregroundStyle(.primary)
-                .padding(Spacing.grid)
-                .background(.ultraThinMaterial, in: Circle())
-                .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
-        }
-        .padding(.trailing, Spacing.section)
-        .padding(.bottom, 60)
-        .sensoryFeedback(.impact, trigger: isPresented)
-        .accessibilityLabel("Import new 3D model")
     }
 }
 
