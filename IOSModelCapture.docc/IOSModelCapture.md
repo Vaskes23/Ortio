@@ -1,13 +1,6 @@
-# IOSModelCapture
+# ``IOSModelCapture``
 
 IOSModelCapture is a sample iOS app that demonstrates guided 3D model capture with LiDAR.
-
-## Requirements
-
-To run this sample app, you need an iPhone or iPad with the following:
-- A LiDAR Scanner
-- An A14 Bionic chip or later
-- iOS or iPadOS 17 or later
 
 ## Project Structure
 
