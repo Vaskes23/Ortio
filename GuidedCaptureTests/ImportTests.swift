@@ -7,9 +7,9 @@
 //
 
 import XCTest
-@testable import GuidedCapture
+@testable import Ortio
 
-final class ImportViewModelTests: XCTestCase {
+final class ImportTests: XCTestCase {
     var mockFileManager: MockFileManager!
     var viewModel: ImportViewModel!
     

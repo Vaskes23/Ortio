@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import GuidedCapture
+@testable import Ortio
 
 final class ModelsTests: XCTestCase {
 
