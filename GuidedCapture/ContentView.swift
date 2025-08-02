@@ -20,17 +20,15 @@ struct ContentView : View {
         TabView{
             ModelsView(viewModel: ModelsViewModel())
                 .tabItem{
-                    Image(systemName: "house.lodge.fill")
-                    Text("Models")
+                    Label("Models", systemImage: "cube")
                 }
             
             ImportView(viewModel: ImportViewModel())
-                .modelContainer(for: Models.self)
                 .tabItem{
-                    Image(systemName: "folder.fill")
-                    Text("Import")
+                    Label("Import", systemImage: "tray.and.arrow.down")
                 }
         }
+        .tint(.accentColor)
     }
 }
 

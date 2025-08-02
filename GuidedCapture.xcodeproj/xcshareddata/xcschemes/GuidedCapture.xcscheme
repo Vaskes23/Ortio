@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
    LastUpgradeVersion = "1500"
-   version = "1.7">
+   version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "70D2F6EA2A339DD500EFA0D8"
-               BuildableName = "GuidedCapture.app"
+               BuildableName = "Ortio.app"
                BlueprintName = "GuidedCapture"
                ReferencedContainer = "container:GuidedCapture.xcodeproj">
             </BuildableReference>
@@ -28,6 +28,17 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7A7B1E482C1B6EAD00650AF8"
+               BuildableName = "GuidedCaptureTests.xctest"
+               BlueprintName = "GuidedCaptureTests"
+               ReferencedContainer = "container:GuidedCapture.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -46,7 +57,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "70D2F6EA2A339DD500EFA0D8"
-            BuildableName = "GuidedCapture.app"
+            BuildableName = "Ortio.app"
             BlueprintName = "GuidedCapture"
             ReferencedContainer = "container:GuidedCapture.xcodeproj">
          </BuildableReference>
@@ -63,7 +74,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "70D2F6EA2A339DD500EFA0D8"
-            BuildableName = "GuidedCapture.app"
+            BuildableName = "Ortio.app"
             BlueprintName = "GuidedCapture"
             ReferencedContainer = "container:GuidedCapture.xcodeproj">
          </BuildableReference>

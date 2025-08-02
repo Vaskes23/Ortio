@@ -6,6 +6,7 @@ Top-level app structure of the view hierarchy.
 */
 
 import SwiftUI
+import SwiftData
 
 @main
 struct GuidedCaptureSampleApp: App {
@@ -16,6 +17,6 @@ struct GuidedCaptureSampleApp: App {
             if #available(iOS 17.0, *) {
                 ContentView()
             }
-        }
+        }.modelContainer(for: [Models.self,User.self])
     }
 }

@@ -10,9 +10,14 @@ import SwiftData
 import SwiftUI
 import Foundation
 
-class ImportViewModel: ObservableObject{
-    
-     static func createUniqueFolderName(from date: Date?) -> String {
+class ImportViewModel: ObservableObject {
+    private let fileManager: FileManagerProtocol
+
+    init(fileManager: FileManagerProtocol = FileManager.default) {
+        self.fileManager = fileManager
+    }
+
+    static func createUniqueFolderName(from date: Date?) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyyMMddHHmmss"
         let dateString = dateFormatter.string(from: date ?? Date())
@@ -28,23 +33,21 @@ class ImportViewModel: ObservableObject{
         return "\(timeStamp)_\(randomSequence).\(fileExtension)"
     }
     
-
-    private func createNewScanDirectory() -> URL? {
+    internal func createNewScanDirectory() -> URL? {
         guard let capturesFolder = rootScansFolder() else {
             print("Can't get user document dir!")
             return nil
         }
         
         let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         let timestamp = formatter.string(from: Date())
-        let newCaptureDir = capturesFolder
-            .appendingPathComponent(timestamp, isDirectory: true)
+        let newCaptureDir = capturesFolder.appendingPathComponent(timestamp, isDirectory: true)
         
         print("Creating capture path: \(newCaptureDir)")
         let capturePath = newCaptureDir.path
         do {
-            try FileManager.default.createDirectory(atPath: capturePath,
-                                                    withIntermediateDirectories: true)
+            try fileManager.createDirectory(atPath: capturePath, withIntermediateDirectories: true, attributes: nil)
             var url = URL(fileURLWithPath: capturePath)
             var resourceValues = URLResourceValues()
             resourceValues.isExcludedFromBackup = true
@@ -55,7 +58,7 @@ class ImportViewModel: ObservableObject{
         }
         
         var isDir: ObjCBool = false
-        let exists = FileManager.default.fileExists(atPath: capturePath, isDirectory: &isDir)
+        let exists = fileManager.fileExists(atPath: capturePath, isDirectory: &isDir)
         guard exists && isDir.boolValue else {
             return nil
         }
@@ -64,9 +67,7 @@ class ImportViewModel: ObservableObject{
     }
     
     private func rootScansFolder() -> URL? {
-        guard let documentsFolder = try? FileManager.default.url(for: .documentDirectory,
-                                                                 in: .userDomainMask,
-                                                                 appropriateFor: nil, create: false) else {
+        guard let documentsFolder = try? fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) else {
             return nil
         }
         return documentsFolder.appendingPathComponent("Scans/", isDirectory: true)
