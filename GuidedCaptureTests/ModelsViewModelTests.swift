@@ -6,26 +6,23 @@
 //  Copyright © 2024 Apple. All rights reserved.
 //
 
-import XCTest
+import Testing
 @testable import Ortio
 
-final class ModelsViewModelTests: XCTestCase {
-    var mockFileManager: MockFileManager!
-    var viewModel: ModelsViewModel!
-    
-    override func setUpWithError() throws {
+@Suite
+struct ModelsViewModelTests {
+    var mockFileManager: MockFileManager
+    var viewModel: ModelsViewModel
+
+    init() {
         mockFileManager = MockFileManager()
         viewModel = ModelsViewModel(fileManager: mockFileManager)
     }
 
-    override func tearDownWithError() throws {
-        mockFileManager = nil
-        viewModel = nil
-    }
-
     // MARK: - urlsInAllModelsFolders Tests
     
-    func testUrlsInAllModelsFoldersWithNoSessions() throws {
+    @Test
+    func urlsInAllModelsFoldersWithNoSessions() throws {
         // Arrange
         let documentsURL = URL(fileURLWithPath: "/path/to/Documents")
         let scansFolderURL = documentsURL.appendingPathComponent("Scans")
@@ -50,10 +47,11 @@ final class ModelsViewModelTests: XCTestCase {
         let modelURLs = try viewModel.urlsInAllModelsFolders()
         
         // Assert
-        XCTAssertEqual(modelURLs.count, 0)
+        #expect(modelURLs.count == 0)
     }
-    
-    func testUrlsInAllModelsFoldersWithSessionsButNoModelsFolder() throws {
+
+    @Test
+    func urlsInAllModelsFoldersWithSessionsButNoModelsFolder() throws {
         // Arrange
         let documentsURL = URL(fileURLWithPath: "/path/to/Documents")
         let scansFolderURL = documentsURL.appendingPathComponent("Scans")
@@ -80,10 +78,11 @@ final class ModelsViewModelTests: XCTestCase {
         let modelURLs = try viewModel.urlsInAllModelsFolders()
         
         // Assert
-        XCTAssertEqual(modelURLs.count, 0)
+        #expect(modelURLs.count == 0)
     }
-    
-    func testUrlsInAllModelsFoldersWithEmptyModelsFolder() throws {
+
+    @Test
+    func urlsInAllModelsFoldersWithEmptyModelsFolder() throws {
         // Arrange
         let documentsURL = URL(fileURLWithPath: "/path/to/Documents")
         let scansFolderURL = documentsURL.appendingPathComponent("Scans")
@@ -112,23 +111,27 @@ final class ModelsViewModelTests: XCTestCase {
         let modelURLs = try viewModel.urlsInAllModelsFolders()
         
         // Assert
-        XCTAssertEqual(modelURLs.count, 0)
+        #expect(modelURLs.count == 0)
     }
-    
-    func testUrlsInAllModelsFoldersWhenDocumentsDirectoryNotFound() throws {
+
+    @Test
+    func urlsInAllModelsFoldersWhenDocumentsDirectoryNotFound() {
         // Arrange
         mockFileManager.urlStub = { directory, domain, url, shouldCreate in
             throw NSError(domain: "Test", code: 1, userInfo: [NSLocalizedDescriptionKey: "Documents directory not found"])
         }
         
         // Act & Assert
-        XCTAssertThrowsError(try viewModel.urlsInAllModelsFolders()) { error in
-            XCTAssertEqual((error as NSError).domain, "Test")
-            XCTAssertEqual((error as NSError).code, 1)
+        let error = #expect(throws: (any Error).self) {
+            try viewModel.urlsInAllModelsFolders()
         }
+        let nsError = error as NSError
+        #expect(nsError.domain == "Test")
+        #expect(nsError.code == 1)
     }
-    
-    func testUrlsInAllModelsFoldersWhenScansDirectoryNotFound() throws {
+
+    @Test
+    func urlsInAllModelsFoldersWhenScansDirectoryNotFound() {
         // Arrange
         let documentsURL = URL(fileURLWithPath: "/path/to/Documents")
         
@@ -141,47 +144,48 @@ final class ModelsViewModelTests: XCTestCase {
         }
         
         // Act & Assert
-        XCTAssertThrowsError(try viewModel.urlsInAllModelsFolders()) { error in
-            XCTAssertEqual((error as NSError).domain, "Test")
-            XCTAssertEqual((error as NSError).code, 2)
+        let error = #expect(throws: (any Error).self) {
+            try viewModel.urlsInAllModelsFolders()
         }
+        let nsError = error as NSError
+        #expect(nsError.domain == "Test")
+        #expect(nsError.code == 2)
     }
     
     // MARK: - loadModelsFromDirectories Tests
     
-    func testLoadModelsFromDirectoriesWithError() throws {
+    @Test
+    func loadModelsFromDirectoriesWithError() async {
         // Arrange
         mockFileManager.urlStub = { directory, domain, url, shouldCreate in
             throw NSError(domain: "Test", code: 1, userInfo: [NSLocalizedDescriptionKey: "Documents directory not found"])
         }
         
-        let expectation = self.expectation(description: "Load models from directories with error")
-        
-        // Act
-        viewModel.loadModelsFromDirectories()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            // Assert
-            XCTAssertEqual(self.viewModel.models.count, 0)
-            expectation.fulfill()
+        // Act & Assert
+        await confirmation("Load models from directories with error") { confirm in
+            viewModel.loadModelsFromDirectories()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                #expect(self.viewModel.models.count == 0)
+                confirm()
+            }
         }
-        
-        waitForExpectations(timeout: 5, handler: nil)
     }
     
     // MARK: - Initialization Tests
     
-    func testInitWithDefaultFileManager() {
+    @Test
+    func initWithDefaultFileManager() {
         // Act
         let viewModelWithDefault = ModelsViewModel()
         
         // Assert
-        XCTAssertNotNil(viewModelWithDefault)
-        XCTAssertEqual(viewModelWithDefault.models.count, 0)
-        XCTAssertNil(viewModelWithDefault.selectedModelForPreview)
+        #expect(viewModelWithDefault != nil)
+        #expect(viewModelWithDefault.models.count == 0)
+        #expect(viewModelWithDefault.selectedModelForPreview == nil)
     }
-    
-    func testInitWithCustomFileManager() {
+
+    @Test
+    func initWithCustomFileManager() {
         // Arrange
         let customFileManager = MockFileManager()
         
@@ -189,8 +193,8 @@ final class ModelsViewModelTests: XCTestCase {
         let viewModelWithCustom = ModelsViewModel(fileManager: customFileManager)
         
         // Assert
-        XCTAssertNotNil(viewModelWithCustom)
-        XCTAssertEqual(viewModelWithCustom.models.count, 0)
-        XCTAssertNil(viewModelWithCustom.selectedModelForPreview)
+        #expect(viewModelWithCustom != nil)
+        #expect(viewModelWithCustom.models.count == 0)
+        #expect(viewModelWithCustom.selectedModelForPreview == nil)
     }
-} 
+}

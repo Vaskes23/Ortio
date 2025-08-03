@@ -6,15 +6,17 @@
 //  Copyright © 2024 Apple. All rights reserved.
 //
 
-import XCTest
+import Testing
 import SwiftUI
 @testable import Ortio
 
-final class BindingExtensionTests: XCTestCase {
+@Suite
+struct BindingExtensionTests {
 
     // MARK: - Binding onChange Tests
-    
-    func testBindingOnChangeWithString() {
+
+    @Test
+    func bindingOnChangeWithString() {
         // Arrange
         var value = "initial"
         var onChangeCalled = false
@@ -36,12 +38,13 @@ final class BindingExtensionTests: XCTestCase {
         onChangeBinding.wrappedValue = "updated"
         
         // Assert
-        XCTAssertTrue(onChangeCalled)
-        XCTAssertEqual(newValue, "updated")
-        XCTAssertEqual(value, "updated")
+        #expect(onChangeCalled)
+        #expect(newValue == "updated")
+        #expect(value == "updated")
     }
-    
-    func testBindingOnChangeWithBool() {
+
+    @Test
+    func bindingOnChangeWithBool() {
         // Arrange
         var value = false
         var onChangeCalled = false
@@ -65,12 +68,13 @@ final class BindingExtensionTests: XCTestCase {
         onChangeBinding.wrappedValue = true
         
         // Assert
-        XCTAssertTrue(onChangeCalled)
-        XCTAssertEqual(callCount, 3)
-        XCTAssertTrue(value)
+        #expect(onChangeCalled)
+        #expect(callCount == 3)
+        #expect(value)
     }
-    
-    func testBindingOnChangeWithInt() {
+
+    @Test
+    func bindingOnChangeWithInt() {
         // Arrange
         var value = 0
         var lastValue: Int?
@@ -92,11 +96,12 @@ final class BindingExtensionTests: XCTestCase {
         onChangeBinding.wrappedValue = 15
         
         // Assert
-        XCTAssertEqual(lastValue, 15)
-        XCTAssertEqual(value, 15)
+        #expect(lastValue == 15)
+        #expect(value == 15)
     }
-    
-    func testBindingOnChangeWithDouble() {
+
+    @Test
+    func bindingOnChangeWithDouble() {
         // Arrange
         var value = 0.0
         var sum = 0.0
@@ -118,11 +123,12 @@ final class BindingExtensionTests: XCTestCase {
         onChangeBinding.wrappedValue = 3.5
         
         // Assert
-        XCTAssertEqual(sum, 7.5)
-        XCTAssertEqual(value, 3.5)
+        #expect(sum == 7.5)
+        #expect(value == 3.5)
     }
-    
-    func testBindingOnChangeWithOptionalString() {
+
+    @Test
+    func bindingOnChangeWithOptionalString() {
         // Arrange
         var value: String? = nil
         var onChangeCalled = false
@@ -146,12 +152,13 @@ final class BindingExtensionTests: XCTestCase {
         onChangeBinding.wrappedValue = nil
         
         // Assert
-        XCTAssertTrue(onChangeCalled)
-        XCTAssertNil(lastValue)
-        XCTAssertNil(value)
+        #expect(onChangeCalled)
+        #expect(lastValue == nil)
+        #expect(value == nil)
     }
-    
-    func testBindingOnChangeWithArray() {
+
+    @Test
+    func bindingOnChangeWithArray() {
         // Arrange
         var value: [String] = []
         var arrayCounts: [Int] = []
@@ -173,11 +180,12 @@ final class BindingExtensionTests: XCTestCase {
         onChangeBinding.wrappedValue = ["item1", "item2", "item3"]
         
         // Assert
-        XCTAssertEqual(arrayCounts, [1, 2, 3])
-        XCTAssertEqual(value.count, 3)
+        #expect(arrayCounts == [1, 2, 3])
+        #expect(value.count == 3)
     }
-    
-    func testBindingOnChangeWithCustomStruct() {
+
+    @Test
+    func bindingOnChangeWithCustomStruct() {
         // Arrange
         struct TestStruct {
             var name: String
@@ -204,14 +212,15 @@ final class BindingExtensionTests: XCTestCase {
         onChangeBinding.wrappedValue = TestStruct(name: "updated", value: 42)
         
         // Assert
-        XCTAssertTrue(onChangeCalled)
-        XCTAssertEqual(lastValue?.name, "updated")
-        XCTAssertEqual(lastValue?.value, 42)
-        XCTAssertEqual(value.name, "updated")
-        XCTAssertEqual(value.value, 42)
+        #expect(onChangeCalled)
+        #expect(lastValue?.name == "updated")
+        #expect(lastValue?.value == 42)
+        #expect(value.name == "updated")
+        #expect(value.value == 42)
     }
-    
-    func testBindingOnChangeWithEnum() {
+
+    @Test
+    func bindingOnChangeWithEnum() {
         // Arrange
         enum TestEnum: String, CaseIterable {
             case first = "first"
@@ -240,14 +249,15 @@ final class BindingExtensionTests: XCTestCase {
         onChangeBinding.wrappedValue = .third
         
         // Assert
-        XCTAssertTrue(onChangeCalled)
-        XCTAssertEqual(lastValue, .third)
-        XCTAssertEqual(value, .third)
+        #expect(onChangeCalled)
+        #expect(lastValue == .third)
+        #expect(value == .third)
     }
-    
+
     // MARK: - Binding onChange Performance Tests
-    
-    func testBindingOnChangePerformance() {
+
+    @Test
+    func bindingOnChangePerformance() {
         // Arrange
         var value = 0
         var callCount = 0
@@ -263,19 +273,21 @@ final class BindingExtensionTests: XCTestCase {
             callCount += 1
         }
         
-        // Act & Assert
-        measure {
+        // Act
+        for _ in 0..<10 {
             for i in 0..<1000 {
                 onChangeBinding.wrappedValue = i
             }
         }
-        
-        XCTAssertEqual(callCount, 10000)
+
+        // Assert
+        #expect(callCount == 10000)
     }
-    
+
     // MARK: - Binding onChange Edge Cases
-    
-    func testBindingOnChangeWithSameValue() {
+
+    @Test
+    func bindingOnChangeWithSameValue() {
         // Arrange
         var value = "test"
         var onChangeCalled = false
@@ -295,11 +307,12 @@ final class BindingExtensionTests: XCTestCase {
         onChangeBinding.wrappedValue = "test" // Same value
         
         // Assert
-        XCTAssertTrue(onChangeCalled) // Should still be called even with same value
-        XCTAssertEqual(value, "test")
+        #expect(onChangeCalled) // Should still be called even with same value
+        #expect(value == "test")
     }
-    
-    func testBindingOnChangeWithEmptyHandler() {
+
+    @Test
+    func bindingOnChangeWithEmptyHandler() {
         // Arrange
         var value = "initial"
         
@@ -318,10 +331,11 @@ final class BindingExtensionTests: XCTestCase {
         onChangeBinding.wrappedValue = "updated"
         
         // Assert
-        XCTAssertEqual(value, "updated") // Should still update the value
+        #expect(value == "updated") // Should still update the value
     }
-    
-    func testBindingOnChangeWithMultipleHandlers() {
+
+    @Test
+    func bindingOnChangeWithMultipleHandlers() {
         // Arrange
         var value = 0
         var handler1Called = false
@@ -346,14 +360,15 @@ final class BindingExtensionTests: XCTestCase {
         onChangeBinding2.wrappedValue = 42
         
         // Assert
-        XCTAssertTrue(handler1Called)
-        XCTAssertTrue(handler2Called)
-        XCTAssertEqual(value, 42)
+        #expect(handler1Called)
+        #expect(handler2Called)
+        #expect(value == 42)
     }
-    
+
     // MARK: - Binding onChange with Complex Logic
-    
-    func testBindingOnChangeWithComplexLogic() {
+
+    @Test
+    func bindingOnChangeWithComplexLogic() {
         // Arrange
         var value = 0
         var processedValues: [Int] = []
@@ -380,7 +395,7 @@ final class BindingExtensionTests: XCTestCase {
         onChangeBinding.wrappedValue = 10
         
         // Assert
-        XCTAssertEqual(processedValues, [10, -3, 20])
-        XCTAssertEqual(value, 10)
+        #expect(processedValues == [10, -3, 20])
+        #expect(value == 10)
     }
-} 
+}

@@ -6,14 +6,16 @@
 //  Copyright © 2024 Apple. All rights reserved.
 //
 
-import XCTest
+import Testing
 @testable import Ortio
 
-final class ModelStructTests: XCTestCase {
+@Suite
+struct ModelStructTests {
 
     // MARK: - ModelsModel Tests
-    
-    func testModelsModelIdentifiableCaptureURLInitialization() {
+
+    @Test
+    func modelsModelIdentifiableCaptureURLInitialization() {
         // Arrange
         let url = URL(fileURLWithPath: "/path/to/model.usdz")
         
@@ -21,11 +23,12 @@ final class ModelStructTests: XCTestCase {
         let identifiableURL = ModelsModel.IdentifiableCaptureURL(url: url)
         
         // Assert
-        XCTAssertEqual(identifiableURL.url, url)
-        XCTAssertNotNil(identifiableURL.id)
+        #expect(identifiableURL.url == url)
+        #expect(identifiableURL.id != nil)
     }
-    
-    func testModelsModelIdentifiableCaptureURLIdentifiable() {
+
+    @Test
+    func modelsModelIdentifiableCaptureURLIdentifiable() {
         // Arrange
         let url = URL(fileURLWithPath: "/path/to/model.usdz")
         
@@ -33,11 +36,12 @@ final class ModelStructTests: XCTestCase {
         let identifiableURL = ModelsModel.IdentifiableCaptureURL(url: url)
         
         // Assert
-        XCTAssertNotNil(identifiableURL.id)
-        XCTAssertTrue(identifiableURL.id is UUID)
+        #expect(identifiableURL.id != nil)
+        #expect(identifiableURL.id is UUID)
     }
-    
-    func testModelsModelIdentifiableCaptureURLUniqueIds() {
+
+    @Test
+    func modelsModelIdentifiableCaptureURLUniqueIds() {
         // Arrange
         let url1 = URL(fileURLWithPath: "/path/to/model1.usdz")
         let url2 = URL(fileURLWithPath: "/path/to/model2.usdz")
@@ -47,12 +51,13 @@ final class ModelStructTests: XCTestCase {
         let identifiableURL2 = ModelsModel.IdentifiableCaptureURL(url: url2)
         
         // Assert
-        XCTAssertNotEqual(identifiableURL1.id, identifiableURL2.id)
-        XCTAssertEqual(identifiableURL1.url, url1)
-        XCTAssertEqual(identifiableURL2.url, url2)
+        #expect(identifiableURL1.id != identifiableURL2.id)
+        #expect(identifiableURL1.url == url1)
+        #expect(identifiableURL2.url == url2)
     }
-    
-    func testModelsModelIdentifiableCaptureURLWithDifferentURLs() {
+
+    @Test
+    func modelsModelIdentifiableCaptureURLWithDifferentURLs() {
         // Arrange
         let urls = [
             URL(fileURLWithPath: "/path/to/model1.usdz"),
@@ -64,20 +69,21 @@ final class ModelStructTests: XCTestCase {
         let identifiableURLs = urls.map { ModelsModel.IdentifiableCaptureURL(url: $0) }
         
         // Assert
-        XCTAssertEqual(identifiableURLs.count, 3)
+        #expect(identifiableURLs.count == 3)
         for (index, identifiableURL) in identifiableURLs.enumerated() {
-            XCTAssertEqual(identifiableURL.url, urls[index])
+            #expect(identifiableURL.url == urls[index])
         }
-        
+
         // All IDs should be unique
         let ids = identifiableURLs.map { $0.id }
         let uniqueIds = Set(ids)
-        XCTAssertEqual(ids.count, uniqueIds.count)
+        #expect(ids.count == uniqueIds.count)
     }
     
     // MARK: - ImportModel Tests
     
-    func testImportModelIdentifiableURLInitialization() {
+    @Test
+    func importModelIdentifiableURLInitialization() {
         // Arrange
         let url = URL(fileURLWithPath: "/path/to/import.usdz")
         
@@ -85,11 +91,12 @@ final class ModelStructTests: XCTestCase {
         let identifiableURL = ImportModel.IdentifiableURL(url: url)
         
         // Assert
-        XCTAssertEqual(identifiableURL.url, url)
-        XCTAssertNotNil(identifiableURL.id)
+        #expect(identifiableURL.url == url)
+        #expect(identifiableURL.id != nil)
     }
-    
-    func testImportModelIdentifiableURLIdentifiable() {
+
+    @Test
+    func importModelIdentifiableURLIdentifiable() {
         // Arrange
         let url = URL(fileURLWithPath: "/path/to/import.usdz")
         
@@ -97,11 +104,12 @@ final class ModelStructTests: XCTestCase {
         let identifiableURL = ImportModel.IdentifiableURL(url: url)
         
         // Assert
-        XCTAssertNotNil(identifiableURL.id)
-        XCTAssertTrue(identifiableURL.id is UUID)
+        #expect(identifiableURL.id != nil)
+        #expect(identifiableURL.id is UUID)
     }
-    
-    func testImportModelIdentifiableURLUniqueIds() {
+
+    @Test
+    func importModelIdentifiableURLUniqueIds() {
         // Arrange
         let url1 = URL(fileURLWithPath: "/path/to/import1.usdz")
         let url2 = URL(fileURLWithPath: "/path/to/import2.usdz")
@@ -111,12 +119,13 @@ final class ModelStructTests: XCTestCase {
         let identifiableURL2 = ImportModel.IdentifiableURL(url: url2)
         
         // Assert
-        XCTAssertNotEqual(identifiableURL1.id, identifiableURL2.id)
-        XCTAssertEqual(identifiableURL1.url, url1)
-        XCTAssertEqual(identifiableURL2.url, url2)
+        #expect(identifiableURL1.id != identifiableURL2.id)
+        #expect(identifiableURL1.url == url1)
+        #expect(identifiableURL2.url == url2)
     }
-    
-    func testImportModelIdentifiableURLWithDifferentURLs() {
+
+    @Test
+    func importModelIdentifiableURLWithDifferentURLs() {
         // Arrange
         let urls = [
             URL(fileURLWithPath: "/path/to/import1.usdz"),
@@ -128,20 +137,21 @@ final class ModelStructTests: XCTestCase {
         let identifiableURLs = urls.map { ImportModel.IdentifiableURL(url: $0) }
         
         // Assert
-        XCTAssertEqual(identifiableURLs.count, 3)
+        #expect(identifiableURLs.count == 3)
         for (index, identifiableURL) in identifiableURLs.enumerated() {
-            XCTAssertEqual(identifiableURL.url, urls[index])
+            #expect(identifiableURL.url == urls[index])
         }
-        
+
         // All IDs should be unique
         let ids = identifiableURLs.map { $0.id }
         let uniqueIds = Set(ids)
-        XCTAssertEqual(ids.count, uniqueIds.count)
+        #expect(ids.count == uniqueIds.count)
     }
     
     // MARK: - Comparison Tests
     
-    func testModelsModelIdentifiableCaptureURLEquality() {
+    @Test
+    func modelsModelIdentifiableCaptureURLEquality() {
         // Arrange
         let url1 = URL(fileURLWithPath: "/path/to/model.usdz")
         let url2 = URL(fileURLWithPath: "/path/to/model.usdz")
@@ -151,12 +161,13 @@ final class ModelStructTests: XCTestCase {
         let identifiableURL2 = ModelsModel.IdentifiableCaptureURL(url: url2)
         
         // Assert
-        XCTAssertEqual(identifiableURL1.url, identifiableURL2.url)
+        #expect(identifiableURL1.url == identifiableURL2.url)
         // IDs should be different even with same URL
-        XCTAssertNotEqual(identifiableURL1.id, identifiableURL2.id)
+        #expect(identifiableURL1.id != identifiableURL2.id)
     }
-    
-    func testImportModelIdentifiableURLEquality() {
+
+    @Test
+    func importModelIdentifiableURLEquality() {
         // Arrange
         let url1 = URL(fileURLWithPath: "/path/to/import.usdz")
         let url2 = URL(fileURLWithPath: "/path/to/import.usdz")
@@ -166,14 +177,15 @@ final class ModelStructTests: XCTestCase {
         let identifiableURL2 = ImportModel.IdentifiableURL(url: url2)
         
         // Assert
-        XCTAssertEqual(identifiableURL1.url, identifiableURL2.url)
+        #expect(identifiableURL1.url == identifiableURL2.url)
         // IDs should be different even with same URL
-        XCTAssertNotEqual(identifiableURL1.id, identifiableURL2.id)
+        #expect(identifiableURL1.id != identifiableURL2.id)
     }
     
     // MARK: - URL Path Extension Tests
     
-    func testModelsModelIdentifiableCaptureURLWithDifferentExtensions() {
+    @Test
+    func modelsModelIdentifiableCaptureURLWithDifferentExtensions() {
         // Arrange
         let urls = [
             URL(fileURLWithPath: "/path/to/model.usdz"),
@@ -185,13 +197,14 @@ final class ModelStructTests: XCTestCase {
         let identifiableURLs = urls.map { ModelsModel.IdentifiableCaptureURL(url: $0) }
         
         // Assert
-        XCTAssertEqual(identifiableURLs.count, 3)
-        XCTAssertEqual(identifiableURLs[0].url.pathExtension, "usdz")
-        XCTAssertEqual(identifiableURLs[1].url.pathExtension, "usd")
-        XCTAssertEqual(identifiableURLs[2].url.pathExtension, "reality")
+        #expect(identifiableURLs.count == 3)
+        #expect(identifiableURLs[0].url.pathExtension == "usdz")
+        #expect(identifiableURLs[1].url.pathExtension == "usd")
+        #expect(identifiableURLs[2].url.pathExtension == "reality")
     }
-    
-    func testImportModelIdentifiableURLWithDifferentExtensions() {
+
+    @Test
+    func importModelIdentifiableURLWithDifferentExtensions() {
         // Arrange
         let urls = [
             URL(fileURLWithPath: "/path/to/import.usdz"),
@@ -203,15 +216,16 @@ final class ModelStructTests: XCTestCase {
         let identifiableURLs = urls.map { ImportModel.IdentifiableURL(url: $0) }
         
         // Assert
-        XCTAssertEqual(identifiableURLs.count, 3)
-        XCTAssertEqual(identifiableURLs[0].url.pathExtension, "usdz")
-        XCTAssertEqual(identifiableURLs[1].url.pathExtension, "usd")
-        XCTAssertEqual(identifiableURLs[2].url.pathExtension, "reality")
+        #expect(identifiableURLs.count == 3)
+        #expect(identifiableURLs[0].url.pathExtension == "usdz")
+        #expect(identifiableURLs[1].url.pathExtension == "usd")
+        #expect(identifiableURLs[2].url.pathExtension == "reality")
     }
     
     // MARK: - URL Last Path Component Tests
     
-    func testModelsModelIdentifiableCaptureURLLastPathComponent() {
+    @Test
+    func modelsModelIdentifiableCaptureURLLastPathComponent() {
         // Arrange
         let url = URL(fileURLWithPath: "/path/to/folder/model.usdz")
         
@@ -219,10 +233,11 @@ final class ModelStructTests: XCTestCase {
         let identifiableURL = ModelsModel.IdentifiableCaptureURL(url: url)
         
         // Assert
-        XCTAssertEqual(identifiableURL.url.lastPathComponent, "model.usdz")
+        #expect(identifiableURL.url.lastPathComponent == "model.usdz")
     }
-    
-    func testImportModelIdentifiableURLLastPathComponent() {
+
+    @Test
+    func importModelIdentifiableURLLastPathComponent() {
         // Arrange
         let url = URL(fileURLWithPath: "/path/to/folder/import.usdz")
         
@@ -230,12 +245,13 @@ final class ModelStructTests: XCTestCase {
         let identifiableURL = ImportModel.IdentifiableURL(url: url)
         
         // Assert
-        XCTAssertEqual(identifiableURL.url.lastPathComponent, "import.usdz")
+        #expect(identifiableURL.url.lastPathComponent == "import.usdz")
     }
     
     // MARK: - URL Deleting Path Extension Tests
     
-    func testModelsModelIdentifiableCaptureURLDeletingPathExtension() {
+    @Test
+    func modelsModelIdentifiableCaptureURLDeletingPathExtension() {
         // Arrange
         let url = URL(fileURLWithPath: "/path/to/model.usdz")
         
@@ -244,10 +260,11 @@ final class ModelStructTests: XCTestCase {
         let urlWithoutExtension = identifiableURL.url.deletingPathExtension()
         
         // Assert
-        XCTAssertEqual(urlWithoutExtension.lastPathComponent, "model")
+        #expect(urlWithoutExtension.lastPathComponent == "model")
     }
-    
-    func testImportModelIdentifiableURLDeletingPathExtension() {
+
+    @Test
+    func importModelIdentifiableURLDeletingPathExtension() {
         // Arrange
         let url = URL(fileURLWithPath: "/path/to/import.usdz")
         
@@ -256,6 +273,6 @@ final class ModelStructTests: XCTestCase {
         let urlWithoutExtension = identifiableURL.url.deletingPathExtension()
         
         // Assert
-        XCTAssertEqual(urlWithoutExtension.lastPathComponent, "import")
+        #expect(urlWithoutExtension.lastPathComponent == "import")
     }
-} 
+}

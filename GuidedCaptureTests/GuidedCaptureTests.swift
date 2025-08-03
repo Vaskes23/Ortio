@@ -6,13 +6,14 @@
 //  Copyright © 2024 Apple. All rights reserved.
 //
 
-import XCTest
+import Testing
 @testable import Ortio
 
-final class GuidedCaptureTests: XCTestCase {
-    
+@Suite
+struct GuidedCaptureTests {
+
     // MARK: - Test Suite Overview
-    
+
     /*
      This test suite covers the following components:
      
@@ -58,19 +59,10 @@ final class GuidedCaptureTests: XCTestCase {
         - Realistic file system simulation
      */
 
-    override func setUpWithError() throws {
-        // Global setup code here
-        // This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Global teardown code here
-        // This method is called after the invocation of each test method in the class.
-    }
-
     // MARK: - Integration Tests
-    
-    func testFileManagerProtocolIntegration() throws {
+
+    @Test
+    func fileManagerProtocolIntegration() throws {
         // This test verifies that the FileManager protocol works with real FileManager
         
         // Arrange
@@ -86,31 +78,29 @@ final class GuidedCaptureTests: XCTestCase {
         try FileManager.default.removeItem(at: testDir)
         
         // Assert
-        XCTAssertTrue(exists)
+        #expect(exists)
     }
-    
     // MARK: - Performance Tests
-    
-    func testPerformanceExample() throws {
+
+    @Test
+    func performanceExample() {
         // This is an example of a performance test case.
-        measure {
-            // Put the code you want to measure the time of here.
-            let mockFileManager = MockFileManager()
-            let viewModel = ModelsViewModel(fileManager: mockFileManager)
-            
-            // Setup realistic file system
-            mockFileManager.setupRealisticFileSystem()
-            
-            // Perform operations
-            for _ in 0..<100 {
-                _ = try? viewModel.urlsInAllModelsFolders()
-            }
+        let mockFileManager = MockFileManager()
+        let viewModel = ModelsViewModel(fileManager: mockFileManager)
+
+        // Setup realistic file system
+        mockFileManager.setupRealisticFileSystem()
+
+        // Perform operations
+        for _ in 0..<100 {
+            _ = try? viewModel.urlsInAllModelsFolders()
         }
     }
-    
+
     // MARK: - Test Coverage Verification
-    
-    func testAllComponentsAreTested() {
+
+    @Test
+    func allComponentsAreTested() {
         // This test ensures that all major components have corresponding test files
         
         let testClasses = [
@@ -125,13 +115,14 @@ final class GuidedCaptureTests: XCTestCase {
         
         // Verify that all test classes are present
         for testClass in testClasses {
-            XCTAssertTrue(true, "Test class \(testClass) should be present")
+            #expect(true, "Test class \(testClass) should be present")
         }
     }
-    
+
     // MARK: - Mock Verification Tests
-    
-    func testMockFileManagerCallTracking() {
+
+    @Test
+    func mockFileManagerCallTracking() {
         // Arrange
         let mockFileManager = MockFileManager()
         let viewModel = ModelsViewModel(fileManager: mockFileManager)
@@ -144,13 +135,14 @@ final class GuidedCaptureTests: XCTestCase {
         _ = try? viewModel.urlsInAllModelsFolders()
         
         // Assert
-        XCTAssertGreaterThan(mockFileManager.urlCallCount, 0)
-        XCTAssertGreaterThan(mockFileManager.contentsOfDirectoryCallCount, 0)
-        XCTAssertNotNil(mockFileManager.lastURLCallParameters)
-        XCTAssertNotNil(mockFileManager.lastContentsOfDirectoryURL)
+        #expect(mockFileManager.urlCallCount > 0)
+        #expect(mockFileManager.contentsOfDirectoryCallCount > 0)
+        #expect(mockFileManager.lastURLCallParameters != nil)
+        #expect(mockFileManager.lastContentsOfDirectoryURL != nil)
     }
-    
-    func testMockFileManagerReset() {
+
+    @Test
+    func mockFileManagerReset() {
         // Arrange
         let mockFileManager = MockFileManager()
         
@@ -159,15 +151,15 @@ final class GuidedCaptureTests: XCTestCase {
         _ = try? mockFileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
         
         // Verify call was made
-        XCTAssertEqual(mockFileManager.urlCallCount, 1)
-        XCTAssertNotNil(mockFileManager.lastURLCallParameters)
+        #expect(mockFileManager.urlCallCount == 1)
+        #expect(mockFileManager.lastURLCallParameters != nil)
         
         // Reset
         mockFileManager.resetAll()
         
         // Assert
-        XCTAssertEqual(mockFileManager.urlCallCount, 0)
-        XCTAssertNil(mockFileManager.lastURLCallParameters)
-        XCTAssertNil(mockFileManager.urlStub)
+        #expect(mockFileManager.urlCallCount == 0)
+        #expect(mockFileManager.lastURLCallParameters == nil)
+        #expect(mockFileManager.urlStub == nil)
     }
 }

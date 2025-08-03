@@ -6,25 +6,22 @@
 //  Copyright © 2024 Apple. All rights reserved.
 //
 
-import XCTest
+import Testing
 @testable import Ortio
 
-final class ModelsTests: XCTestCase {
+@Suite
+struct ModelsTests {
 
-    var mockFileManager: MockFileManager!
-    var viewModel: ModelsViewModel!
-    
-    override func setUpWithError() throws {
+    var mockFileManager: MockFileManager
+    var viewModel: ModelsViewModel
+
+    init() {
         mockFileManager = MockFileManager()
         viewModel = ModelsViewModel(fileManager: mockFileManager)
     }
 
-    override func tearDownWithError() throws {
-        mockFileManager = nil
-        viewModel = nil
-    }
-
-    func testUrlsInAllModelsFolders() throws {
+    @Test
+    func urlsInAllModelsFolders() throws {
         // Arrange
         let expectedURLs = [
             URL(string: "file:///path/to/Documents/Scans/Session1/Models/model1.usdz")!,
@@ -53,10 +50,11 @@ final class ModelsTests: XCTestCase {
         let modelURLs = try viewModel.urlsInAllModelsFolders()
         
         // Assert
-        XCTAssertEqual(modelURLs, expectedURLs)
+        #expect(modelURLs == expectedURLs)
     }
 
-    func testLoadModelsFromDirectories() throws {
+    @Test
+    func loadModelsFromDirectories() async {
         // Arrange
         let expectedURLs = [
             URL(string: "file:///path/to/Documents/Scans/Session1/Models/model1.usdz")!,
@@ -80,18 +78,14 @@ final class ModelsTests: XCTestCase {
         mockFileManager.fileExistsStub = { path, isDirectory in
             return path == "/path/to/Documents/Scans/Session1/Models"
         }
-        
-        let expectation = self.expectation(description: "Load models from directories")
-        
-        // Act
-        viewModel.loadModelsFromDirectories()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            // Assert
-            XCTAssertEqual(self.viewModel.models.map { $0.url }, expectedURLs)
-            expectation.fulfill()
+
+        // Act & Assert
+        await confirmation("Load models from directories") { confirm in
+            viewModel.loadModelsFromDirectories()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                #expect(self.viewModel.models.map { $0.url } == expectedURLs)
+                confirm()
+            }
         }
-        
-        waitForExpectations(timeout: 20, handler: nil)
     }
 }

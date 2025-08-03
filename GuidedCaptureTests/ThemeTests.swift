@@ -6,50 +6,56 @@
 //  Copyright © 2024 Apple. All rights reserved.
 //
 
-import XCTest
+import Testing
 @testable import Ortio
 
-final class ThemeTests: XCTestCase {
+@Suite
+struct ThemeTests {
 
     // MARK: - Theme Enum Tests
-    
-    func testThemeAllCases() {
+
+    @Test
+    func themeAllCases() {
         // Act
         let allCases = Theme.allCases
         
         // Assert
-        XCTAssertEqual(allCases.count, 3)
-        XCTAssertTrue(allCases.contains(.light))
-        XCTAssertTrue(allCases.contains(.dark))
-        XCTAssertTrue(allCases.contains(.system))
+        #expect(allCases.count == 3)
+        #expect(allCases.contains(.light))
+        #expect(allCases.contains(.dark))
+        #expect(allCases.contains(.system))
     }
-    
-    func testThemeIdentifiable() {
+
+    @Test
+    func themeIdentifiable() {
         // Act & Assert
         let lightTheme = Theme.light
         let darkTheme = Theme.dark
         let systemTheme = Theme.system
         
-        XCTAssertEqual(lightTheme.id, "light")
-        XCTAssertEqual(darkTheme.id, "dark")
-        XCTAssertEqual(systemTheme.id, "system")
+        #expect(lightTheme.id == "light")
+        #expect(darkTheme.id == "dark")
+        #expect(systemTheme.id == "system")
     }
-    
-    func testThemeDescription() {
+
+    @Test
+    func themeDescription() {
         // Act & Assert
-        XCTAssertEqual(Theme.light.description, "Light")
-        XCTAssertEqual(Theme.dark.description, "Dark")
-        XCTAssertEqual(Theme.system.description, "System")
+        #expect(Theme.light.description == "Light")
+        #expect(Theme.dark.description == "Dark")
+        #expect(Theme.system.description == "System")
     }
-    
-    func testThemeRawValue() {
+
+    @Test
+    func themeRawValue() {
         // Act & Assert
-        XCTAssertEqual(Theme.light.rawValue, "light")
-        XCTAssertEqual(Theme.dark.rawValue, "dark")
-        XCTAssertEqual(Theme.system.rawValue, "system")
+        #expect(Theme.light.rawValue == "light")
+        #expect(Theme.dark.rawValue == "dark")
+        #expect(Theme.system.rawValue == "system")
     }
-    
-    func testThemeCodable() throws {
+
+    @Test
+    func themeCodable() throws {
         // Arrange
         let themes: [Theme] = [.light, .dark, .system]
         
@@ -61,58 +67,63 @@ final class ThemeTests: XCTestCase {
         let decodedThemes = try decoder.decode([Theme].self, from: data)
         
         // Assert
-        XCTAssertEqual(decodedThemes, themes)
+        #expect(decodedThemes == themes)
     }
-    
-    func testThemeEquality() {
+
+    @Test
+    func themeEquality() {
         // Act & Assert
-        XCTAssertEqual(Theme.light, Theme.light)
-        XCTAssertEqual(Theme.dark, Theme.dark)
-        XCTAssertEqual(Theme.system, Theme.system)
-        XCTAssertNotEqual(Theme.light, Theme.dark)
-        XCTAssertNotEqual(Theme.light, Theme.system)
-        XCTAssertNotEqual(Theme.dark, Theme.system)
+        #expect(Theme.light == Theme.light)
+        #expect(Theme.dark == Theme.dark)
+        #expect(Theme.system == Theme.system)
+        #expect(Theme.light != Theme.dark)
+        #expect(Theme.light != Theme.system)
+        #expect(Theme.dark != Theme.system)
     }
-    
-    func testThemeHashable() {
+
+    @Test
+    func themeHashable() {
         // Arrange
         let themes: Set<Theme> = [.light, .dark, .system]
         
         // Act & Assert
-        XCTAssertEqual(themes.count, 3)
-        XCTAssertTrue(themes.contains(.light))
-        XCTAssertTrue(themes.contains(.dark))
-        XCTAssertTrue(themes.contains(.system))
+        #expect(themes.count == 3)
+        #expect(themes.contains(.light))
+        #expect(themes.contains(.dark))
+        #expect(themes.contains(.system))
     }
     
     // MARK: - Theme Initialization Tests
     
-    func testThemeInitFromRawValue() {
+    @Test
+    func themeInitFromRawValue() {
         // Act & Assert
-        XCTAssertEqual(Theme(rawValue: "light"), .light)
-        XCTAssertEqual(Theme(rawValue: "dark"), .dark)
-        XCTAssertEqual(Theme(rawValue: "system"), .system)
-        XCTAssertNil(Theme(rawValue: "invalid"))
+        #expect(Theme(rawValue: "light") == .light)
+        #expect(Theme(rawValue: "dark") == .dark)
+        #expect(Theme(rawValue: "system") == .system)
+        #expect(Theme(rawValue: "invalid") == nil)
     }
     
     
     // MARK: - Theme String Representation Tests
     
-    func testThemeStringInterpolation() {
+    @Test
+    func themeStringInterpolation() {
         // Act
         let lightString = "\(Theme.light)"
         let darkString = "\(Theme.dark)"
         let systemString = "\(Theme.system)"
         
         // Assert
-        XCTAssertEqual(lightString, "light")
-        XCTAssertEqual(darkString, "dark")
-        XCTAssertEqual(systemString, "system")
+        #expect(lightString == "light")
+        #expect(darkString == "dark")
+        #expect(systemString == "system")
     }
     
     // MARK: - Theme Array Operations Tests
     
-    func testThemeArrayOperations() {
+    @Test
+    func themeArrayOperations() {
         // Arrange
         var themes: [Theme] = []
         
@@ -122,13 +133,14 @@ final class ThemeTests: XCTestCase {
         themes.append(.system)
         
         // Assert
-        XCTAssertEqual(themes.count, 3)
-        XCTAssertEqual(themes[0], .light)
-        XCTAssertEqual(themes[1], .dark)
-        XCTAssertEqual(themes[2], .system)
+        #expect(themes.count == 3)
+        #expect(themes[0] == .light)
+        #expect(themes[1] == .dark)
+        #expect(themes[2] == .system)
     }
     
-    func testThemeArrayFiltering() {
+    @Test
+    func themeArrayFiltering() {
         // Arrange
         let themes: [Theme] = [.light, .dark, .system, .light, .dark]
         
@@ -138,12 +150,13 @@ final class ThemeTests: XCTestCase {
         let systemThemes = themes.filter { $0 == .system }
         
         // Assert
-        XCTAssertEqual(lightThemes.count, 2)
-        XCTAssertEqual(darkThemes.count, 2)
-        XCTAssertEqual(systemThemes.count, 1)
+        #expect(lightThemes.count == 2)
+        #expect(darkThemes.count == 2)
+        #expect(systemThemes.count == 1)
     }
     
-    func testThemeArrayMapping() {
+    @Test
+    func themeArrayMapping() {
         // Arrange
         let themes: [Theme] = [.light, .dark, .system]
         
@@ -152,13 +165,14 @@ final class ThemeTests: XCTestCase {
         let rawValues = themes.map { $0.rawValue }
         
         // Assert
-        XCTAssertEqual(descriptions, ["Light", "Dark", "System"])
-        XCTAssertEqual(rawValues, ["light", "dark", "system"])
+        #expect(descriptions == ["Light", "Dark", "System"])
+        #expect(rawValues == ["light", "dark", "system"])
     }
     
     // MARK: - Theme Dictionary Tests
     
-    func testThemeAsDictionaryKey() {
+    @Test
+    func themeAsDictionaryKey() {
         // Arrange
         var themeDictionary: [Theme: String] = [:]
         
@@ -168,67 +182,68 @@ final class ThemeTests: XCTestCase {
         themeDictionary[.system] = "System Mode"
         
         // Assert
-        XCTAssertEqual(themeDictionary[.light], "Light Mode")
-        XCTAssertEqual(themeDictionary[.dark], "Dark Mode")
-        XCTAssertEqual(themeDictionary[.system], "System Mode")
-        XCTAssertEqual(themeDictionary.count, 3)
+        #expect(themeDictionary[.light] == "Light Mode")
+        #expect(themeDictionary[.dark] == "Dark Mode")
+        #expect(themeDictionary[.system] == "System Mode")
+        #expect(themeDictionary.count == 3)
     }
     
     // MARK: - Theme Optional Tests
     
-    func testThemeOptionalHandling() {
+    @Test
+    func themeOptionalHandling() {
         // Arrange
         let optionalLight: Theme? = .light
         let optionalDark: Theme? = .dark
         let optionalNil: Theme? = nil
         
         // Act & Assert
-        XCTAssertNotNil(optionalLight)
-        XCTAssertNotNil(optionalDark)
-        XCTAssertNil(optionalNil)
-        
+        #expect(optionalLight != nil)
+        #expect(optionalDark != nil)
+        #expect(optionalNil == nil)
+
         if let theme = optionalLight {
-            XCTAssertEqual(theme, .light)
+            #expect(theme == .light)
         } else {
-            XCTFail("Optional light theme should not be nil")
+            #expect(false, "Optional light theme should not be nil")
         }
-        
+
         if let theme = optionalDark {
-            XCTAssertEqual(theme, .dark)
+            #expect(theme == .dark)
         } else {
-            XCTFail("Optional dark theme should not be nil")
+            #expect(false, "Optional dark theme should not be nil")
         }
     }
     
     // MARK: - Theme Switch Statement Tests
     
-    func testThemeSwitchStatement() {
+    @Test
+    func themeSwitchStatement() {
         // Test all cases in a switch statement
         let themes: [Theme] = [.light, .dark, .system]
         
         for theme in themes {
             switch theme {
             case .light:
-                XCTAssertEqual(theme.description, "Light")
+                #expect(theme.description == "Light")
             case .dark:
-                XCTAssertEqual(theme.description, "Dark")
+                #expect(theme.description == "Dark")
             case .system:
-                XCTAssertEqual(theme.description, "System")
+                #expect(theme.description == "System")
             }
         }
     }
-    
+
     // MARK: - Theme Performance Tests
-    
-    func testThemePerformance() {
-        // Measure performance of theme operations
-        measure {
-            let themes: [Theme] = [.light, .dark, .system]
-            for _ in 0..<1000 {
-                _ = themes.map { $0.description }
-                _ = themes.map { $0.rawValue }
-                _ = themes.map { $0.id }
-            }
+
+    @Test
+    func themePerformance() {
+        // Simple performance-like loop
+        let themes: [Theme] = [.light, .dark, .system]
+        for _ in 0..<1000 {
+            _ = themes.map { $0.description }
+            _ = themes.map { $0.rawValue }
+            _ = themes.map { $0.id }
         }
     }
-} 
+}

@@ -6,28 +6,31 @@
 //  Copyright © 2024 Apple. All rights reserved.
 //
 
-import XCTest
+import Testing
 @testable import Ortio
 
-final class FileManagerProtocolTests: XCTestCase {
-    var fileManager: FileManager!
-    
-    override func setUpWithError() throws {
+@Suite
+struct FileManagerProtocolTests {
+    var fileManager: FileManager
+
+    init() {
         fileManager = FileManager.default
     }
 
-    override func tearDownWithError() throws {
-        fileManager = nil
+    deinit {
+        fileManager = FileManager.default
     }
 
     // MARK: - FileManager Protocol Conformance Tests
-    
-    func testFileManagerConformsToFileManagerProtocol() {
+
+    @Test
+    func fileManagerConformsToFileManagerProtocol() {
         // Act & Assert
-        XCTAssertTrue(FileManager.default is FileManagerProtocol)
+        #expect(FileManager.default is FileManagerProtocol)
     }
-    
-    func testFileManagerProtocolContentsOfDirectory() throws {
+
+    @Test
+    func fileManagerProtocolContentsOfDirectory() throws {
         // Arrange
         let tempDir = FileManager.default.temporaryDirectory
         let testDir = tempDir.appendingPathComponent("TestDirectory")
@@ -45,15 +48,16 @@ final class FileManagerProtocolTests: XCTestCase {
         let contents = try fileManager.contentsOfDirectory(at: testDir, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
         
         // Assert
-        XCTAssertEqual(contents.count, 2)
-        XCTAssertTrue(contents.contains(testFile1))
-        XCTAssertTrue(contents.contains(testFile2))
+        #expect(contents.count == 2)
+        #expect(contents.contains(testFile1))
+        #expect(contents.contains(testFile2))
         
         // Cleanup
         try fileManager.removeItem(at: testDir)
     }
     
-    func testFileManagerProtocolFileExists() {
+    @Test
+    func fileManagerProtocolFileExists() {
         // Arrange
         let tempDir = FileManager.default.temporaryDirectory
         let testFile = tempDir.appendingPathComponent("testfile.txt")
@@ -62,28 +66,30 @@ final class FileManagerProtocolTests: XCTestCase {
         try? "test content".write(to: testFile, atomically: true, encoding: .utf8)
         
         // Act & Assert
-        XCTAssertTrue(fileManager.fileExists(atPath: testFile.path, isDirectory: nil))
-        XCTAssertFalse(fileManager.fileExists(atPath: "/nonexistent/path", isDirectory: nil))
-        
+        #expect(fileManager.fileExists(atPath: testFile.path, isDirectory: nil))
+        #expect(!fileManager.fileExists(atPath: "/nonexistent/path", isDirectory: nil))
+
         // Test directory check
         var isDirectory: ObjCBool = false
-        XCTAssertTrue(fileManager.fileExists(atPath: tempDir.path, isDirectory: &isDirectory))
-        XCTAssertTrue(isDirectory.boolValue)
+        #expect(fileManager.fileExists(atPath: tempDir.path, isDirectory: &isDirectory))
+        #expect(isDirectory.boolValue)
         
         // Cleanup
         try? fileManager.removeItem(at: testFile)
     }
     
-    func testFileManagerProtocolURL() throws {
+    @Test
+    func fileManagerProtocolURL() throws {
         // Arrange & Act
         let documentsURL = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
         
         // Assert
-        XCTAssertNotNil(documentsURL)
-        XCTAssertTrue(documentsURL.hasDirectoryPath)
+        #expect(documentsURL != nil)
+        #expect(documentsURL.hasDirectoryPath)
     }
     
-    func testFileManagerProtocolCreateDirectory() throws {
+    @Test
+    func fileManagerProtocolCreateDirectory() throws {
         // Arrange
         let tempDir = FileManager.default.temporaryDirectory
         let testDir = tempDir.appendingPathComponent("TestCreateDirectory")
@@ -92,17 +98,18 @@ final class FileManagerProtocolTests: XCTestCase {
         try fileManager.createDirectory(atPath: testDir.path, withIntermediateDirectories: true, attributes: nil)
         
         // Assert
-        XCTAssertTrue(fileManager.fileExists(atPath: testDir.path, isDirectory: nil))
-        
+        #expect(fileManager.fileExists(atPath: testDir.path, isDirectory: nil))
+
         var isDirectory: ObjCBool = false
-        fileManager.fileExists(atPath: testDir.path, isDirectory: &isDirectory)
-        XCTAssertTrue(isDirectory.boolValue)
+        _ = fileManager.fileExists(atPath: testDir.path, isDirectory: &isDirectory)
+        #expect(isDirectory.boolValue)
         
         // Cleanup
         try fileManager.removeItem(at: testDir)
     }
     
-    func testFileManagerProtocolAttributesOfItem() throws {
+    @Test
+    func fileManagerProtocolAttributesOfItem() throws {
         // Arrange
         let tempDir = FileManager.default.temporaryDirectory
         let testFile = tempDir.appendingPathComponent("testattributes.txt")
@@ -113,20 +120,20 @@ final class FileManagerProtocolTests: XCTestCase {
         let attributes = try fileManager.attributesOfItem(atPath: testFile.path)
         
         // Assert
-        XCTAssertNotNil(attributes)
-        XCTAssertNotNil(attributes[.size])
-        XCTAssertNotNil(attributes[.creationDate])
-        XCTAssertNotNil(attributes[.modificationDate])
-        
+        #expect(attributes[.size] != nil)
+        #expect(attributes[.creationDate] != nil)
+        #expect(attributes[.modificationDate] != nil)
+
         if let size = attributes[.size] as? NSNumber {
-            XCTAssertGreaterThan(size.intValue, 0)
+            #expect(size.intValue > 0)
         }
         
         // Cleanup
         try fileManager.removeItem(at: testFile)
     }
     
-    func testFileManagerProtocolCopyItem() throws {
+    @Test
+    func fileManagerProtocolCopyItem() throws {
         // Arrange
         let tempDir = FileManager.default.temporaryDirectory
         let sourceFile = tempDir.appendingPathComponent("source.txt")
@@ -138,11 +145,11 @@ final class FileManagerProtocolTests: XCTestCase {
         try fileManager.copyItem(at: sourceFile, to: destinationFile)
         
         // Assert
-        XCTAssertTrue(fileManager.fileExists(atPath: sourceFile.path, isDirectory: nil))
-        XCTAssertTrue(fileManager.fileExists(atPath: destinationFile.path, isDirectory: nil))
-        
+        #expect(fileManager.fileExists(atPath: sourceFile.path, isDirectory: nil))
+        #expect(fileManager.fileExists(atPath: destinationFile.path, isDirectory: nil))
+
         let copiedContent = try String(contentsOf: destinationFile, encoding: .utf8)
-        XCTAssertEqual(copiedContent, testContent)
+        #expect(copiedContent == testContent)
         
         // Cleanup
         try fileManager.removeItem(at: sourceFile)
@@ -151,17 +158,19 @@ final class FileManagerProtocolTests: XCTestCase {
     
     // MARK: - Error Handling Tests
     
-    func testFileManagerProtocolContentsOfDirectoryError() {
+    @Test
+    func fileManagerProtocolContentsOfDirectoryError() {
         // Arrange
         let nonexistentDir = URL(fileURLWithPath: "/nonexistent/directory")
         
         // Act & Assert
-        XCTAssertThrowsError(try fileManager.contentsOfDirectory(at: nonexistentDir, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)) { error in
-            XCTAssertTrue(error is CocoaError)
+        #expect(throws: CocoaError.self) {
+            try fileManager.contentsOfDirectory(at: nonexistentDir, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
         }
     }
-    
-    func testFileManagerProtocolCreateDirectoryError() {
+
+    @Test
+    func fileManagerProtocolCreateDirectoryError() {
         // Arrange
         let tempDir = FileManager.default.temporaryDirectory
         let testDir = tempDir.appendingPathComponent("TestCreateDirectory")
@@ -170,54 +179,56 @@ final class FileManagerProtocolTests: XCTestCase {
         try? fileManager.createDirectory(atPath: testDir.path, withIntermediateDirectories: true, attributes: nil)
         
         // Act & Assert - trying to create the same directory again should fail
-        XCTAssertThrowsError(try fileManager.createDirectory(atPath: testDir.path, withIntermediateDirectories: false, attributes: nil)) { error in
-            XCTAssertTrue(error is CocoaError)
+        #expect(throws: CocoaError.self) {
+            try fileManager.createDirectory(atPath: testDir.path, withIntermediateDirectories: false, attributes: nil)
         }
         
         // Cleanup
         try? fileManager.removeItem(at: testDir)
     }
     
-    func testFileManagerProtocolAttributesOfItemError() {
+    @Test
+    func fileManagerProtocolAttributesOfItemError() {
         // Arrange
         let nonexistentFile = "/nonexistent/file.txt"
         
         // Act & Assert
-        XCTAssertThrowsError(try fileManager.attributesOfItem(atPath: nonexistentFile)) { error in
-            XCTAssertTrue(error is CocoaError)
+        #expect(throws: CocoaError.self) {
+            try fileManager.attributesOfItem(atPath: nonexistentFile)
         }
     }
-    
-    func testFileManagerProtocolCopyItemError() {
+
+    @Test
+    func fileManagerProtocolCopyItemError() {
         // Arrange
         let sourceFile = URL(fileURLWithPath: "/nonexistent/source.txt")
         let destinationFile = URL(fileURLWithPath: "/nonexistent/destination.txt")
         
         // Act & Assert
-        XCTAssertThrowsError(try fileManager.copyItem(at: sourceFile, to: destinationFile)) { error in
-            XCTAssertTrue(error is CocoaError)
+        #expect(throws: CocoaError.self) {
+            try fileManager.copyItem(at: sourceFile, to: destinationFile)
         }
     }
-    
     // MARK: - Protocol Method Signature Tests
-    
-    func testFileManagerProtocolMethodSignatures() {
+
+    @Test
+    func fileManagerProtocolMethodSignatures() {
         // This test ensures that the protocol methods have the correct signatures
         // by attempting to call them through the protocol type
-        
+
         let protocolFileManager: FileManagerProtocol = fileManager
-        
+
         // Test that we can call the protocol methods
-        XCTAssertNoThrow(try {
+        #expect(throws: Never.self) {
             _ = try protocolFileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-        }())
-        
-        XCTAssertNoThrow(try {
+        }
+
+        #expect(throws: Never.self) {
             _ = try protocolFileManager.contentsOfDirectory(at: URL(fileURLWithPath: "/"), includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
-        }())
-        
-        XCTAssertNoThrow(try {
+        }
+
+        #expect(throws: Never.self) {
             _ = protocolFileManager.fileExists(atPath: "/", isDirectory: nil)
-        }())
+        }
     }
-} 
+}

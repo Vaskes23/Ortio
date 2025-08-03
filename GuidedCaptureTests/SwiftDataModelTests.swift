@@ -6,28 +6,29 @@
 //  Copyright © 2024 Apple. All rights reserved.
 //
 
-import XCTest
+import Testing
 import SwiftData
 @testable import Ortio
 
-final class SwiftDataModelTests: XCTestCase {
-    var modelContainer: ModelContainer!
-    var modelContext: ModelContext!
-    
-    override func setUpWithError() throws {
+@Suite
+struct SwiftDataModelTests {
+    var modelContainer: ModelContainer
+    var modelContext: ModelContext
+
+    init() throws {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         modelContainer = try ModelContainer(for: Models.self, User.self, configurations: config)
         modelContext = ModelContext(modelContainer)
     }
 
-    override func tearDownWithError() throws {
-        modelContext = nil
-        modelContainer = nil
+    deinit {
+        // cleanup automatically
     }
 
     // MARK: - Models Tests
     
-    func testModelsInitialization() {
+    @Test
+    func modelsInitialization() {
         // Arrange
         let name = "Test Model"
         let date = Date()
@@ -40,15 +41,16 @@ final class SwiftDataModelTests: XCTestCase {
         let model = Models(name: name, date: date, favorite: favorite, imported: imported, size: size, model: modelURL)
         
         // Assert
-        XCTAssertEqual(model.name, name)
-        XCTAssertEqual(model.date, date)
-        XCTAssertEqual(model.favorite, favorite)
-        XCTAssertEqual(model.imported, imported)
-        XCTAssertEqual(model.size, size)
-        XCTAssertEqual(model.model, modelURL)
+        #expect(model.name == name)
+        #expect(model.date == date)
+        #expect(model.favorite == favorite)
+        #expect(model.imported == imported)
+        #expect(model.size == size)
+        #expect(model.model == modelURL)
     }
-    
-    func testModelsUniqueConstraints() throws {
+
+    @Test
+    func modelsUniqueConstraints() throws {
         // Arrange
         let url1 = URL(fileURLWithPath: "/path/to/model1.usdz")
         let url2 = URL(fileURLWithPath: "/path/to/model2.usdz")
@@ -61,24 +63,26 @@ final class SwiftDataModelTests: XCTestCase {
         modelContext.insert(model2)
         
         // Assert
-        XCTAssertNoThrow(try modelContext.save())
-        
+        #expect(throws: Never.self) { try modelContext.save() }
+
         let fetchDescriptor = FetchDescriptor<Models>()
         let savedModels = try modelContext.fetch(fetchDescriptor)
-        XCTAssertEqual(savedModels.count, 2)
+        #expect(savedModels.count == 2)
     }
-    
-    func testModelsIdentifiable() {
+
+    @Test
+    func modelsIdentifiable() {
         // Arrange
         let model = Models(name: "Test Model", date: Date(), favorite: false, imported: true, size: 1024, model: URL(fileURLWithPath: "/path/to/model.usdz"))
         
         // Act & Assert
-        XCTAssertNotNil(model.id)
+        #expect(model.id != nil)
     }
     
     // MARK: - User Tests
     
-    func testUserInitialization() {
+    @Test
+    func userInitialization() {
         // Arrange
         let username = "testuser"
         let name = "Test User"
@@ -89,24 +93,26 @@ final class SwiftDataModelTests: XCTestCase {
         let user = User(username: username, name: name, appearance: appearance, profileImage: profileImageData)
         
         // Assert
-        XCTAssertEqual(user.username, username)
-        XCTAssertEqual(user.name, name)
-        XCTAssertEqual(user.appearance, appearance)
-        XCTAssertEqual(user.profileImage, profileImageData)
+        #expect(user.username == username)
+        #expect(user.name == name)
+        #expect(user.appearance == appearance)
+        #expect(user.profileImage == profileImageData)
     }
-    
-    func testUserConvenienceInitializer() {
+
+    @Test
+    func userConvenienceInitializer() {
         // Act
         let user = User()
         
         // Assert
-        XCTAssertEqual(user.username, "placeholder")
-        XCTAssertEqual(user.name, "Placeholder User")
-        XCTAssertEqual(user.appearance, 0)
-        XCTAssertEqual(user.profileImage, Data())
+        #expect(user.username == "placeholder")
+        #expect(user.name == "Placeholder User")
+        #expect(user.appearance == 0)
+        #expect(user.profileImage == Data())
     }
-    
-    func testUserProfileUIImageWithValidData() {
+
+    @Test
+    func userProfileUIImageWithValidData() {
         // Arrange
         let imageData = Data([0xFF, 0xD8, 0xFF, 0xE0]) // Minimal JPEG header
         let user = User(username: "test", name: "Test", appearance: 0, profileImage: imageData)
@@ -116,10 +122,11 @@ final class SwiftDataModelTests: XCTestCase {
         
         // Assert
         // Note: This will be nil because the data is not a valid image, but we're testing the property
-        XCTAssertNil(uiImage) // Invalid image data should return nil
+        #expect(uiImage == nil) // Invalid image data should return nil
     }
-    
-    func testUserProfileUIImageWithNilData() {
+
+    @Test
+    func userProfileUIImageWithNilData() {
         // Arrange
         let user = User(username: "test", name: "Test", appearance: 0, profileImage: nil)
         
@@ -127,10 +134,11 @@ final class SwiftDataModelTests: XCTestCase {
         let uiImage = user.profileUIImage
         
         // Assert
-        XCTAssertNil(uiImage)
+        #expect(uiImage == nil)
     }
-    
-    func testUserUpdateProfileImage() {
+
+    @Test
+    func userUpdateProfileImage() {
         // Arrange
         let user = User(username: "test", name: "Test", appearance: 0, profileImage: nil)
         let testImage = createTestImage()
@@ -139,11 +147,12 @@ final class SwiftDataModelTests: XCTestCase {
         user.updateProfileImage(testImage)
         
         // Assert
-        XCTAssertNotNil(user.profileImage)
-        XCTAssertGreaterThan(user.profileImage?.count ?? 0, 0)
+        #expect(user.profileImage != nil)
+        #expect((user.profileImage?.count ?? 0) > 0)
     }
-    
-    func testUserUniqueConstraints() throws {
+
+    @Test
+    func userUniqueConstraints() throws {
         // Arrange
         let user1 = User(username: "user1", name: "User 1", appearance: 0, profileImage: nil)
         let user2 = User(username: "user2", name: "User 2", appearance: 1, profileImage: nil)
@@ -153,24 +162,26 @@ final class SwiftDataModelTests: XCTestCase {
         modelContext.insert(user2)
         
         // Assert
-        XCTAssertNoThrow(try modelContext.save())
-        
+        #expect(throws: Never.self) { try modelContext.save() }
+
         let fetchDescriptor = FetchDescriptor<User>()
         let savedUsers = try modelContext.fetch(fetchDescriptor)
-        XCTAssertEqual(savedUsers.count, 2)
+        #expect(savedUsers.count == 2)
     }
     
-    func testUserIdentifiable() {
+    @Test
+    func userIdentifiable() {
         // Arrange
         let user = User(username: "test", name: "Test", appearance: 0, profileImage: nil)
         
         // Act & Assert
-        XCTAssertNotNil(user.username) // username is the unique identifier
+        #expect(user.username != nil) // username is the unique identifier
     }
     
     // MARK: - SwiftData Operations Tests
     
-    func testSaveAndFetchModels() throws {
+    @Test
+    func saveAndFetchModels() throws {
         // Arrange
         let model1 = Models(name: "Model 1", date: Date(), favorite: false, imported: true, size: 1024, model: URL(fileURLWithPath: "/path/to/model1.usdz"))
         let model2 = Models(name: "Model 2", date: Date(), favorite: true, imported: false, size: 2048, model: URL(fileURLWithPath: "/path/to/model2.usdz"))
@@ -184,12 +195,13 @@ final class SwiftDataModelTests: XCTestCase {
         let fetchedModels = try modelContext.fetch(fetchDescriptor)
         
         // Assert
-        XCTAssertEqual(fetchedModels.count, 2)
-        XCTAssertTrue(fetchedModels.contains { $0.name == "Model 1" })
-        XCTAssertTrue(fetchedModels.contains { $0.name == "Model 2" })
+        #expect(fetchedModels.count == 2)
+        #expect(fetchedModels.contains { $0.name == "Model 1" })
+        #expect(fetchedModels.contains { $0.name == "Model 2" })
     }
-    
-    func testSaveAndFetchUsers() throws {
+
+    @Test
+    func saveAndFetchUsers() throws {
         // Arrange
         let user1 = User(username: "user1", name: "User 1", appearance: 0, profileImage: nil)
         let user2 = User(username: "user2", name: "User 2", appearance: 1, profileImage: nil)
@@ -203,12 +215,13 @@ final class SwiftDataModelTests: XCTestCase {
         let fetchedUsers = try modelContext.fetch(fetchDescriptor)
         
         // Assert
-        XCTAssertEqual(fetchedUsers.count, 2)
-        XCTAssertTrue(fetchedUsers.contains { $0.username == "user1" })
-        XCTAssertTrue(fetchedUsers.contains { $0.username == "user2" })
+        #expect(fetchedUsers.count == 2)
+        #expect(fetchedUsers.contains { $0.username == "user1" })
+        #expect(fetchedUsers.contains { $0.username == "user2" })
     }
-    
-    func testDeleteModel() throws {
+
+    @Test
+    func deleteModel() throws {
         // Arrange
         let model = Models(name: "Test Model", date: Date(), favorite: false, imported: true, size: 1024, model: URL(fileURLWithPath: "/path/to/model.usdz"))
         modelContext.insert(model)
@@ -217,7 +230,7 @@ final class SwiftDataModelTests: XCTestCase {
         // Verify model exists
         let fetchDescriptor = FetchDescriptor<Models>()
         var fetchedModels = try modelContext.fetch(fetchDescriptor)
-        XCTAssertEqual(fetchedModels.count, 1)
+        #expect(fetchedModels.count == 1)
         
         // Act
         modelContext.delete(model)
@@ -225,10 +238,11 @@ final class SwiftDataModelTests: XCTestCase {
         
         // Assert
         fetchedModels = try modelContext.fetch(fetchDescriptor)
-        XCTAssertEqual(fetchedModels.count, 0)
+        #expect(fetchedModels.count == 0)
     }
-    
-    func testDeleteUser() throws {
+
+    @Test
+    func deleteUser() throws {
         // Arrange
         let user = User(username: "testuser", name: "Test User", appearance: 0, profileImage: nil)
         modelContext.insert(user)
@@ -237,7 +251,7 @@ final class SwiftDataModelTests: XCTestCase {
         // Verify user exists
         let fetchDescriptor = FetchDescriptor<User>()
         var fetchedUsers = try modelContext.fetch(fetchDescriptor)
-        XCTAssertEqual(fetchedUsers.count, 1)
+        #expect(fetchedUsers.count == 1)
         
         // Act
         modelContext.delete(user)
@@ -245,10 +259,11 @@ final class SwiftDataModelTests: XCTestCase {
         
         // Assert
         fetchedUsers = try modelContext.fetch(fetchDescriptor)
-        XCTAssertEqual(fetchedUsers.count, 0)
+        #expect(fetchedUsers.count == 0)
     }
-    
-    func testUpdateModel() throws {
+
+    @Test
+    func updateModel() throws {
         // Arrange
         let model = Models(name: "Original Name", date: Date(), favorite: false, imported: true, size: 1024, model: URL(fileURLWithPath: "/path/to/model.usdz"))
         modelContext.insert(model)
@@ -262,12 +277,13 @@ final class SwiftDataModelTests: XCTestCase {
         // Assert
         let fetchDescriptor = FetchDescriptor<Models>()
         let fetchedModels = try modelContext.fetch(fetchDescriptor)
-        XCTAssertEqual(fetchedModels.count, 1)
-        XCTAssertEqual(fetchedModels.first?.name, "Updated Name")
-        XCTAssertTrue(fetchedModels.first?.favorite ?? false)
+        #expect(fetchedModels.count == 1)
+        #expect(fetchedModels.first?.name == "Updated Name")
+        #expect(fetchedModels.first?.favorite ?? false)
     }
-    
-    func testUpdateUser() throws {
+
+    @Test
+    func updateUser() throws {
         // Arrange
         let user = User(username: "original", name: "Original Name", appearance: 0, profileImage: nil)
         modelContext.insert(user)
@@ -281,9 +297,9 @@ final class SwiftDataModelTests: XCTestCase {
         // Assert
         let fetchDescriptor = FetchDescriptor<User>()
         let fetchedUsers = try modelContext.fetch(fetchDescriptor)
-        XCTAssertEqual(fetchedUsers.count, 1)
-        XCTAssertEqual(fetchedUsers.first?.name, "Updated Name")
-        XCTAssertEqual(fetchedUsers.first?.appearance, 1)
+        #expect(fetchedUsers.count == 1)
+        #expect(fetchedUsers.first?.name == "Updated Name")
+        #expect(fetchedUsers.first?.appearance == 1)
     }
     
     // MARK: - Helper Methods
