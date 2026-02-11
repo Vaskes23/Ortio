@@ -8,20 +8,6 @@ A class that supports the creation, listing, and filename support of a capture f
 import Dispatch
 import Foundation
 import os
-import SwiftData
-
-@Model 
-final class CreatedModels{
-    @Attribute(.unique) var name: String
-    var date: Date
-    @Attribute(.unique) var model: URL
-    
-    init(name: String,  date: Date, model: URL) {
-        self.name = name
-        self.date = date
-        self.model = model
-    }
-}
 
 class CaptureFolderManager: ObservableObject {
     static let logger = Logger(subsystem: GuidedCaptureSampleApp.subsystem,
@@ -126,7 +112,7 @@ class CaptureFolderManager: ObservableObject {
 
     // Returns the basename for file with the given `id`.
     static func imageIdString(for id: UInt32) -> String {
-        return String(format: "%@%04d", imageStringPrefix, id)
+        String(format: "%@%04d", imageStringPrefix, id)
     }
 
     /// Returns the file URL for the HEIC image that matches the specified
@@ -137,7 +123,7 @@ class CaptureFolderManager: ObservableObject {
     ///   - id: Identifier of an image.
     /// - Returns: `outputDir` URL if the image exists
     static func heicImageUrl(in outputDir: URL, id: UInt32) -> URL {
-        return outputDir
+        outputDir
             .appendingPathComponent(imageIdString(for: id))
             .appendingPathExtension(heicImageExtension)
     }
