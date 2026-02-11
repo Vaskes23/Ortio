@@ -16,8 +16,6 @@ class AppDataModel: ObservableObject, Identifiable {
     let logger = Logger(subsystem: GuidedCaptureSampleApp.subsystem,
                                 category: "AppDataModel")
 
-    static let instance = AppDataModel()
-
     /// The session that manages the object capture phase.
     ///
     /// Set the correct folder locations for the capture session using ``scanFolderManager``.
@@ -33,7 +31,7 @@ class AppDataModel: ObservableObject, Identifiable {
 
     static let minNumImages = 10
 
-    static let bundleForLocalizedStrings = { return Bundle.main }()
+    static let bundleForLocalizedStrings = { return Bundle.main }() // swiftlint:disable:this implicit_return
 
     /// The object that manages the reconstruction process of a set of images of an object into a 3D model.
     ///
@@ -91,7 +89,7 @@ class AppDataModel: ObservableObject, Identifiable {
     }
 
     // Leaves the model state in ready.
-     private init() {
+    init() {
         state = .ready
     }
 
@@ -170,7 +168,8 @@ class AppDataModel: ObservableObject, Identifiable {
     private func startNewCapture() -> Bool {
         logger.log("startNewCapture() called...")
         if !ObjectCaptureSession.isSupported {
-            preconditionFailure("ObjectCaptureSession is not supported on this device!")
+            logger.warning("ObjectCaptureSession is not supported on this device. Skipping capture setup.")
+            return false
         }
 
         guard let folderManager = CaptureFolderManager() else {
@@ -311,7 +310,7 @@ class AppDataModel: ObservableObject, Identifiable {
                 }
 
             case .failed:
-                logger.error("App failed state error=\(String(describing: self.error!))")
+                logger.error("App failed state error=\(String(describing: self.error!))") // swiftlint:disable:this force_unwrapping
                 // Shows error screen.
             default:
                 break

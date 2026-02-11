@@ -8,7 +8,7 @@ struct LoadGuidedCaptureView: View {
     static let logger = Logger(subsystem: GuidedCaptureSampleApp.subsystem,
                                 category: "ContentView")
 
-    @StateObject var appModel: AppDataModel = AppDataModel.instance
+    @EnvironmentObject var appModel: AppDataModel
 
     @State private var showReconstructionView: Bool = false
     @State private var showErrorAlert: Bool = false
@@ -41,7 +41,7 @@ struct LoadGuidedCaptureView: View {
             }
         }
         .alert(
-            "Failed:  " + (appModel.error != nil  ? "\(String(describing: appModel.error!))" : ""),
+            "Failed:  " + (appModel.error != nil  ? "\(String(describing: appModel.error!))" : ""), // swiftlint:disable:this force_unwrapping
             isPresented: $showErrorAlert,
             actions: {
                 Button("OK") {
