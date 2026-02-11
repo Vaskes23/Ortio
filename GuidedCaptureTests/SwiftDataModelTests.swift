@@ -82,16 +82,16 @@ final class SwiftDataModelTests: XCTestCase {
         // Arrange
         let username = "testuser"
         let name = "Test User"
-        let appearance = 1
+        let theme: Theme = .dark
         let profileImageData = Data([1, 2, 3, 4])
-        
+
         // Act
-        let user = User(username: username, name: name, appearance: appearance, profileImage: profileImageData)
-        
+        let user = User(username: username, name: name, theme: theme, profileImage: profileImageData)
+
         // Assert
         XCTAssertEqual(user.username, username)
         XCTAssertEqual(user.name, name)
-        XCTAssertEqual(user.appearance, appearance)
+        XCTAssertEqual(user.theme, theme)
         XCTAssertEqual(user.profileImage, profileImageData)
     }
     
@@ -102,14 +102,14 @@ final class SwiftDataModelTests: XCTestCase {
         // Assert
         XCTAssertEqual(user.username, "placeholder")
         XCTAssertEqual(user.name, "Placeholder User")
-        XCTAssertEqual(user.appearance, 0)
+        XCTAssertEqual(user.theme, .light)
         XCTAssertEqual(user.profileImage, Data())
     }
     
     func testUserProfileUIImageWithValidData() {
         // Arrange
         let imageData = Data([0xFF, 0xD8, 0xFF, 0xE0]) // Minimal JPEG header
-        let user = User(username: "test", name: "Test", appearance: 0, profileImage: imageData)
+        let user = User(username: "test", name: "Test", theme: .light, profileImage: imageData)
         
         // Act
         let uiImage = user.profileUIImage
@@ -121,7 +121,7 @@ final class SwiftDataModelTests: XCTestCase {
     
     func testUserProfileUIImageWithNilData() {
         // Arrange
-        let user = User(username: "test", name: "Test", appearance: 0, profileImage: nil)
+        let user = User(username: "test", name: "Test", theme: .light, profileImage: nil)
         
         // Act
         let uiImage = user.profileUIImage
@@ -132,7 +132,7 @@ final class SwiftDataModelTests: XCTestCase {
     
     func testUserUpdateProfileImage() {
         // Arrange
-        let user = User(username: "test", name: "Test", appearance: 0, profileImage: nil)
+        let user = User(username: "test", name: "Test", theme: .light, profileImage: nil)
         let testImage = createTestImage()
         
         // Act
@@ -145,8 +145,8 @@ final class SwiftDataModelTests: XCTestCase {
     
     func testUserUniqueConstraints() throws {
         // Arrange
-        let user1 = User(username: "user1", name: "User 1", appearance: 0, profileImage: nil)
-        let user2 = User(username: "user2", name: "User 2", appearance: 1, profileImage: nil)
+        let user1 = User(username: "user1", name: "User 1", theme: .light, profileImage: nil)
+        let user2 = User(username: "user2", name: "User 2", theme: .dark, profileImage: nil)
         
         // Act
         modelContext.insert(user1)
@@ -162,7 +162,7 @@ final class SwiftDataModelTests: XCTestCase {
     
     func testUserIdentifiable() {
         // Arrange
-        let user = User(username: "test", name: "Test", appearance: 0, profileImage: nil)
+        let user = User(username: "test", name: "Test", theme: .light, profileImage: nil)
         
         // Act & Assert
         XCTAssertNotNil(user.username) // username is the unique identifier
@@ -191,8 +191,8 @@ final class SwiftDataModelTests: XCTestCase {
     
     func testSaveAndFetchUsers() throws {
         // Arrange
-        let user1 = User(username: "user1", name: "User 1", appearance: 0, profileImage: nil)
-        let user2 = User(username: "user2", name: "User 2", appearance: 1, profileImage: nil)
+        let user1 = User(username: "user1", name: "User 1", theme: .light, profileImage: nil)
+        let user2 = User(username: "user2", name: "User 2", theme: .dark, profileImage: nil)
         
         // Act
         modelContext.insert(user1)
@@ -230,7 +230,7 @@ final class SwiftDataModelTests: XCTestCase {
     
     func testDeleteUser() throws {
         // Arrange
-        let user = User(username: "testuser", name: "Test User", appearance: 0, profileImage: nil)
+        let user = User(username: "testuser", name: "Test User", theme: .light, profileImage: nil)
         modelContext.insert(user)
         try modelContext.save()
         
@@ -269,21 +269,21 @@ final class SwiftDataModelTests: XCTestCase {
     
     func testUpdateUser() throws {
         // Arrange
-        let user = User(username: "original", name: "Original Name", appearance: 0, profileImage: nil)
+        let user = User(username: "original", name: "Original Name", theme: .light, profileImage: nil)
         modelContext.insert(user)
         try modelContext.save()
         
         // Act
         user.name = "Updated Name"
-        user.appearance = 1
+        user.theme = .dark
         try modelContext.save()
-        
+
         // Assert
         let fetchDescriptor = FetchDescriptor<User>()
         let fetchedUsers = try modelContext.fetch(fetchDescriptor)
         XCTAssertEqual(fetchedUsers.count, 1)
         XCTAssertEqual(fetchedUsers.first?.name, "Updated Name")
-        XCTAssertEqual(fetchedUsers.first?.appearance, 1)
+        XCTAssertEqual(fetchedUsers.first?.theme, .dark)
     }
     
     // MARK: - Helper Methods
@@ -293,8 +293,8 @@ final class SwiftDataModelTests: XCTestCase {
         UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
         UIColor.red.setFill()
         UIRectFill(CGRect(origin: .zero, size: size))
-        let image = UIGraphicsGetImageFromCurrentImageContext()!
+        let image = UIGraphicsGetImageFromCurrentImageContext()! // swiftlint:disable:this force_unwrapping
         UIGraphicsEndImageContext()
         return image
     }
-} 
+}

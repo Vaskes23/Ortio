@@ -56,6 +56,12 @@
 		7ACE23412C2C441A00A0D5B0 /* FileManagerMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACE23402C2C441A00A0D5B0 /* FileManagerMocks.swift */; };
 		7ACE234E2C2CC79900A0D5B0 /* ImportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACE234D2C2CC79900A0D5B0 /* ImportTests.swift */; };
 		7ACE234F2C2CC83B00A0D5B0 /* FileManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACE234B2C2CC6BE00A0D5B0 /* FileManagerProtocol.swift */; };
+		3DC5CF1064D1199CBFC7E8BD /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4136B410CCC55444B30888E6 /* Models.swift */; };
+		84EE06C1DF0EC4A06F5B6DDB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEF67CCC7F0B8393430CC55 /* User.swift */; };
+		353A8DC15E83A6BC67FE3F86 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60B8EBAE92E426C4DFFC54 /* Theme.swift */; };
+		FD6D464EA4F3278460898BC3 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7840F529923935DE359C496 /* SettingsViewModel.swift */; };
+		3C11131E0A7865F7F536A9ED /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8E002D17E0BFD9F3263D35 /* EditProfileView.swift */; };
+		C2B3D4E5F607182930415A6C /* PathConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A2C3D4E5F6071829304A5B /* PathConstants.swift */; };
 		7AF0DE7C2E3E6C6700E1E6C3 /* ImportViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF0DE772E3E6C6700E1E6C3 /* ImportViewModelTests.swift */; };
 		7AF0DE7D2E3E6C6700E1E6C3 /* BindingExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF0DE752E3E6C6700E1E6C3 /* BindingExtensionTests.swift */; };
 		7AF0DE7E2E3E6C6700E1E6C3 /* SwiftDataModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF0DE7A2E3E6C6700E1E6C3 /* SwiftDataModelTests.swift */; };
@@ -132,6 +138,12 @@
 		7ACE233E2C2C424800A0D5B0 /* ModelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsTests.swift; sourceTree = "<group>"; };
 		7ACE23402C2C441A00A0D5B0 /* FileManagerMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerMocks.swift; sourceTree = "<group>"; };
 		7ACE234B2C2CC6BE00A0D5B0 /* FileManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerProtocol.swift; sourceTree = "<group>"; };
+		4136B410CCC55444B30888E6 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		CEEF67CCC7F0B8393430CC55 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		6E60B8EBAE92E426C4DFFC54 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		A7840F529923935DE359C496 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		3E8E002D17E0BFD9F3263D35 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
+		B1A2C3D4E5F6071829304A5B /* PathConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathConstants.swift; sourceTree = "<group>"; };
 		7ACE234D2C2CC79900A0D5B0 /* ImportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportTests.swift; sourceTree = "<group>"; };
 		7AF0DE752E3E6C6700E1E6C3 /* BindingExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindingExtensionTests.swift; sourceTree = "<group>"; };
 		7AF0DE762E3E6C6700E1E6C3 /* FileManagerProtocolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerProtocolTests.swift; sourceTree = "<group>"; };
@@ -184,6 +196,12 @@
 				7A2F65F82BEA7BD80075EA8D /* ModelsViewModel.swift */,
 				7A2F65FA2BEA7BE80075EA8D /* ModelsModel.swift */,
 				7ACE234B2C2CC6BE00A0D5B0 /* FileManagerProtocol.swift */,
+				4136B410CCC55444B30888E6 /* Models.swift */,
+				CEEF67CCC7F0B8393430CC55 /* User.swift */,
+				6E60B8EBAE92E426C4DFFC54 /* Theme.swift */,
+				A7840F529923935DE359C496 /* SettingsViewModel.swift */,
+				3E8E002D17E0BFD9F3263D35 /* EditProfileView.swift */,
+				B1A2C3D4E5F6071829304A5B /* PathConstants.swift */,
 				7028C8442A33C1F900381BF1 /* README.md */,
 				70D2F6ED2A339DD500EFA0D8 /* GuidedCapture */,
 				7A7B1E4A2C1B6EAD00650AF8 /* GuidedCaptureTests */,
@@ -450,6 +468,12 @@
 				EB20D5622A40341C00992055 /* AppDataModel+State.swift in Sources */,
 				7A97A5EB2B792C1F00DCA681 /* ModelsView.swift in Sources */,
 				70D2F7242A339E4A00EFA0D8 /* ProgressBarView.swift in Sources */,
+				3DC5CF1064D1199CBFC7E8BD /* Models.swift in Sources */,
+				84EE06C1DF0EC4A06F5B6DDB /* User.swift in Sources */,
+				353A8DC15E83A6BC67FE3F86 /* Theme.swift in Sources */,
+				FD6D464EA4F3278460898BC3 /* SettingsViewModel.swift in Sources */,
+				3C11131E0A7865F7F536A9ED /* EditProfileView.swift in Sources */,
+				C2B3D4E5F607182930415A6C /* PathConstants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -634,7 +658,7 @@
 				PRODUCT_NAME = Ortio;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SUPPORTED_PLATFORMS = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -675,7 +699,7 @@
 				PRODUCT_NAME = Ortio;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SUPPORTED_PLATFORMS = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
