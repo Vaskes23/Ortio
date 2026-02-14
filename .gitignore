@@ -19,3 +19,16 @@ xcuserdata/
 
 **/*.playground/playground.xcworkspace/xcshareddata/*
 !**/*.playground/playground.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
+
+# Ortio Project - Secrets and Configuration
+Configuration/Secrets.xcconfig
+
+# Swift Package Manager
+.swiftpm/
+.build/
+
+# visionOS Build Artifacts
+GuidedCaptureVision/RealityComposerAssets/
+
+# Claude Code - track project settings and hooks, ignore local settings
+.claude/settings.local.json
