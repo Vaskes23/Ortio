@@ -13,12 +13,17 @@ struct GuidedCaptureSampleApp: App {
     static let subsystem: String = "com.example.apple-samplecode.GuidedCapture"
 
     @StateObject private var appModel = AppDataModel()
+    @Query private var users: [User]
+    @Environment(\.modelContext) private var modelContext
 
     var body: some Scene {
         WindowGroup {
             if #available(iOS 17.0, *) {
                 ContentView()
                     .environmentObject(appModel)
+                    .onAppear {
+                        appModel.loadTheme(from: users)
+                    }
             }
         }.modelContainer(for: [Models.self, User.self])
     }

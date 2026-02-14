@@ -14,6 +14,7 @@ struct SettingsView: View {
     @State private var viewModel = SettingsViewModel()
     @Query var users: [User]
     @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject var appModel: AppDataModel
 
     var body: some View {
         NavigationStack {
@@ -71,8 +72,8 @@ struct SettingsView: View {
                         sectionHeader("Appearance")
 
                         VStack(spacing: 0) {
-                            ThemePicker(selectedTheme: $viewModel.selectedTheme.onChange {
-                                viewModel.saveTheme(context: modelContext)
+                            ThemePicker(selectedTheme: $appModel.selectedTheme.onChange {
+                                appModel.saveTheme(user: viewModel.user, context: modelContext)
                             })
                         }
                         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
@@ -86,7 +87,6 @@ struct SettingsView: View {
             .navigationTitle("Account")
             .navigationBarTitleDisplayMode(.large)
             .background(Color(.systemGroupedBackground))
-            .preferredColorScheme(viewModel.selectedTheme.colorScheme)
         }
         .onAppear {
             viewModel.loadUser(from: users, context: modelContext)

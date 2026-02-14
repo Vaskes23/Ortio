@@ -8,6 +8,7 @@ A data model that maintains the state of the app.
 import Combine
 import RealityKit
 import SwiftUI
+import SwiftData
 import os
 
 @MainActor
@@ -15,6 +16,9 @@ import os
 class AppDataModel: ObservableObject, Identifiable {
     let logger = Logger(subsystem: GuidedCaptureSampleApp.subsystem,
                                 category: "AppDataModel")
+
+    /// The currently selected theme for the app (light, dark, or system).
+    @Published var selectedTheme: Theme = .system
 
     /// The session that manages the object capture phase.
     ///
@@ -332,6 +336,27 @@ class AppDataModel: ObservableObject, Identifiable {
             }
         }
         return currentState
+    }
+
+    // MARK: - Theme Management
+
+    /// Loads the theme preference from the first user in SwiftData.
+    func loadTheme(from users: [User]) {
+        if let user = users.first {
+            selectedTheme = user.theme
+            logger.debug("Loaded theme: \(user.theme.description)")
+        }
+    }
+
+    /// Saves the currently selected theme to the user's SwiftData record.
+    func saveTheme(user: User, context: ModelContext) {
+        user.theme = selectedTheme
+        do {
+            try context.save()
+            logger.debug("Saved theme: \(self.selectedTheme.description)")
+        } catch {
+            logger.error("Failed to save theme: \(error)")
+        }
     }
 
 }
