@@ -1,8 +1,8 @@
 # SwiftLint configuration for Ortio
 
 excluded:
-  - GuidedCapture.xcodeproj
-  - GuidedCaptureWidgets
+  - Ortio.xcodeproj
+  - OrtioWidgets
   - build
   - DerivedData
   - .build

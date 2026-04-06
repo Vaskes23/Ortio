@@ -9,7 +9,7 @@
 ## 🎉 What's Been Built
 
 ### 1. Shared Framework Architecture ✅
-**Location:** `/GuidedCaptureShared/`
+**Location:** `/OrtioShared/`
 
 A complete framework containing shared code between iOS and visionOS apps:
 
@@ -33,12 +33,12 @@ A complete framework containing shared code between iOS and visionOS apps:
 ---
 
 ### 2. visionOS App Scaffold ✅
-**Location:** `/GuidedCaptureVision/`
+**Location:** `/OrtioVision/`
 
 A complete visionOS app ready for RealityKit implementation:
 
 - **App Entry Point**
-  - `GuidedCaptureVisionApp.swift` - SwiftData container configured
+  - `OrtioVisionApp.swift` - SwiftData container configured
   - Immersive space placeholder for AR mode
 
 - **Views** (SwiftUI)
@@ -82,7 +82,7 @@ Production-ready PostgreSQL database schema for Supabase:
 ---
 
 ### 4. Comprehensive Tests ✅
-**Location:** `/GuidedCaptureTests/`
+**Location:** `/OrtioTests/`
 
 - **Annotation Model Tests** (12 test methods)
   - Initialization with SIMD types
@@ -180,11 +180,11 @@ Production-ready PostgreSQL database schema for Supabase:
 **Time:** 30 minutes
 **Guide:** `FRAMEWORK_SETUP_GUIDE.md`
 
-1. Open `GuidedCapture.xcodeproj` in Xcode
-2. Create `GuidedCaptureShared` framework target
-3. Add files from `/GuidedCaptureShared/` directory
-4. Create `GuidedCaptureVision` visionOS target
-5. Add files from `/GuidedCaptureVision/` directory
+1. Open `Ortio.xcodeproj` in Xcode
+2. Create `OrtioShared` framework target
+3. Add files from `/OrtioShared/` directory
+4. Create `OrtioVision` visionOS target
+5. Add files from `/OrtioVision/` directory
 6. Build both targets
 
 **Why Manual?** Xcode project files are binary/complex. Cannot be automated safely.
@@ -205,7 +205,7 @@ Production-ready PostgreSQL database schema for Supabase:
 **Guide:** `FRAMEWORK_SETUP_GUIDE.md` Section 5
 
 1. Add package: `https://github.com/supabase/supabase-swift`
-2. Link to `GuidedCaptureShared` target
+2. Link to `OrtioShared` target
 3. Uncomment Supabase client in `CloudStorageService.swift`
 
 **After These 3 Steps:**
@@ -290,7 +290,7 @@ class ModelViewerViewModel {
 
 ### Shared Framework (9 files)
 ```
-GuidedCaptureShared/
+OrtioShared/
 ├── Models/
 │   ├── Annotation.swift ✨ NEW (240 lines)
 │   ├── Models.swift (copied)
@@ -310,8 +310,8 @@ GuidedCaptureShared/
 
 ### visionOS App (6 files)
 ```
-GuidedCaptureVision/
-├── GuidedCaptureVisionApp.swift ✨ NEW (30 lines)
+OrtioVision/
+├── OrtioVisionApp.swift ✨ NEW (30 lines)
 ├── Views/
 │   ├── ContentView.swift ✨ NEW (25 lines)
 │   ├── ModelBrowserView.swift ✨ NEW (60 lines)
@@ -323,7 +323,7 @@ GuidedCaptureVision/
 
 ### Tests (2 files)
 ```
-GuidedCaptureTests/
+OrtioTests/
 ├── AnnotationModelTests.swift ✨ NEW (250 lines, 12 tests)
 └── mocks/
     └── MockNetworkService.swift ✨ NEW (180 lines)
@@ -491,17 +491,17 @@ database/
 ### Useful Commands
 ```bash
 # Build framework
-xcodebuild -project GuidedCapture.xcodeproj \
-  -scheme GuidedCaptureShared \
+xcodebuild -project Ortio.xcodeproj \
+  -scheme OrtioShared \
   -configuration Debug
 
 # Run tests
-xcodebuild test -project GuidedCapture.xcodeproj \
-  -scheme GuidedCapture \
+xcodebuild test -project Ortio.xcodeproj \
+  -scheme Ortio \
   -destination 'platform=iOS Simulator,name=iPhone 16'
 
 # Clean build
-xcodebuild clean -project GuidedCapture.xcodeproj
+xcodebuild clean -project Ortio.xcodeproj
 ```
 
 ---

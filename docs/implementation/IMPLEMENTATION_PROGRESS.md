@@ -13,12 +13,12 @@
 **Status:** Code complete, awaiting Xcode configuration
 
 **Created Files:**
-- `GuidedCaptureShared/Models/`
+- `OrtioShared/Models/`
   - `Models.swift` (copied from root)
   - `User.swift` (copied from root)
   - `Theme.swift` (copied from root)
   - `Annotation.swift` ✨ **NEW** - SwiftData model with model-relative coordinates
-- `GuidedCaptureShared/Utilities/`
+- `OrtioShared/Utilities/`
   - `FileManagerProtocol.swift` (copied from root)
   - `PathConstants.swift` (copied from root)
 
@@ -30,13 +30,13 @@
 **Status:** Code complete, awaiting Xcode target creation
 
 **Created Files:**
-- `GuidedCaptureVision/GuidedCaptureVisionApp.swift` - App entry point with SwiftData container
-- `GuidedCaptureVision/Views/`
+- `OrtioVision/OrtioVisionApp.swift` - App entry point with SwiftData container
+- `OrtioVision/Views/`
   - `ContentView.swift` - TabView navigation (Models/Settings)
   - `ModelBrowserView.swift` - Browse local models with List UI
   - `ModelViewerView.swift` - RealityKit viewer placeholder with gesture support
   - `SettingsView.swift` - User profile and settings
-- `GuidedCaptureVision/ViewModels/`
+- `OrtioVision/ViewModels/`
   - `ModelViewerViewModel.swift` - MVVM pattern for 3D viewer
 
 **Outcome:** Full visionOS app scaffold following iOS patterns, ready for target configuration.
@@ -49,13 +49,13 @@
 **Status:** Fully implemented with tests
 
 **Created Files:**
-- `GuidedCaptureShared/Models/Annotation.swift` - SwiftData model
+- `OrtioShared/Models/Annotation.swift` - SwiftData model
   - Position: model-relative coordinates (x, y, z)
   - Rotation: quaternion (x, y, z, w)
   - Content: title + content
   - Sync status: `.pending`, `.synced`, `.failed`
   - Convenience initializers for SIMD3/simd_quatf
-- `GuidedCaptureTests/AnnotationModelTests.swift` - Comprehensive unit tests
+- `OrtioTests/AnnotationModelTests.swift` - Comprehensive unit tests
   - Initialization tests
   - Persistence tests (insert, update, delete)
   - Query tests (by model, author, sync status)
@@ -71,19 +71,19 @@
 **Status:** Protocol and DTOs implemented, Supabase stub ready
 
 **Created Files:**
-- `GuidedCaptureShared/Networking/NetworkProtocol.swift`
+- `OrtioShared/Networking/NetworkProtocol.swift`
   - Protocol with auth, model ops, annotation ops, sharing ops
   - `SharePermission` enum (view, annotate)
   - `NetworkError` with detailed error types
-- `GuidedCaptureShared/Networking/CloudStorageService.swift`
+- `OrtioShared/Networking/CloudStorageService.swift`
   - Supabase implementation stub (awaiting SDK)
   - TODO comments for all methods
-- `GuidedCaptureShared/SupabaseModels/`
+- `OrtioShared/SupabaseModels/`
   - `ModelRecord.swift` - DTO for cloud model metadata
   - `AnnotationRecord.swift` - DTO for cloud annotations
   - `UserRecord.swift` - DTO for cloud user data
   - Conversion methods between DTOs and SwiftData models
-- `GuidedCaptureTests/mocks/MockNetworkService.swift`
+- `OrtioTests/mocks/MockNetworkService.swift`
   - Full mock implementation for testing
   - Call tracking and configurable stubs
   - In-memory storage for simple test scenarios
@@ -121,7 +121,7 @@
 Added exclusions for:
 - `Configuration/Secrets.xcconfig` (protect Supabase keys)
 - `.swiftpm/` (Swift Package Manager artifacts)
-- `GuidedCaptureVision/RealityComposerAssets/` (large binaries)
+- `OrtioVision/RealityComposerAssets/` (large binaries)
 
 ---
 
@@ -175,8 +175,8 @@ Added exclusions for:
 
 ### Immediate (Required for Building)
 1. **Configure Xcode Targets** (MANUAL - see `FRAMEWORK_SETUP_GUIDE.md`)
-   - Create `GuidedCaptureShared` framework target
-   - Create `GuidedCaptureVision` visionOS target
+   - Create `OrtioShared` framework target
+   - Create `OrtioVision` visionOS target
    - Link framework to both iOS and visionOS apps
    - Verify builds succeed
 
@@ -249,13 +249,13 @@ Added exclusions for:
 ## 🏗️ File Structure (Current State)
 
 ```
-GuidedCapture.xcodeproj/
-├── GuidedCapture (iOS target) ────────────── EXISTS
+Ortio.xcodeproj/
+├── Ortio (iOS target) ────────────── EXISTS
 │   ├── Capture/ photogrammetry ────────── ✅ WORKING
 │   ├── Models/ browsing ───────────────── ✅ WORKING
 │   └── Import/ importing ──────────────── ✅ WORKING
 │
-├── GuidedCaptureShared (Framework) ───────── ⚠️ NEEDS TARGET CONFIG
+├── OrtioShared (Framework) ───────── ⚠️ NEEDS TARGET CONFIG
 │   ├── Models/ ────────────────────────── ✅ READY
 │   │   ├── Models.swift
 │   │   ├── User.swift
@@ -272,8 +272,8 @@ GuidedCapture.xcodeproj/
 │       ├── FileManagerProtocol.swift
 │       └── PathConstants.swift
 │
-├── GuidedCaptureVision (visionOS) ────────── ⚠️ NEEDS TARGET CONFIG
-│   ├── GuidedCaptureVisionApp.swift ───── ✅ READY
+├── OrtioVision (visionOS) ────────── ⚠️ NEEDS TARGET CONFIG
+│   ├── OrtioVisionApp.swift ───── ✅ READY
 │   ├── Views/ ─────────────────────────── ✅ READY
 │   │   ├── ContentView.swift
 │   │   ├── ModelBrowserView.swift
@@ -282,7 +282,7 @@ GuidedCapture.xcodeproj/
 │   └── ViewModels/ ────────────────────── ✅ READY
 │       └── ModelViewerViewModel.swift
 │
-├── GuidedCaptureTests/ ───────────────────── EXISTS
+├── OrtioTests/ ───────────────────── EXISTS
 │   ├── AnnotationModelTests.swift ✨ ──── ✅ COMPLETE
 │   └── mocks/
 │       ├── FileManagerMocks.swift ──────── EXISTS

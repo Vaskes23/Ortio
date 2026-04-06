@@ -63,20 +63,20 @@ An architect builds a physical scale model → scans it with iPhone → uploads 
 ```bash
 # Clone repository
 git clone <repo-url>
-cd GuidedCapture
+cd Ortio
 
 # Open in Xcode
-open GuidedCapture.xcodeproj
+open Ortio.xcodeproj
 
 # Follow FRAMEWORK_SETUP_GUIDE.md to:
-# 1. Create GuidedCaptureShared framework target
-# 2. Create GuidedCaptureVision visionOS target
+# 1. Create OrtioShared framework target
+# 2. Create OrtioVision visionOS target
 # 3. Link dependencies
 
 # Run tests
 xcodebuild test \
-  -project GuidedCapture.xcodeproj \
-  -scheme GuidedCapture \
+  -project Ortio.xcodeproj \
+  -scheme Ortio \
   -destination 'platform=iOS Simulator,name=iPhone 16'
 ```
 
@@ -120,10 +120,10 @@ visionOS App (View & Annotate)
 
 ```
 /
-├── GuidedCapture/              iOS app (photogrammetry)
-├── GuidedCaptureShared/        Shared code (models, networking)
-├── GuidedCaptureVision/        visionOS app (3D viewing)
-├── GuidedCaptureTests/         Unit & integration tests
+├── Ortio/              iOS app (photogrammetry)
+├── OrtioShared/        Shared code (models, networking)
+├── OrtioVision/        visionOS app (3D viewing)
+├── OrtioTests/         Unit & integration tests
 ├── docs/                       📚 All documentation
 │   ├── getting-started/        Setup guides
 │   ├── implementation/         Planning & progress
@@ -182,8 +182,8 @@ See [docs/README.md](docs/README.md) for full navigation guide.
 ### Run All Tests
 ```bash
 xcodebuild test \
-  -project GuidedCapture.xcodeproj \
-  -scheme GuidedCapture \
+  -project Ortio.xcodeproj \
+  -scheme Ortio \
   -destination 'platform=iOS Simulator,name=iPhone 16'
 ```
 
@@ -281,13 +281,13 @@ See [CLAUDE.md](CLAUDE.md) for full conventions.
 
 See [LICENSE](LICENSE/) folder for this sample's licensing information.
 
-**Note:** This project is based on Apple's GuidedCapture sample with significant extensions for XR collaboration.
+**Note:** This project is based on Apple's Ortio sample with significant extensions for XR collaboration.
 
 ---
 
 ## 🙏 Acknowledgments
 
-- **Apple** - GuidedCapture sample project foundation
+- **Apple** - Ortio sample project foundation
 - **Supabase** - Backend infrastructure
 - **RealityKit** - 3D rendering framework
 

@@ -1,0 +1,9 @@
+{
+  "name": "Ortio Onboarding Flow Generator",
+  "id": "ortio-onboarding-flow",
+  "api": "1.0.0",
+  "main": "code.js",
+  "capabilities": [],
+  "enableProposedApi": false,
+  "editorType": ["figma"]
+}

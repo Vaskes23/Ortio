@@ -11,7 +11,7 @@
 All code is written and waiting for you. Here's what exists:
 
 ### ✅ Shared Framework (Epic 1.1 COMPLETE)
-Location: `/GuidedCaptureShared/`
+Location: `/OrtioShared/`
 
 **Models:**
 - `Annotation.swift` - Spatial annotation data model with model-relative coordinates
@@ -27,10 +27,10 @@ Location: `/GuidedCaptureShared/`
 - `MockNetworkService.swift` - Full mock for testing
 
 ### ✅ visionOS App (Epic 1.2 COMPLETE)
-Location: `/GuidedCaptureVision/`
+Location: `/OrtioVision/`
 
 **App Structure:**
-- `GuidedCaptureVisionApp.swift` - SwiftData configured
+- `OrtioVisionApp.swift` - SwiftData configured
 - `ContentView.swift` - TabView navigation
 - `ModelBrowserView.swift` - Browse local models
 - `ModelViewerView.swift` - RealityKit viewer (placeholder)
@@ -53,10 +53,10 @@ Location: `/database/schema.sql`
 ### Step 1: Configure Xcode (30 min)
 Follow `FRAMEWORK_SETUP_GUIDE.md` sections 1-3:
 
-1. Create `GuidedCaptureShared` framework target
-2. Add files from `/GuidedCaptureShared/` to target
-3. Create `GuidedCaptureVision` visionOS target
-4. Add files from `/GuidedCaptureVision/` to target
+1. Create `OrtioShared` framework target
+2. Add files from `/OrtioShared/` to target
+3. Create `OrtioVision` visionOS target
+4. Add files from `/OrtioVision/` to target
 
 **Expected Result:** Both targets build successfully
 
@@ -75,7 +75,7 @@ Follow `FRAMEWORK_SETUP_GUIDE.md` section 7:
 Follow `FRAMEWORK_SETUP_GUIDE.md` section 5:
 
 1. Add Supabase Swift SDK via Swift Package Manager
-2. Link to `GuidedCaptureShared` target
+2. Link to `OrtioShared` target
 3. Uncomment Supabase client in `CloudStorageService.swift`
 
 **Expected Result:** Framework builds with Supabase imported
@@ -107,7 +107,7 @@ Follow `FRAMEWORK_SETUP_GUIDE.md` section 5:
 Once the 3-step setup is complete, implement features in this order:
 
 ### Priority 1: RealityKit Viewer (Epic 1.3)
-**File:** `GuidedCaptureVision/Views/ModelViewerView.swift`
+**File:** `OrtioVision/Views/ModelViewerView.swift`
 **Task:** Replace placeholder RealityView with actual USDZ loading
 
 **Pseudocode:**
@@ -129,7 +129,7 @@ RealityView { content in
 - [RealityKit Loading Models](https://developer.apple.com/documentation/realitykit/loading-entities-from-files)
 
 ### Priority 2: Gesture Controls (Epic 1.4)
-**File:** `GuidedCaptureVision/ViewModels/ModelViewerViewModel.swift`
+**File:** `OrtioVision/ViewModels/ModelViewerViewModel.swift`
 **Task:** Connect gesture handlers to RealityKit entity transforms
 
 **Pseudocode:**
@@ -145,7 +145,7 @@ func handleRotation(_ angle: Angle) {
 ```
 
 ### Priority 3: Annotation Markers (Epic 2.2)
-**File:** Create `GuidedCaptureVision/RealityKit/AnnotationMarkerEntity.swift`
+**File:** Create `OrtioVision/RealityKit/AnnotationMarkerEntity.swift`
 **Task:** Create 3D markers that appear on model surface
 
 **Pseudocode:**
@@ -166,7 +166,7 @@ marker.addChild(textEntity)
 ```
 
 ### Priority 4: Authentication (Epic 3.2)
-**File:** `GuidedCaptureShared/Networking/CloudStorageService.swift`
+**File:** `OrtioShared/Networking/CloudStorageService.swift`
 **Task:** Implement signup/signin methods
 
 **Pseudocode:**
@@ -206,7 +206,7 @@ func uploadToCloud(_ model: Models) async throws {
 
 **iOS App Code:**
 ```
-/GuidedCapture/
+/Ortio/
 ├── Capture/ ────────────── Photogrammetry (existing)
 ├── Import/ ─────────────── Model import (existing)
 └── Models/ ─────────────── Model browsing (existing)
@@ -214,7 +214,7 @@ func uploadToCloud(_ model: Models) async throws {
 
 **Shared Code (used by both iOS and visionOS):**
 ```
-/GuidedCaptureShared/
+/OrtioShared/
 ├── Models/ ─────────────── SwiftData models
 ├── Networking/ ─────────── Cloud APIs
 ├── SupabaseModels/ ────── DTOs (data transfer objects)
@@ -223,7 +223,7 @@ func uploadToCloud(_ model: Models) async throws {
 
 **visionOS App Code:**
 ```
-/GuidedCaptureVision/
+/OrtioVision/
 ├── Views/ ──────────────── SwiftUI views
 ├── ViewModels/ ─────────── MVVM business logic
 └── RealityKit/ ─────────── 3D graphics (to be created)
@@ -231,7 +231,7 @@ func uploadToCloud(_ model: Models) async throws {
 
 **Tests:**
 ```
-/GuidedCaptureTests/
+/OrtioTests/
 ├── mocks/ ──────────────── Mock services for testing
 ├── *Tests.swift ────────── Unit tests
 └── IntegrationTests/ ───── End-to-end tests (to be created)
@@ -250,8 +250,8 @@ func uploadToCloud(_ model: Models) async throws {
 ### Unit Tests (Run Locally)
 ```bash
 xcodebuild test \
-  -project GuidedCapture.xcodeproj \
-  -scheme GuidedCapture \
+  -project Ortio.xcodeproj \
+  -scheme Ortio \
   -destination 'platform=iOS Simulator,name=iPhone 16'
 ```
 
@@ -263,7 +263,7 @@ xcodebuild test \
 - ⏸️ ModelViewerViewModel (TODO: add tests)
 
 ### Integration Tests (Requires Supabase)
-Create `/GuidedCaptureTests/IntegrationTests/` and test:
+Create `/OrtioTests/IntegrationTests/` and test:
 - Upload model → download on different device
 - Create annotation → sync to cloud → fetch on other device
 - Share model → access from shared user account
@@ -359,15 +359,15 @@ struct MyView: View {
 
 ## 🐛 Common Issues & Fixes
 
-### "No such module 'GuidedCaptureShared'"
+### "No such module 'OrtioShared'"
 **Cause:** Framework not built or not linked
 **Fix:**
-1. Select GuidedCaptureShared scheme → Build (⌘B)
+1. Select OrtioShared scheme → Build (⌘B)
 2. Check target dependencies in Build Phases
 
 ### visionOS Simulator Crashes on Launch
 **Cause:** SwiftData container misconfigured
-**Fix:** Check `GuidedCaptureVisionApp.swift` has all models in schema:
+**Fix:** Check `OrtioVisionApp.swift` has all models in schema:
 ```swift
 let schema = Schema([
     Models.self,
@@ -379,9 +379,9 @@ let schema = Schema([
 ### Tests Fail After Adding Framework
 **Cause:** Test target doesn't link framework
 **Fix:**
-1. Select GuidedCaptureTests target
-2. Build Phases → Link Binary → Add `GuidedCaptureShared.framework`
-3. Add `@testable import GuidedCaptureShared` to tests
+1. Select OrtioTests target
+2. Build Phases → Link Binary → Add `OrtioShared.framework`
+3. Add `@testable import OrtioShared` to tests
 
 ### Supabase Upload Returns 401
 **Cause:** Not authenticated or token expired
