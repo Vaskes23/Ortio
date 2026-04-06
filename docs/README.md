@@ -115,7 +115,7 @@ Database schema and backend infrastructure.
 └─────────────────────┬───────────────────────────┘
                       │
         ┌─────────────▼─────────────┐
-        │  GuidedCaptureShared      │
+        │  OrtioShared      │
         │  - Data Models            │
         │  - Network Protocol       │
         │  - DTOs                   │

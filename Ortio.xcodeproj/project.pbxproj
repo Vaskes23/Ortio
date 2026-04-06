@@ -1,0 +1,1075 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		182104D51F7E4FDDB6F1897A /* OnboardingTutorialView+LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E8E8F28BD18DE4FF655F74 /* OnboardingTutorialView+LocalizedString.swift */; };
+		1A727ADCB199BAEC1C9FF8FF /* FileManagerMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 948A3190C8AEDE9FFA2E393E /* FileManagerMocks.swift */; };
+		1A8EFF3405719974B07820B2 /* ScanPasses-iPad-FixedHeight-2.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = A1273134F7063892A7221864 /* ScanPasses-iPad-FixedHeight-2.mp4 */; };
+		1E2AABDAEED2AEFB0FC60271 /* SwiftDataModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59EEB23B22E2E6E2D8FCB58 /* SwiftDataModelTests.swift */; };
+		1F485920C8F453DEAB07A713 /* LoadOrtioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 918FB9C151BB747C59421448 /* LoadOrtioView.swift */; };
+		260359A9DC97E34DB0F5EE49 /* CaptureOverlayView+Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADF6DAF9FA0340F4FE41D61 /* CaptureOverlayView+Buttons.swift */; };
+		261DA2CC308EF9C86991D6E2 /* ModelsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC39B48A222312BE1150C7A /* ModelsModel.swift */; };
+		29619610E0F2CDF5FB234C32 /* AppDataModel+State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FEE7C4410EA1EAF166BCF8 /* AppDataModel+State.swift */; };
+		2971DFF9598CA766C5AF195D /* ScanPasses-iPad-FixedHeight-3.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = C3DDA9D5578BA521909481DF /* ScanPasses-iPad-FixedHeight-3.mp4 */; };
+		33694972C3E01853A6C14CEF /* ScanPasses-iPhone-FixedHeight-1.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 5D433C4EB330F71E7B6A1EF9 /* ScanPasses-iPhone-FixedHeight-1.mp4 */; };
+		337C7D3260D548F044A564DB /* CaptureOverlayView+LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AD6E0ECD328B2CB0BA317C4 /* CaptureOverlayView+LocalizedString.swift */; };
+		353FFE93A20C1BD7DC330474 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3E3C7189D1A5484B3512F2 /* PlayerView.swift */; };
+		3C55E9AD60B51508F8EB0E1B /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4263A8183E8B209A72017AE4 /* OnboardingView.swift */; };
+		3FB879A073B394F29DFE6FBF /* ThemeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5695A3DFCF960530DE6A56D /* ThemeTests.swift */; };
+		4409932704B0E1A02C62C014 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099B2697E8C2736EEB9F0158 /* User.swift */; };
+		44920348142798638CC58853 /* ImportViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8DC4A9CB17C3A6DECA78C5 /* ImportViewModelTests.swift */; };
+		4BB1CF5E4E5831166586B1EB /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5664658887A6E0103EB8B89 /* SettingsViewModel.swift */; };
+		4E786691FFC84E817A533F40 /* ImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A143E8B94EA21AA54D551FA8 /* ImportView.swift */; };
+		512CCB2E38FD7037F559BAAE /* OrtioApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BB03DDAF3B2434C02CF9CB /* OrtioApp.swift */; };
+		515102F89B5D0F9A28C9B88A /* CaptureUtilitiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C823BA0229B541952CD44655 /* CaptureUtilitiesTests.swift */; };
+		51C8E1821EBDBB4953B8715B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6203A8EE54AE99FB6F3D8345 /* Assets.xcassets */; };
+		522ACD95F48900677DA2A216 /* AppDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48911CDAC899F9EC9F3F823 /* AppDataModel.swift */; };
+		56C6880EE8024989098DA711 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 250B9B0E382F67AD4CE4887A /* SettingsView.swift */; };
+		5C863AF8C16FD19AE0728AB1 /* CaptureOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09081E76A1B2B40542F3F6F /* CaptureOverlayView.swift */; };
+		5EA3809157929D74905FA2D1 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD7BEFC9EEF4B401AFE07B8 /* Theme.swift */; };
+		65D34B5BF869E9EF18AE204F /* ShotFileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F553EC5A2F5983E5BC18DC43 /* ShotFileInfo.swift */; };
+		69FA37E21B5468978450B4A1 /* FileManagerProtocolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574AE9BD34EF8E92C20FDAD7 /* FileManagerProtocolTests.swift */; };
+		6A2879844F1BE0DC6775491B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5424EA9310E1ED50DDB71CEE /* Preview Assets.xcassets */; };
+		6AC6B0D314AE1B57CAE131CB /* CapturePrimaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DBFF86BA55A0955F3C0297 /* CapturePrimaryView.swift */; };
+		6F279FEC33E6B1550F879F77 /* ScanPasses-iPad-FixedHeight-unflippable-high.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = D614FE78D14AA63B31E995AF /* ScanPasses-iPad-FixedHeight-unflippable-high.mp4 */; };
+		6F5D1820EEBC219EEE42967B /* ModelsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBF5A6D047AD0ED931A71D2 /* ModelsViewModelTests.swift */; };
+		72543B8DAF973E2D9A3FC85A /* ImportModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B298FACB151FAC94C3C4BB /* ImportModel.swift */; };
+		7C586405758FD5970C18B77A /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BC1FAAB7F0626DE655128C /* EditProfileView.swift */; };
+		83A275039534B1916F66C59B /* TimedMessageList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0653708831BAC62DEA4B6C4 /* TimedMessageList.swift */; };
+		852FF8905DC62714B61C61B3 /* OrtioTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACADE0D270FA3A3D7BFF65A2 /* OrtioTests.swift */; };
+		89E55D8A571646E1B97879CF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEE13610A7400309B9FD87B /* ContentView.swift */; };
+		8B8EFC5BFFBFD3305F923CF8 /* ModelsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9B6A80F1D65FEBCB724ACB /* ModelsTests.swift */; };
+		8BCD6D9E2B50ABFCA037F0D0 /* ImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21808949E04E57F41F66659 /* ImportViewModel.swift */; };
+		8E4787ADB66D658C6A4B06BC /* HelpPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B926CE01D9470D93A5A9ADE6 /* HelpPageView.swift */; };
+		93D6982DCEEEFB482144ECDC /* ModelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7FF1F56E090B27C79626768 /* ModelView.swift */; };
+		95C76A969E4F928CF62C7093 /* AppDataModel+Orbit.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03445EDDC906A611C41DDD2 /* AppDataModel+Orbit.swift */; };
+		968312F0CC4C3EAFB36D4C7A /* OnboardingButtonView+LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2114CB8486E9FD8F9C8DC173 /* OnboardingButtonView+LocalizedString.swift */; };
+		96C06A9F88D7F04B7C7F57DD /* ScanPasses-iPhone-FixedHeight-unflippable-high.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = D5C2F48BE6B8337A41C351B3 /* ScanPasses-iPhone-FixedHeight-unflippable-high.mp4 */; };
+		96F6B85365B2145D2270C34A /* FeedbackMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890FDE20B93D48B9A4068008 /* FeedbackMessages.swift */; };
+		998FBD03EA9AB038D2EBD9F0 /* ImportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9453E3D998DD639553B59C /* ImportTests.swift */; };
+		9D23222179D94AEA41B8B068 /* PathConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD752922301E3954407ED73 /* PathConstants.swift */; };
+		AE024C69ADE3CD14992F2909 /* ScanPasses-iPhone-FixedHeight-2.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = A65C8B40107D7CD78C5D45A7 /* ScanPasses-iPhone-FixedHeight-2.mp4 */; };
+		BC80A8C69B7EF39348FCCF3B /* ProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8246F24644041A72C861FD /* ProgressBarView.swift */; };
+		C08772F22C47F87A497FC0E9 /* OnboardingTutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87FE6B3EF1A5C77F27C9937F /* OnboardingTutorialView.swift */; };
+		C5E39EF50966126310FEAB65 /* TutorialVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE776109FAE7C32D6512935D /* TutorialVideoView.swift */; };
+		C926DD069FADA245EC023FBA /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21817ED4DB541CAB9EA911FD /* Models.swift */; };
+		CA7ABCFAA07679146ED61E61 /* UntilProcessingCompleteFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B8FDD9AC2B4D8090CBC157 /* UntilProcessingCompleteFilter.swift */; };
+		CC4279C3108DF0E7E746D5E9 /* ScanPasses-iPad-FixedHeight-unflippable-low.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 97C37AF17F99A541C77F4D18 /* ScanPasses-iPad-FixedHeight-unflippable-low.mp4 */; };
+		CC72635EFC40315B688CEC3D /* OnboardingStateMachineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A5D7991B8208A150D782F6 /* OnboardingStateMachineTests.swift */; };
+		CE0476592CF7B5CAFB173DBE /* ScanPasses-iPad-FixedHeight-1.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 0614283290A52438E9B5FEB3 /* ScanPasses-iPad-FixedHeight-1.mp4 */; };
+		D24906E36AA9F67405B4D601 /* ScanPasses-iPhone-FixedHeight-3.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 1E9265620F259C75CCDB551C /* ScanPasses-iPhone-FixedHeight-3.mp4 */; };
+		D96286E9B182C9A15CC4F898 /* ModelStructTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D2D85AE93490621FFE8198 /* ModelStructTests.swift */; };
+		DB9E5CF68CEA986036AB909B /* BindingExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635322F8EE3F66AB16F66D3B /* BindingExtensionTests.swift */; };
+		E040703C79117C5AEF2B5C63 /* ModelsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A649DD3F8D74CE99356E77A /* ModelsView.swift */; };
+		E0B53640070DBF6FD9866D8C /* SettingsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B71A761F35AAE61B90C9BFC /* SettingsViewModelTests.swift */; };
+		E404256709F3317B52F0F69D /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA7C422DD37E8DB19AFF402 /* FeedbackView.swift */; };
+		EB084AE6D6C0FF3AB2A22D07 /* ScanPasses-iPhone-FixedHeight-unflippable-low.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 5A47BEDAEA44DC75ED0257B0 /* ScanPasses-iPhone-FixedHeight-unflippable-low.mp4 */; };
+		EBB39FA23E7F4E9B6F5AC5DE /* CaptureFolderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 937F4E6BAA4D88C31B02F7A2 /* CaptureFolderManager.swift */; };
+		EC12CB7D534703EF66FD24A3 /* OnboardingButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 582079B00769338A44396A91 /* OnboardingButtonView.swift */; };
+		ECD4CF3A807BBF6903917966 /* OnboardingStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72EC56DBEBF68E8FB4EB7AD /* OnboardingStateMachine.swift */; };
+		F721A1ED9AC4FE69A0AB0359 /* ModelsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF80C4DFCC8F4FAC4328F42 /* ModelsViewModel.swift */; };
+		F79FFE6AA96636A0F031C96F /* ReconstructionPrimaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74A725A5130296737A0A609 /* ReconstructionPrimaryView.swift */; };
+		FC1B9A366407C51AEF1FC370 /* FileManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C89E7A42694442BDE136658 /* FileManagerProtocol.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DD8424DC0B51D121455D2604 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 66F70ED314FDE954FDCEAB5E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B0E4DD053D4FCC6B4B9C19DA;
+			remoteInfo = Ortio;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0480B4B17B03C23DCDB769AC /* FRAMEWORK_SETUP_GUIDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = FRAMEWORK_SETUP_GUIDE.md; sourceTree = "<group>"; };
+		05D5637A16FCAD9D1278076C /* IMPLEMENTATION_PROGRESS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = IMPLEMENTATION_PROGRESS.md; sourceTree = "<group>"; };
+		05E8E8F28BD18DE4FF655F74 /* OnboardingTutorialView+LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OnboardingTutorialView+LocalizedString.swift"; sourceTree = "<group>"; };
+		0614283290A52438E9B5FEB3 /* ScanPasses-iPad-FixedHeight-1.mp4 */ = {isa = PBXFileReference; path = "ScanPasses-iPad-FixedHeight-1.mp4"; sourceTree = "<group>"; };
+		099B2697E8C2736EEB9F0158 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		0A9453E3D998DD639553B59C /* ImportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportTests.swift; sourceTree = "<group>"; };
+		0CA7C422DD37E8DB19AFF402 /* FeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
+		0DD1F377024E5E628DD88DBA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		1A649DD3F8D74CE99356E77A /* ModelsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsView.swift; sourceTree = "<group>"; };
+		1E9265620F259C75CCDB551C /* ScanPasses-iPhone-FixedHeight-3.mp4 */ = {isa = PBXFileReference; path = "ScanPasses-iPhone-FixedHeight-3.mp4"; sourceTree = "<group>"; };
+		2114CB8486E9FD8F9C8DC173 /* OnboardingButtonView+LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OnboardingButtonView+LocalizedString.swift"; sourceTree = "<group>"; };
+		21817ED4DB541CAB9EA911FD /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		250B9B0E382F67AD4CE4887A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		2A8246F24644041A72C861FD /* ProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBarView.swift; sourceTree = "<group>"; };
+		2AD6E0ECD328B2CB0BA317C4 /* CaptureOverlayView+LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaptureOverlayView+LocalizedString.swift"; sourceTree = "<group>"; };
+		2AEE13610A7400309B9FD87B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		31DBFF86BA55A0955F3C0297 /* CapturePrimaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePrimaryView.swift; sourceTree = "<group>"; };
+		3ADF6DAF9FA0340F4FE41D61 /* CaptureOverlayView+Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaptureOverlayView+Buttons.swift"; sourceTree = "<group>"; };
+		4263A8183E8B209A72017AE4 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		4C89E7A42694442BDE136658 /* FileManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerProtocol.swift; sourceTree = "<group>"; };
+		5424EA9310E1ED50DDB71CEE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		574AE9BD34EF8E92C20FDAD7 /* FileManagerProtocolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerProtocolTests.swift; sourceTree = "<group>"; };
+		582079B00769338A44396A91 /* OnboardingButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingButtonView.swift; sourceTree = "<group>"; };
+		5A47BEDAEA44DC75ED0257B0 /* ScanPasses-iPhone-FixedHeight-unflippable-low.mp4 */ = {isa = PBXFileReference; path = "ScanPasses-iPhone-FixedHeight-unflippable-low.mp4"; sourceTree = "<group>"; };
+		5D433C4EB330F71E7B6A1EF9 /* ScanPasses-iPhone-FixedHeight-1.mp4 */ = {isa = PBXFileReference; path = "ScanPasses-iPhone-FixedHeight-1.mp4"; sourceTree = "<group>"; };
+		5DB49A0F0E25E114FB493AE9 /* schema.sql */ = {isa = PBXFileReference; path = schema.sql; sourceTree = "<group>"; };
+		6203A8EE54AE99FB6F3D8345 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		635322F8EE3F66AB16F66D3B /* BindingExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindingExtensionTests.swift; sourceTree = "<group>"; };
+		6448B0FB6BFE59BF3E5FDEF0 /* MatyasVascakBachelorThesisProposal.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = MatyasVascakBachelorThesisProposal.md; sourceTree = "<group>"; };
+		67FEE7C4410EA1EAF166BCF8 /* AppDataModel+State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDataModel+State.swift"; sourceTree = "<group>"; };
+		6B71A761F35AAE61B90C9BFC /* SettingsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModelTests.swift; sourceTree = "<group>"; };
+		6B8DC4A9CB17C3A6DECA78C5 /* ImportViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportViewModelTests.swift; sourceTree = "<group>"; };
+		726BA8E7C3B6ED2F899C118D /* SUMMARY.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SUMMARY.md; sourceTree = "<group>"; };
+		76BC1FAAB7F0626DE655128C /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
+		7A9B6A80F1D65FEBCB724ACB /* ModelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsTests.swift; sourceTree = "<group>"; };
+		7CF80C4DFCC8F4FAC4328F42 /* ModelsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsViewModel.swift; sourceTree = "<group>"; };
+		85D2D85AE93490621FFE8198 /* ModelStructTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelStructTests.swift; sourceTree = "<group>"; };
+		87FE6B3EF1A5C77F27C9937F /* OnboardingTutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTutorialView.swift; sourceTree = "<group>"; };
+		885AEB2962C219348354204F /* SampleCode.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = SampleCode.xcconfig; sourceTree = "<group>"; };
+		890FDE20B93D48B9A4068008 /* FeedbackMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackMessages.swift; sourceTree = "<group>"; };
+		918FB9C151BB747C59421448 /* LoadOrtioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadOrtioView.swift; sourceTree = "<group>"; };
+		937F4E6BAA4D88C31B02F7A2 /* CaptureFolderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureFolderManager.swift; sourceTree = "<group>"; };
+		948A3190C8AEDE9FFA2E393E /* FileManagerMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerMocks.swift; sourceTree = "<group>"; };
+		94A5D7991B8208A150D782F6 /* OnboardingStateMachineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingStateMachineTests.swift; sourceTree = "<group>"; };
+		9766E6B869719A1C91D0B005 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		97C37AF17F99A541C77F4D18 /* ScanPasses-iPad-FixedHeight-unflippable-low.mp4 */ = {isa = PBXFileReference; path = "ScanPasses-iPad-FixedHeight-unflippable-low.mp4"; sourceTree = "<group>"; };
+		9DC39B48A222312BE1150C7A /* ModelsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsModel.swift; sourceTree = "<group>"; };
+		9E3E3C7189D1A5484B3512F2 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+		9FD752922301E3954407ED73 /* PathConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathConstants.swift; sourceTree = "<group>"; };
+		A1273134F7063892A7221864 /* ScanPasses-iPad-FixedHeight-2.mp4 */ = {isa = PBXFileReference; path = "ScanPasses-iPad-FixedHeight-2.mp4"; sourceTree = "<group>"; };
+		A143E8B94EA21AA54D551FA8 /* ImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportView.swift; sourceTree = "<group>"; };
+		A21808949E04E57F41F66659 /* ImportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportViewModel.swift; sourceTree = "<group>"; };
+		A48911CDAC899F9EC9F3F823 /* AppDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDataModel.swift; sourceTree = "<group>"; };
+		A588BB85176A1816E7B8866D /* IMPLEMENTATION_PLAN.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = IMPLEMENTATION_PLAN.md; sourceTree = "<group>"; };
+		A59EEB23B22E2E6E2D8FCB58 /* SwiftDataModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataModelTests.swift; sourceTree = "<group>"; };
+		A65C8B40107D7CD78C5D45A7 /* ScanPasses-iPhone-FixedHeight-2.mp4 */ = {isa = PBXFileReference; path = "ScanPasses-iPhone-FixedHeight-2.mp4"; sourceTree = "<group>"; };
+		A72753D0081BCF94EE57B779 /* project.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = project.yml; sourceTree = "<group>"; };
+		A72EC56DBEBF68E8FB4EB7AD /* OnboardingStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingStateMachine.swift; sourceTree = "<group>"; };
+		A9796E63C317E67349F6158C /* Ortio.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Ortio.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		ACADE0D270FA3A3D7BFF65A2 /* OrtioTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrtioTests.swift; sourceTree = "<group>"; };
+		B2254C1DEBCAD7A0A4384FE9 /* CLAUDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CLAUDE.md; sourceTree = "<group>"; };
+		B3B298FACB151FAC94C3C4BB /* ImportModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportModel.swift; sourceTree = "<group>"; };
+		B5695A3DFCF960530DE6A56D /* ThemeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeTests.swift; sourceTree = "<group>"; };
+		B926CE01D9470D93A5A9ADE6 /* HelpPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpPageView.swift; sourceTree = "<group>"; };
+		BA43707B721B4ED42FA8E742 /* QUICK_START.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = QUICK_START.md; sourceTree = "<group>"; };
+		C09081E76A1B2B40542F3F6F /* CaptureOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureOverlayView.swift; sourceTree = "<group>"; };
+		C3DDA9D5578BA521909481DF /* ScanPasses-iPad-FixedHeight-3.mp4 */ = {isa = PBXFileReference; path = "ScanPasses-iPad-FixedHeight-3.mp4"; sourceTree = "<group>"; };
+		C823BA0229B541952CD44655 /* CaptureUtilitiesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureUtilitiesTests.swift; sourceTree = "<group>"; };
+		CDBF5A6D047AD0ED931A71D2 /* ModelsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsViewModelTests.swift; sourceTree = "<group>"; };
+		CE776109FAE7C32D6512935D /* TutorialVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialVideoView.swift; sourceTree = "<group>"; };
+		D03445EDDC906A611C41DDD2 /* AppDataModel+Orbit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDataModel+Orbit.swift"; sourceTree = "<group>"; };
+		D181B859C04D0511C87AFA5E /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		D5C2F48BE6B8337A41C351B3 /* ScanPasses-iPhone-FixedHeight-unflippable-high.mp4 */ = {isa = PBXFileReference; path = "ScanPasses-iPhone-FixedHeight-unflippable-high.mp4"; sourceTree = "<group>"; };
+		D614FE78D14AA63B31E995AF /* ScanPasses-iPad-FixedHeight-unflippable-high.mp4 */ = {isa = PBXFileReference; path = "ScanPasses-iPad-FixedHeight-unflippable-high.mp4"; sourceTree = "<group>"; };
+		D74A725A5130296737A0A609 /* ReconstructionPrimaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReconstructionPrimaryView.swift; sourceTree = "<group>"; };
+		D7FF1F56E090B27C79626768 /* ModelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelView.swift; sourceTree = "<group>"; };
+		E0653708831BAC62DEA4B6C4 /* TimedMessageList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimedMessageList.swift; sourceTree = "<group>"; };
+		E5664658887A6E0103EB8B89 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		E97C4DFE5EFB98A947E5C179 /* OrtioTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = OrtioTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E9B8FDD9AC2B4D8090CBC157 /* UntilProcessingCompleteFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UntilProcessingCompleteFilter.swift; sourceTree = "<group>"; };
+		F2BB03DDAF3B2434C02CF9CB /* OrtioApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrtioApp.swift; sourceTree = "<group>"; };
+		F553EC5A2F5983E5BC18DC43 /* ShotFileInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotFileInfo.swift; sourceTree = "<group>"; };
+		FCD7BEFC9EEF4B401AFE07B8 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0295FD3ACE81AB07C2694CA1 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				55661272C1296622B1EA152C /* Models */,
+				2EA8F09D6D48AA8B128C8700 /* ViewModels */,
+				44AC70D74B2940E8973F1B9A /* Views */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		0462624F71AC707FF1143E7F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				582079B00769338A44396A91 /* OnboardingButtonView.swift */,
+				2114CB8486E9FD8F9C8DC173 /* OnboardingButtonView+LocalizedString.swift */,
+				87FE6B3EF1A5C77F27C9937F /* OnboardingTutorialView.swift */,
+				05E8E8F28BD18DE4FF655F74 /* OnboardingTutorialView+LocalizedString.swift */,
+				4263A8183E8B209A72017AE4 /* OnboardingView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		1595209EF7476E71725D69B9 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A9926CE0B0700243C304DA98 /* Models */,
+				5CDC1623171B3C834F203BCF /* ViewModels */,
+				1CA1AA8E65B26DEAF3F45890 /* Views */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		18CC87AE687639844084D4A6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A9796E63C317E67349F6158C /* Ortio.app */,
+				E97C4DFE5EFB98A947E5C179 /* OrtioTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1CA1AA8E65B26DEAF3F45890 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				1A649DD3F8D74CE99356E77A /* ModelsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		226509555ACFDC9A92C0F667 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C09081E76A1B2B40542F3F6F /* CaptureOverlayView.swift */,
+				3ADF6DAF9FA0340F4FE41D61 /* CaptureOverlayView+Buttons.swift */,
+				2AD6E0ECD328B2CB0BA317C4 /* CaptureOverlayView+LocalizedString.swift */,
+				31DBFF86BA55A0955F3C0297 /* CapturePrimaryView.swift */,
+				0CA7C422DD37E8DB19AFF402 /* FeedbackView.swift */,
+				B926CE01D9470D93A5A9ADE6 /* HelpPageView.swift */,
+				918FB9C151BB747C59421448 /* LoadOrtioView.swift */,
+				D7FF1F56E090B27C79626768 /* ModelView.swift */,
+				D74A725A5130296737A0A609 /* ReconstructionPrimaryView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		280341269E0AAD1C5093E5B1 /* Import */ = {
+			isa = PBXGroup;
+			children = (
+				4044A5B5906437B6D06555A6 /* Models */,
+				333E970851AF9F475FCD2906 /* ViewModels */,
+				FFED9F3F487A9970390BCE45 /* Views */,
+			);
+			path = Import;
+			sourceTree = "<group>";
+		};
+		2EA8F09D6D48AA8B128C8700 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				E5664658887A6E0103EB8B89 /* SettingsViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		314EE0A8A00854A3C41A86C4 /* Ortio */ = {
+			isa = PBXGroup;
+			children = (
+				6203A8EE54AE99FB6F3D8345 /* Assets.xcassets */,
+				7397E6E53AE4A64818BF9E90 /* App */,
+				DA38D31725C30CE8F36E0105 /* Features */,
+				A427498E6058B9CB5DAB3682 /* Preview Content */,
+				8C3FB76A92ED1DA154192DE2 /* Resources */,
+				63B4FC4EC4D9512DB45D507A /* SharedUI */,
+			);
+			path = Ortio;
+			sourceTree = "<group>";
+		};
+		333E970851AF9F475FCD2906 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A21808949E04E57F41F66659 /* ImportViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		3619061A17DD13EF413C18AC /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				B86DE4E425D21D35E2CD5CCC /* ViewModels */,
+				0462624F71AC707FF1143E7F /* Views */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		3D50149A43F2D5CEE664E9D7 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				C2DB8CD502850913327CE1C0 /* Capture */,
+				D41CA6F8BDCD7D3994E85ED1 /* Import */,
+				A2A35BDE3B107FE13F00B746 /* Models */,
+				C3DD18AA93AE5B88F81CB325 /* Onboarding */,
+				C927A64CE83505846088B975 /* Settings */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		4044A5B5906437B6D06555A6 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B3B298FACB151FAC94C3C4BB /* ImportModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		43C24B2F964C843199EDDB6A /* OrtioTests */ = {
+			isa = PBXGroup;
+			children = (
+				461953DC6048F8B5861A4E95 /* Core */,
+				3D50149A43F2D5CEE664E9D7 /* Features */,
+				59BC5D83C11BC8E67A3343AD /* mocks */,
+				58DB4212122483250610E39B /* Shared */,
+			);
+			path = OrtioTests;
+			sourceTree = "<group>";
+		};
+		44AC70D74B2940E8973F1B9A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				76BC1FAAB7F0626DE655128C /* EditProfileView.swift */,
+				250B9B0E382F67AD4CE4887A /* SettingsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		461953DC6048F8B5861A4E95 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				635322F8EE3F66AB16F66D3B /* BindingExtensionTests.swift */,
+				ACADE0D270FA3A3D7BFF65A2 /* OrtioTests.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		500339322FEB24E1D3ED48AD /* Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				885AEB2962C219348354204F /* SampleCode.xcconfig */,
+			);
+			path = Configuration;
+			sourceTree = "<group>";
+		};
+		55661272C1296622B1EA152C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FCD7BEFC9EEF4B401AFE07B8 /* Theme.swift */,
+				099B2697E8C2736EEB9F0158 /* User.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		55874CC8BEB66B8A1957F1F4 = {
+			isa = PBXGroup;
+			children = (
+				D181B859C04D0511C87AFA5E /* .swiftlint.yml */,
+				B2254C1DEBCAD7A0A4384FE9 /* CLAUDE.md */,
+				A72753D0081BCF94EE57B779 /* project.yml */,
+				9766E6B869719A1C91D0B005 /* README.md */,
+				500339322FEB24E1D3ED48AD /* Configuration */,
+				93EA7FF06A47FB09180621F2 /* docs */,
+				314EE0A8A00854A3C41A86C4 /* Ortio */,
+				43C24B2F964C843199EDDB6A /* OrtioTests */,
+				CB9512AE004E289663B5223F /* Requirements */,
+				18CC87AE687639844084D4A6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		58DB4212122483250610E39B /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				574AE9BD34EF8E92C20FDAD7 /* FileManagerProtocolTests.swift */,
+				85D2D85AE93490621FFE8198 /* ModelStructTests.swift */,
+				A59EEB23B22E2E6E2D8FCB58 /* SwiftDataModelTests.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		59BC5D83C11BC8E67A3343AD /* mocks */ = {
+			isa = PBXGroup;
+			children = (
+				948A3190C8AEDE9FFA2E393E /* FileManagerMocks.swift */,
+			);
+			path = mocks;
+			sourceTree = "<group>";
+		};
+		5CDC1623171B3C834F203BCF /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				7CF80C4DFCC8F4FAC4328F42 /* ModelsViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		63B4FC4EC4D9512DB45D507A /* SharedUI */ = {
+			isa = PBXGroup;
+			children = (
+				9E3E3C7189D1A5484B3512F2 /* PlayerView.swift */,
+				2A8246F24644041A72C861FD /* ProgressBarView.swift */,
+				CE776109FAE7C32D6512935D /* TutorialVideoView.swift */,
+			);
+			path = SharedUI;
+			sourceTree = "<group>";
+		};
+		6576DBAAA2F7EC9AC7C12344 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A48911CDAC899F9EC9F3F823 /* AppDataModel.swift */,
+				D03445EDDC906A611C41DDD2 /* AppDataModel+Orbit.swift */,
+				67FEE7C4410EA1EAF166BCF8 /* AppDataModel+State.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		7397E6E53AE4A64818BF9E90 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				2AEE13610A7400309B9FD87B /* ContentView.swift */,
+				F2BB03DDAF3B2434C02CF9CB /* OrtioApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		8A9C71A129729957899F30CA /* implementation */ = {
+			isa = PBXGroup;
+			children = (
+				A588BB85176A1816E7B8866D /* IMPLEMENTATION_PLAN.md */,
+				05D5637A16FCAD9D1278076C /* IMPLEMENTATION_PROGRESS.md */,
+				726BA8E7C3B6ED2F899C118D /* SUMMARY.md */,
+			);
+			path = implementation;
+			sourceTree = "<group>";
+		};
+		8C19A8F50775ED88675E6E61 /* Capture */ = {
+			isa = PBXGroup;
+			children = (
+				C40A29D553BF19A840A67A34 /* Models */,
+				A81F3E3BDD7F4A411A998634 /* Utilities */,
+				6576DBAAA2F7EC9AC7C12344 /* ViewModels */,
+				226509555ACFDC9A92C0F667 /* Views */,
+			);
+			path = Capture;
+			sourceTree = "<group>";
+		};
+		8C3FB76A92ED1DA154192DE2 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				0614283290A52438E9B5FEB3 /* ScanPasses-iPad-FixedHeight-1.mp4 */,
+				A1273134F7063892A7221864 /* ScanPasses-iPad-FixedHeight-2.mp4 */,
+				C3DDA9D5578BA521909481DF /* ScanPasses-iPad-FixedHeight-3.mp4 */,
+				D614FE78D14AA63B31E995AF /* ScanPasses-iPad-FixedHeight-unflippable-high.mp4 */,
+				97C37AF17F99A541C77F4D18 /* ScanPasses-iPad-FixedHeight-unflippable-low.mp4 */,
+				5D433C4EB330F71E7B6A1EF9 /* ScanPasses-iPhone-FixedHeight-1.mp4 */,
+				A65C8B40107D7CD78C5D45A7 /* ScanPasses-iPhone-FixedHeight-2.mp4 */,
+				1E9265620F259C75CCDB551C /* ScanPasses-iPhone-FixedHeight-3.mp4 */,
+				D5C2F48BE6B8337A41C351B3 /* ScanPasses-iPhone-FixedHeight-unflippable-high.mp4 */,
+				5A47BEDAEA44DC75ED0257B0 /* ScanPasses-iPhone-FixedHeight-unflippable-low.mp4 */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		93EA7FF06A47FB09180621F2 /* docs */ = {
+			isa = PBXGroup;
+			children = (
+				0DD1F377024E5E628DD88DBA /* README.md */,
+				C93AF59BD73DFBF29F99B3ED /* database */,
+				EBE39B85506CB7248FF16B8E /* getting-started */,
+				8A9C71A129729957899F30CA /* implementation */,
+			);
+			path = docs;
+			sourceTree = "<group>";
+		};
+		A2A35BDE3B107FE13F00B746 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				7A9B6A80F1D65FEBCB724ACB /* ModelsTests.swift */,
+				CDBF5A6D047AD0ED931A71D2 /* ModelsViewModelTests.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A427498E6058B9CB5DAB3682 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				5424EA9310E1ED50DDB71CEE /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		A81F3E3BDD7F4A411A998634 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				890FDE20B93D48B9A4068008 /* FeedbackMessages.swift */,
+				E0653708831BAC62DEA4B6C4 /* TimedMessageList.swift */,
+				E9B8FDD9AC2B4D8090CBC157 /* UntilProcessingCompleteFilter.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		A9926CE0B0700243C304DA98 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				21817ED4DB541CAB9EA911FD /* Models.swift */,
+				9DC39B48A222312BE1150C7A /* ModelsModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		B86DE4E425D21D35E2CD5CCC /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A72EC56DBEBF68E8FB4EB7AD /* OnboardingStateMachine.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		C2DB8CD502850913327CE1C0 /* Capture */ = {
+			isa = PBXGroup;
+			children = (
+				C823BA0229B541952CD44655 /* CaptureUtilitiesTests.swift */,
+			);
+			path = Capture;
+			sourceTree = "<group>";
+		};
+		C3DD18AA93AE5B88F81CB325 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				94A5D7991B8208A150D782F6 /* OnboardingStateMachineTests.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		C40A29D553BF19A840A67A34 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				937F4E6BAA4D88C31B02F7A2 /* CaptureFolderManager.swift */,
+				4C89E7A42694442BDE136658 /* FileManagerProtocol.swift */,
+				9FD752922301E3954407ED73 /* PathConstants.swift */,
+				F553EC5A2F5983E5BC18DC43 /* ShotFileInfo.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		C927A64CE83505846088B975 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				6B71A761F35AAE61B90C9BFC /* SettingsViewModelTests.swift */,
+				B5695A3DFCF960530DE6A56D /* ThemeTests.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		C93AF59BD73DFBF29F99B3ED /* database */ = {
+			isa = PBXGroup;
+			children = (
+				5DB49A0F0E25E114FB493AE9 /* schema.sql */,
+			);
+			path = database;
+			sourceTree = "<group>";
+		};
+		CB9512AE004E289663B5223F /* Requirements */ = {
+			isa = PBXGroup;
+			children = (
+				6448B0FB6BFE59BF3E5FDEF0 /* MatyasVascakBachelorThesisProposal.md */,
+			);
+			path = Requirements;
+			sourceTree = "<group>";
+		};
+		D41CA6F8BDCD7D3994E85ED1 /* Import */ = {
+			isa = PBXGroup;
+			children = (
+				0A9453E3D998DD639553B59C /* ImportTests.swift */,
+				6B8DC4A9CB17C3A6DECA78C5 /* ImportViewModelTests.swift */,
+			);
+			path = Import;
+			sourceTree = "<group>";
+		};
+		DA38D31725C30CE8F36E0105 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				8C19A8F50775ED88675E6E61 /* Capture */,
+				280341269E0AAD1C5093E5B1 /* Import */,
+				1595209EF7476E71725D69B9 /* Models */,
+				3619061A17DD13EF413C18AC /* Onboarding */,
+				0295FD3ACE81AB07C2694CA1 /* Settings */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		EBE39B85506CB7248FF16B8E /* getting-started */ = {
+			isa = PBXGroup;
+			children = (
+				0480B4B17B03C23DCDB769AC /* FRAMEWORK_SETUP_GUIDE.md */,
+				BA43707B721B4ED42FA8E742 /* QUICK_START.md */,
+			);
+			path = "getting-started";
+			sourceTree = "<group>";
+		};
+		FFED9F3F487A9970390BCE45 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A143E8B94EA21AA54D551FA8 /* ImportView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		15854276796D2B48663EDF56 /* OrtioTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E7DAD4D58C51DD7582CEF28C /* Build configuration list for PBXNativeTarget "OrtioTests" */;
+			buildPhases = (
+				6CB3B672E059BC9B13B6C092 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				520F95CC5B62465799332EE0 /* PBXTargetDependency */,
+			);
+			name = OrtioTests;
+			packageProductDependencies = (
+			);
+			productName = OrtioTests;
+			productReference = E97C4DFE5EFB98A947E5C179 /* OrtioTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		B0E4DD053D4FCC6B4B9C19DA /* Ortio */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F927613A05C641CDE1704092 /* Build configuration list for PBXNativeTarget "Ortio" */;
+			buildPhases = (
+				A697AD7251BF856E2DAACF87 /* Sources */,
+				32A793E97A8E719A733E1998 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Ortio;
+			packageProductDependencies = (
+			);
+			productName = Ortio;
+			productReference = A9796E63C317E67349F6158C /* Ortio.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		66F70ED314FDE954FDCEAB5E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					15854276796D2B48663EDF56 = {
+						DevelopmentTeam = D763CZ24GN;
+						ProvisioningStyle = Automatic;
+					};
+					B0E4DD053D4FCC6B4B9C19DA = {
+						DevelopmentTeam = D763CZ24GN;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 0A92B63BB382575F924DFDB5 /* Build configuration list for PBXProject "Ortio" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 55874CC8BEB66B8A1957F1F4;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B0E4DD053D4FCC6B4B9C19DA /* Ortio */,
+				15854276796D2B48663EDF56 /* OrtioTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		32A793E97A8E719A733E1998 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				51C8E1821EBDBB4953B8715B /* Assets.xcassets in Resources */,
+				6A2879844F1BE0DC6775491B /* Preview Assets.xcassets in Resources */,
+				CE0476592CF7B5CAFB173DBE /* ScanPasses-iPad-FixedHeight-1.mp4 in Resources */,
+				1A8EFF3405719974B07820B2 /* ScanPasses-iPad-FixedHeight-2.mp4 in Resources */,
+				2971DFF9598CA766C5AF195D /* ScanPasses-iPad-FixedHeight-3.mp4 in Resources */,
+				6F279FEC33E6B1550F879F77 /* ScanPasses-iPad-FixedHeight-unflippable-high.mp4 in Resources */,
+				CC4279C3108DF0E7E746D5E9 /* ScanPasses-iPad-FixedHeight-unflippable-low.mp4 in Resources */,
+				33694972C3E01853A6C14CEF /* ScanPasses-iPhone-FixedHeight-1.mp4 in Resources */,
+				AE024C69ADE3CD14992F2909 /* ScanPasses-iPhone-FixedHeight-2.mp4 in Resources */,
+				D24906E36AA9F67405B4D601 /* ScanPasses-iPhone-FixedHeight-3.mp4 in Resources */,
+				96C06A9F88D7F04B7C7F57DD /* ScanPasses-iPhone-FixedHeight-unflippable-high.mp4 in Resources */,
+				EB084AE6D6C0FF3AB2A22D07 /* ScanPasses-iPhone-FixedHeight-unflippable-low.mp4 in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6CB3B672E059BC9B13B6C092 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DB9E5CF68CEA986036AB909B /* BindingExtensionTests.swift in Sources */,
+				515102F89B5D0F9A28C9B88A /* CaptureUtilitiesTests.swift in Sources */,
+				1A727ADCB199BAEC1C9FF8FF /* FileManagerMocks.swift in Sources */,
+				69FA37E21B5468978450B4A1 /* FileManagerProtocolTests.swift in Sources */,
+				998FBD03EA9AB038D2EBD9F0 /* ImportTests.swift in Sources */,
+				44920348142798638CC58853 /* ImportViewModelTests.swift in Sources */,
+				D96286E9B182C9A15CC4F898 /* ModelStructTests.swift in Sources */,
+				8B8EFC5BFFBFD3305F923CF8 /* ModelsTests.swift in Sources */,
+				6F5D1820EEBC219EEE42967B /* ModelsViewModelTests.swift in Sources */,
+				CC72635EFC40315B688CEC3D /* OnboardingStateMachineTests.swift in Sources */,
+				852FF8905DC62714B61C61B3 /* OrtioTests.swift in Sources */,
+				E0B53640070DBF6FD9866D8C /* SettingsViewModelTests.swift in Sources */,
+				1E2AABDAEED2AEFB0FC60271 /* SwiftDataModelTests.swift in Sources */,
+				3FB879A073B394F29DFE6FBF /* ThemeTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A697AD7251BF856E2DAACF87 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				95C76A969E4F928CF62C7093 /* AppDataModel+Orbit.swift in Sources */,
+				29619610E0F2CDF5FB234C32 /* AppDataModel+State.swift in Sources */,
+				522ACD95F48900677DA2A216 /* AppDataModel.swift in Sources */,
+				EBB39FA23E7F4E9B6F5AC5DE /* CaptureFolderManager.swift in Sources */,
+				260359A9DC97E34DB0F5EE49 /* CaptureOverlayView+Buttons.swift in Sources */,
+				337C7D3260D548F044A564DB /* CaptureOverlayView+LocalizedString.swift in Sources */,
+				5C863AF8C16FD19AE0728AB1 /* CaptureOverlayView.swift in Sources */,
+				6AC6B0D314AE1B57CAE131CB /* CapturePrimaryView.swift in Sources */,
+				89E55D8A571646E1B97879CF /* ContentView.swift in Sources */,
+				7C586405758FD5970C18B77A /* EditProfileView.swift in Sources */,
+				96F6B85365B2145D2270C34A /* FeedbackMessages.swift in Sources */,
+				E404256709F3317B52F0F69D /* FeedbackView.swift in Sources */,
+				FC1B9A366407C51AEF1FC370 /* FileManagerProtocol.swift in Sources */,
+				8E4787ADB66D658C6A4B06BC /* HelpPageView.swift in Sources */,
+				72543B8DAF973E2D9A3FC85A /* ImportModel.swift in Sources */,
+				4E786691FFC84E817A533F40 /* ImportView.swift in Sources */,
+				8BCD6D9E2B50ABFCA037F0D0 /* ImportViewModel.swift in Sources */,
+				1F485920C8F453DEAB07A713 /* LoadOrtioView.swift in Sources */,
+				93D6982DCEEEFB482144ECDC /* ModelView.swift in Sources */,
+				C926DD069FADA245EC023FBA /* Models.swift in Sources */,
+				261DA2CC308EF9C86991D6E2 /* ModelsModel.swift in Sources */,
+				E040703C79117C5AEF2B5C63 /* ModelsView.swift in Sources */,
+				F721A1ED9AC4FE69A0AB0359 /* ModelsViewModel.swift in Sources */,
+				968312F0CC4C3EAFB36D4C7A /* OnboardingButtonView+LocalizedString.swift in Sources */,
+				EC12CB7D534703EF66FD24A3 /* OnboardingButtonView.swift in Sources */,
+				ECD4CF3A807BBF6903917966 /* OnboardingStateMachine.swift in Sources */,
+				182104D51F7E4FDDB6F1897A /* OnboardingTutorialView+LocalizedString.swift in Sources */,
+				C08772F22C47F87A497FC0E9 /* OnboardingTutorialView.swift in Sources */,
+				3C55E9AD60B51508F8EB0E1B /* OnboardingView.swift in Sources */,
+				512CCB2E38FD7037F559BAAE /* OrtioApp.swift in Sources */,
+				9D23222179D94AEA41B8B068 /* PathConstants.swift in Sources */,
+				353FFE93A20C1BD7DC330474 /* PlayerView.swift in Sources */,
+				BC80A8C69B7EF39348FCCF3B /* ProgressBarView.swift in Sources */,
+				F79FFE6AA96636A0F031C96F /* ReconstructionPrimaryView.swift in Sources */,
+				56C6880EE8024989098DA711 /* SettingsView.swift in Sources */,
+				4BB1CF5E4E5831166586B1EB /* SettingsViewModel.swift in Sources */,
+				65D34B5BF869E9EF18AE204F /* ShotFileInfo.swift in Sources */,
+				5EA3809157929D74905FA2D1 /* Theme.swift in Sources */,
+				83A275039534B1916F66C59B /* TimedMessageList.swift in Sources */,
+				C5E39EF50966126310FEAB65 /* TutorialVideoView.swift in Sources */,
+				CA7ABCFAA07679146ED61E61 /* UntilProcessingCompleteFilter.swift in Sources */,
+				4409932704B0E1A02C62C014 /* User.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		520F95CC5B62465799332EE0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B0E4DD053D4FCC6B4B9C19DA /* Ortio */;
+			targetProxy = DD8424DC0B51D121455D2604 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1BD32DECF41F2529B96900B3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 885AEB2962C219348354204F /* SampleCode.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1 $(inherited)";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4329941B5DFAFEB04795408A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 885AEB2962C219348354204F /* SampleCode.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		47D9357063D4233E9CAE0E5A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Ortio/Preview Content\"";
+				DEVELOPMENT_TEAM = D763CZ24GN;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Ortio/Info.plist;
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app uses the camera to scan objects.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.Ortio${SAMPLE_CODE_DISAMBIGUATOR}";
+				PRODUCT_NAME = Ortio;
+				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CCC1F4EFE1D5861B6D7AB230 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D763CZ24GN;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = learn.Memorize.MatyasVascak.OrtioTests;
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Ortio.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Ortio";
+			};
+			name = Release;
+		};
+		F20963DE75C571020D15B91B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Ortio/Preview Content\"";
+				DEVELOPMENT_TEAM = D763CZ24GN;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Ortio/Info.plist;
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app uses the camera to scan objects.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.Ortio${SAMPLE_CODE_DISAMBIGUATOR}";
+				PRODUCT_NAME = Ortio;
+				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		F6CB0B6EAD825642B6F0E971 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D763CZ24GN;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = learn.Memorize.MatyasVascak.OrtioTests;
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Ortio.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Ortio";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0A92B63BB382575F924DFDB5 /* Build configuration list for PBXProject "Ortio" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1BD32DECF41F2529B96900B3 /* Debug */,
+				4329941B5DFAFEB04795408A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		E7DAD4D58C51DD7582CEF28C /* Build configuration list for PBXNativeTarget "OrtioTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F6CB0B6EAD825642B6F0E971 /* Debug */,
+				CCC1F4EFE1D5861B6D7AB230 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F927613A05C641CDE1704092 /* Build configuration list for PBXNativeTarget "Ortio" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				47D9357063D4233E9CAE0E5A /* Debug */,
+				F20963DE75C571020D15B91B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 66F70ED314FDE954FDCEAB5E /* Project object */;
+}

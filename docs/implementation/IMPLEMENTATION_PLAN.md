@@ -18,10 +18,10 @@ This document breaks down the full implementation plan into digestible parts for
 ### Deliverables
 
 #### 1.1 Framework Structure
-- [ ] Create `GuidedCaptureShared` framework target in Xcode
+- [ ] Create `OrtioShared` framework target in Xcode
 - [ ] Set up directory structure:
   ```
-  /GuidedCaptureShared/
+  /OrtioShared/
   ├── Models/
   ├── Networking/
   ├── Utilities/
@@ -31,19 +31,19 @@ This document breaks down the full implementation plan into digestible parts for
 - [ ] Link framework to iOS target
 
 #### 1.2 Move Existing Models
-- [ ] Move `Models.swift` → `/GuidedCaptureShared/Models/`
-- [ ] Move `User.swift` → `/GuidedCaptureShared/Models/`
-- [ ] Move `Theme.swift` → `/GuidedCaptureShared/Models/`
-- [ ] Move `FileManagerProtocol.swift` → `/GuidedCaptureShared/Utilities/`
-- [ ] Move `PathConstants.swift` → `/GuidedCaptureShared/Utilities/`
+- [ ] Move `Models.swift` → `/OrtioShared/Models/`
+- [ ] Move `User.swift` → `/OrtioShared/Models/`
+- [ ] Move `Theme.swift` → `/OrtioShared/Models/`
+- [ ] Move `FileManagerProtocol.swift` → `/OrtioShared/Utilities/`
+- [ ] Move `PathConstants.swift` → `/OrtioShared/Utilities/`
 
 #### 1.3 Update iOS App Imports
-- [ ] Add `import GuidedCaptureShared` to all iOS files using models
+- [ ] Add `import OrtioShared` to all iOS files using models
 - [ ] Update test files to import framework
 - [ ] Verify all tests still pass
 
 #### 1.4 Create Annotation Model
-**New File**: `/GuidedCaptureShared/Models/Annotation.swift`
+**New File**: `/OrtioShared/Models/Annotation.swift`
 
 ```swift
 import Foundation
@@ -105,7 +105,7 @@ enum SyncStatus: String, Codable {
 ```
 
 #### 1.5 Write Tests
-**New File**: `/GuidedCaptureTests/AnnotationModelTests.swift`
+**New File**: `/OrtioTests/AnnotationModelTests.swift`
 - Test annotation creation
 - Test position/rotation conversions
 - Test sync status transitions
@@ -118,7 +118,7 @@ enum SyncStatus: String, Codable {
 - ✅ No regressions in iOS functionality
 
 ### Questions for Review
-1. **Framework Naming**: Is `GuidedCaptureShared` acceptable, or prefer `OrtioCore`/`OrtioShared`?
+1. **Framework Naming**: Is `OrtioShared` acceptable, or prefer `OrtioCore`/`OrtioShared`?
 2. **Annotation Fields**: Do we need additional metadata (e.g., color, priority, tags)?
 3. **Sync Strategy**: Confirm model-relative coordinates vs world-space anchors?
 
@@ -137,21 +137,21 @@ enum SyncStatus: String, Codable {
 ### Deliverables
 
 #### 2.1 Create visionOS Target
-- [ ] Create `GuidedCaptureVision` target in Xcode (visionOS platform)
-- [ ] Link `GuidedCaptureShared` framework
+- [ ] Create `OrtioVision` target in Xcode (visionOS platform)
+- [ ] Link `OrtioShared` framework
 - [ ] Configure Info.plist for visionOS requirements
 - [ ] Add app icon and assets catalog
 
 #### 2.2 App Entry Point
-**New File**: `/GuidedCaptureVision/GuidedCaptureVisionApp.swift`
+**New File**: `/OrtioVision/OrtioVisionApp.swift`
 
 ```swift
 import SwiftUI
 import SwiftData
-import GuidedCaptureShared
+import OrtioShared
 
 @main
-struct GuidedCaptureVisionApp: App {
+struct OrtioVisionApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Models.self,
@@ -177,7 +177,7 @@ struct GuidedCaptureVisionApp: App {
 ```
 
 #### 2.3 Main Navigation
-**New File**: `/GuidedCaptureVision/Views/ContentView.swift`
+**New File**: `/OrtioVision/Views/ContentView.swift`
 
 - TabView with 2 tabs:
   - **Browse**: Model browser (grid of downloaded/local models)
@@ -186,9 +186,9 @@ struct GuidedCaptureVisionApp: App {
 
 #### 2.4 Placeholder Views
 **New Files**:
-- `/GuidedCaptureVision/Views/ModelBrowserView.swift` - Empty grid with "No models yet" message
-- `/GuidedCaptureVision/Views/SettingsView.swift` - Basic settings UI
-- `/GuidedCaptureVision/ViewModels/ModelBrowserViewModel.swift` - ViewModel scaffold
+- `/OrtioVision/Views/ModelBrowserView.swift` - Empty grid with "No models yet" message
+- `/OrtioVision/Views/SettingsView.swift` - Basic settings UI
+- `/OrtioVision/ViewModels/ModelBrowserViewModel.swift` - ViewModel scaffold
 
 #### 2.5 Test on Simulator
 - [ ] Build visionOS app
@@ -222,7 +222,7 @@ struct GuidedCaptureVisionApp: App {
 ### Deliverables
 
 #### 3.1 Model Loader Utility
-**New File**: `/GuidedCaptureVision/RealityKit/ModelLoader.swift`
+**New File**: `/OrtioVision/RealityKit/ModelLoader.swift`
 
 ```swift
 import RealityKit
@@ -239,7 +239,7 @@ actor ModelLoader {
 ```
 
 #### 3.2 ModelViewerView
-**New File**: `/GuidedCaptureVision/Views/ModelViewerView.swift`
+**New File**: `/OrtioVision/Views/ModelViewerView.swift`
 
 - RealityKit `RealityView` component
 - Load USDZ from URL
@@ -248,12 +248,12 @@ actor ModelLoader {
 - Center and scale model appropriately
 
 #### 3.3 ModelViewerViewModel
-**New File**: `/GuidedCaptureVision/ViewModels/ModelViewerViewModel.swift`
+**New File**: `/OrtioVision/ViewModels/ModelViewerViewModel.swift`
 
 ```swift
 import SwiftUI
 import RealityKit
-import GuidedCaptureShared
+import OrtioShared
 
 @Observable
 final class ModelViewerViewModel {
@@ -280,7 +280,7 @@ final class ModelViewerViewModel {
 ```
 
 #### 3.4 Gesture Recognizers
-**New File**: `/GuidedCaptureVision/RealityKit/GestureHandler.swift`
+**New File**: `/OrtioVision/RealityKit/GestureHandler.swift`
 
 - Pinch gesture → Scale model (min: 0.1x, max: 10x)
 - Rotation gesture → Rotate around Y-axis
@@ -323,7 +323,7 @@ final class ModelViewerViewModel {
 ### Deliverables
 
 #### 4.1 Immersive Space Setup
-**New File**: `/GuidedCaptureVision/ImmersiveSpace/ARImmersiveView.swift`
+**New File**: `/OrtioVision/ImmersiveSpace/ARImmersiveView.swift`
 
 - Create immersive space scene
 - Enable ARKit session
@@ -564,11 +564,11 @@ Configuration/Secrets.xcconfig
 
 #### 6.1 Add Supabase Swift SDK
 - [ ] Add package dependency: `https://github.com/supabase/supabase-swift`
-- [ ] Link to `GuidedCaptureShared` framework
+- [ ] Link to `OrtioShared` framework
 - [ ] Import in networking files
 
 #### 6.2 NetworkProtocol Definition
-**New File**: `/GuidedCaptureShared/Networking/NetworkProtocol.swift`
+**New File**: `/OrtioShared/Networking/NetworkProtocol.swift`
 
 ```swift
 import Foundation
@@ -606,7 +606,7 @@ enum SharePermission: String, Codable {
 #### 6.3 Data Transfer Objects (DTOs)
 **New Files**:
 
-`/GuidedCaptureShared/SupabaseModels/UserRecord.swift`
+`/OrtioShared/SupabaseModels/UserRecord.swift`
 ```swift
 import Foundation
 
@@ -619,7 +619,7 @@ struct UserRecord: Codable, Identifiable {
 }
 ```
 
-`/GuidedCaptureShared/SupabaseModels/ModelRecord.swift`
+`/OrtioShared/SupabaseModels/ModelRecord.swift`
 ```swift
 import Foundation
 
@@ -634,7 +634,7 @@ struct ModelRecord: Codable, Identifiable {
 }
 ```
 
-`/GuidedCaptureShared/SupabaseModels/AnnotationRecord.swift`
+`/OrtioShared/SupabaseModels/AnnotationRecord.swift`
 ```swift
 import Foundation
 
@@ -657,7 +657,7 @@ struct AnnotationRecord: Codable, Identifiable {
 ```
 
 #### 6.4 CloudStorageService Implementation
-**New File**: `/GuidedCaptureShared/Networking/CloudStorageService.swift`
+**New File**: `/OrtioShared/Networking/CloudStorageService.swift`
 
 ```swift
 import Foundation
@@ -678,11 +678,11 @@ final class CloudStorageService: NetworkProtocol {
 ```
 
 #### 6.5 Mock Network Service
-**New File**: `/GuidedCaptureTests/mocks/MockNetworkService.swift`
+**New File**: `/OrtioTests/mocks/MockNetworkService.swift`
 
 ```swift
 import Foundation
-@testable import GuidedCaptureShared
+@testable import OrtioShared
 
 final class MockNetworkService: NetworkProtocol {
     // Call tracking
@@ -700,7 +700,7 @@ final class MockNetworkService: NetworkProtocol {
 ```
 
 #### 6.6 Error Handling
-**New File**: `/GuidedCaptureShared/Networking/NetworkError.swift`
+**New File**: `/OrtioShared/Networking/NetworkError.swift`
 
 ```swift
 import Foundation
@@ -729,7 +729,7 @@ enum NetworkError: LocalizedError {
 ```
 
 #### 6.7 Write Tests
-**New File**: `/GuidedCaptureTests/CloudStorageServiceTests.swift`
+**New File**: `/OrtioTests/CloudStorageServiceTests.swift`
 - Test authentication flow (sign up, sign in, sign out)
 - Test model upload/download
 - Test annotation CRUD
@@ -779,7 +779,7 @@ enum NetworkError: LocalizedError {
 - Add cloud sync status badge (uploaded vs local-only)
 
 #### 7.3 Background Upload
-**New File**: `/GuidedCapture/Utilities/BackgroundUploadManager.swift`
+**New File**: `/Ortio/Utilities/BackgroundUploadManager.swift`
 
 - Configure `URLSessionConfiguration.background`
 - Handle upload tasks surviving app backgrounding
@@ -790,7 +790,7 @@ enum NetworkError: LocalizedError {
 - Mark model as "synced to cloud"
 
 #### 7.5 Write Tests
-**New File**: `/GuidedCaptureTests/ModelUploadTests.swift`
+**New File**: `/OrtioTests/ModelUploadTests.swift`
 - Test upload flow with `MockNetworkService`
 - Test progress tracking
 - Test error handling
@@ -823,11 +823,11 @@ enum NetworkError: LocalizedError {
 ### Deliverables
 
 #### 8.1 CloudBrowserViewModel
-**New File**: `/GuidedCaptureVision/ViewModels/CloudBrowserViewModel.swift`
+**New File**: `/OrtioVision/ViewModels/CloudBrowserViewModel.swift`
 
 ```swift
 import SwiftUI
-import GuidedCaptureShared
+import OrtioShared
 
 @Observable
 final class CloudBrowserViewModel {
@@ -856,7 +856,7 @@ final class CloudBrowserViewModel {
 ```
 
 #### 8.2 CloudBrowserView
-**New File**: `/GuidedCaptureVision/Views/CloudBrowserView.swift`
+**New File**: `/OrtioVision/Views/CloudBrowserView.swift`
 
 - Grid layout showing cloud models
 - Download button per model
@@ -865,7 +865,7 @@ final class CloudBrowserViewModel {
 - Filter: "My Models" vs "Shared with Me"
 
 #### 8.3 Cache Management
-**New File**: `/GuidedCaptureShared/Utilities/ModelCacheManager.swift`
+**New File**: `/OrtioShared/Utilities/ModelCacheManager.swift`
 
 - Cache location: `Library/Caches/Models/<modelId>.usdz`
 - Track cache size
@@ -877,7 +877,7 @@ final class CloudBrowserViewModel {
 - Handle missing cache files gracefully
 
 #### 8.5 Write Tests
-**New File**: `/GuidedCaptureTests/CloudBrowserViewModelTests.swift`
+**New File**: `/OrtioTests/CloudBrowserViewModelTests.swift`
 - Test fetching cloud models
 - Test download flow
 - Test cache eviction
@@ -910,12 +910,12 @@ final class CloudBrowserViewModel {
 ### Deliverables
 
 #### 9.1 AnnotationViewModel
-**New File**: `/GuidedCaptureVision/ViewModels/AnnotationViewModel.swift`
+**New File**: `/OrtioVision/ViewModels/AnnotationViewModel.swift`
 
 ```swift
 import SwiftUI
 import SwiftData
-import GuidedCaptureShared
+import OrtioShared
 
 @Observable
 final class AnnotationViewModel {
@@ -948,7 +948,7 @@ final class AnnotationViewModel {
 ```
 
 #### 9.2 Raycasting & Hit Detection
-**New File**: `/GuidedCaptureVision/RealityKit/RaycastHandler.swift`
+**New File**: `/OrtioVision/RealityKit/RaycastHandler.swift`
 
 - Implement tap gesture on RealityKit scene
 - Perform raycast to detect model surface hit
@@ -956,7 +956,7 @@ final class AnnotationViewModel {
 - Return position and surface normal (for rotation)
 
 #### 9.3 Annotation Marker Entity
-**New File**: `/GuidedCaptureVision/RealityKit/AnnotationMarkerEntity.swift`
+**New File**: `/OrtioVision/RealityKit/AnnotationMarkerEntity.swift`
 
 ```swift
 import RealityKit
@@ -985,7 +985,7 @@ final class AnnotationMarkerEntity: Entity {
 ```
 
 #### 9.4 Annotation Input Modal
-**New File**: `/GuidedCaptureVision/Views/AnnotationInputView.swift`
+**New File**: `/OrtioVision/Views/AnnotationInputView.swift`
 
 - SwiftUI sheet/modal view
 - Text field for title (max 50 chars)
@@ -994,7 +994,7 @@ final class AnnotationMarkerEntity: Entity {
 - Show character count
 
 #### 9.5 Annotation List View
-**New File**: `/GuidedCaptureVision/Views/AnnotationListView.swift`
+**New File**: `/OrtioVision/Views/AnnotationListView.swift`
 
 - List all annotations for current model
 - Show title, author, date
@@ -1008,7 +1008,7 @@ final class AnnotationMarkerEntity: Entity {
 - Persist visibility state in UserDefaults
 
 #### 9.7 Write Tests
-**New File**: `/GuidedCaptureTests/AnnotationViewModelTests.swift`
+**New File**: `/OrtioTests/AnnotationViewModelTests.swift`
 - Test annotation creation
 - Test coordinate conversion
 - Test SwiftData persistence
@@ -1044,7 +1044,7 @@ final class AnnotationMarkerEntity: Entity {
 ### Deliverables
 
 #### 10.1 SyncManager
-**New File**: `/GuidedCaptureShared/Networking/SyncManager.swift`
+**New File**: `/OrtioShared/Networking/SyncManager.swift`
 
 ```swift
 import Foundation
@@ -1074,7 +1074,7 @@ final class SyncManager {
 ```
 
 #### 10.2 Background Upload Queue
-**New File**: `/GuidedCaptureShared/Utilities/UploadQueue.swift`
+**New File**: `/OrtioShared/Utilities/UploadQueue.swift`
 
 - Queue pending annotations for upload
 - Retry failed uploads with exponential backoff
@@ -1092,7 +1092,7 @@ final class SyncManager {
 - Allow manual retry for failed syncs
 
 #### 10.5 Write Tests
-**New File**: `/GuidedCaptureTests/SyncManagerTests.swift`
+**New File**: `/OrtioTests/SyncManagerTests.swift`
 - Test upload queue
 - Test conflict resolution (last-write-wins)
 - Test offline queue persistence
@@ -1125,7 +1125,7 @@ final class SyncManager {
 ### Deliverables
 
 #### 11.1 Share Sheet (iOS)
-**New File**: `/GuidedCapture/Views/ShareModelView.swift`
+**New File**: `/Ortio/Views/ShareModelView.swift`
 
 - Modal sheet with text field for email
 - Picker for permission (view / annotate)
@@ -1138,7 +1138,7 @@ final class SyncManager {
 - Present `ShareModelView` sheet
 
 #### 11.3 Shared Models Section (visionOS)
-**File**: `/GuidedCaptureVision/Views/CloudBrowserView.swift`
+**File**: `/OrtioVision/Views/CloudBrowserView.swift`
 - Add "Shared with Me" tab/section
 - Fetch shared models via `NetworkProtocol.fetchSharedModels()`
 - Display with different badge/icon
@@ -1149,7 +1149,7 @@ final class SyncManager {
 - Show permission badge in UI
 
 #### 11.5 Write Tests
-**New File**: `/GuidedCaptureTests/ModelSharingTests.swift`
+**New File**: `/OrtioTests/ModelSharingTests.swift`
 - Test share flow
 - Test permission enforcement
 - Test fetching shared models
@@ -1189,7 +1189,7 @@ final class SyncManager {
 - [ ] Verify 80%+ coverage with Xcode coverage report
 
 #### 12.2 Integration Tests
-**New Directory**: `/GuidedCaptureTests/IntegrationTests/`
+**New Directory**: `/OrtioTests/IntegrationTests/`
 
 **New Files**:
 - `FullWorkflowTests.swift` - iOS scan → upload → visionOS download
