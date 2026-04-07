@@ -11,6 +11,7 @@ import SwiftData
 /// Account settings screen with profile, notifications, and theme controls.
 /// All state and persistence is managed by `SettingsViewModel`.
 struct SettingsView: View {
+    @Environment(\.dismiss) private var dismiss
     @State private var viewModel = SettingsViewModel()
     @Query var users: [User]
     @Environment(\.modelContext) private var modelContext
@@ -18,33 +19,27 @@ struct SettingsView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                LazyVStack(spacing: 24) {
-                    // Profile Section
-                    VStack(spacing: 16) {
-                        sectionHeader("Profile")
+            ZStack {
+                OrtioDesignSystem.shellGradient
+                    .ignoresSafeArea()
 
-                        VStack(spacing: 0) {
-                            NavigationLink(destination: EditProfileView(name: $viewModel.name)) {
-                                ProfileItemView(
-                                    title: viewModel.name,
-                                    subtitle: "View Profile",
-                                    profileImage: viewModel.user.profileUIImage
-                                )
-                                .padding(.horizontal, 16)
-                                .padding(.vertical, 12)
-                            }
-                            .buttonStyle(PlainButtonStyle())
-                            .accessibilityLabel("Edit profile")
+                ScrollView(showsIndicators: false) {
+                    LazyVStack(spacing: 22) {
+                        SettingsHeader {
+                            dismiss()
                         }
-                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
-                    }
 
-                    // Notifications Section
-                    VStack(spacing: 16) {
-                        sectionHeader("Notifications")
+                        NavigationLink(destination: EditProfileView(name: $viewModel.name)) {
+                            SettingsProfileCard(
+                                title: viewModel.name,
+                                subtitle: viewModel.user.username,
+                                profileImage: viewModel.user.profileUIImage
+                            )
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("Edit profile")
 
-                        VStack(spacing: 0) {
+                        SettingsCard(title: "Notifications") {
                             settingsRow(
                                 icon: "bell",
                                 title: "Push Notifications",
@@ -64,29 +59,19 @@ struct SettingsView: View {
                                 isLast: true
                             )
                         }
-                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
-                    }
 
-                    // Appearance Section
-                    VStack(spacing: 16) {
-                        sectionHeader("Appearance")
-
-                        VStack(spacing: 0) {
+                        SettingsCard(title: "Appearance") {
                             ThemePicker(selectedTheme: $appModel.selectedTheme.onChange {
                                 appModel.saveTheme(user: viewModel.user, context: modelContext)
                             })
                         }
-                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
                     }
-
-                    Spacer(minLength: 100)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 18)
+                    .padding(.bottom, 48)
                 }
-                .padding(.horizontal, 16)
-                .padding(.top, 8)
             }
-            .navigationTitle("Account")
-            .navigationBarTitleDisplayMode(.large)
-            .background(Color(.systemGroupedBackground))
+            .toolbar(.hidden, for: .navigationBar)
         }
         .onAppear {
             viewModel.loadUser(from: users, context: modelContext)
@@ -99,19 +84,6 @@ struct SettingsView: View {
         } message: {
             Text(viewModel.errorMessage ?? "")
         }
-    }
-
-    private func sectionHeader(_ title: String) -> some View {
-        HStack {
-            Text(title)
-                .font(.footnote)
-                .fontWeight(.medium)
-                .foregroundStyle(.secondary)
-                .textCase(.uppercase)
-                .tracking(0.5)
-            Spacer()
-        }
-        .padding(.horizontal, 4)
     }
 
     private func settingsRow(
@@ -135,6 +107,7 @@ struct SettingsView: View {
 
                 Toggle("", isOn: toggle)
                     .labelsHidden()
+                    .tint(OrtioDesignSystem.accent)
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
@@ -192,7 +165,7 @@ struct ThemePicker: View {
 
                         if selectedTheme == theme {
                             Image(systemName: "checkmark")
-                                .foregroundColor(.blue)
+                                .foregroundColor(OrtioDesignSystem.accent)
                                 .font(.system(size: 16, weight: .semibold))
                         }
                     }
@@ -216,45 +189,99 @@ struct ThemePicker: View {
     }
 }
 
-// MARK: - ProfileItemView
-
-struct ProfileItemView: View {
-    var title: String
-    var subtitle: String
-    var profileImage: UIImage?
+private struct SettingsHeader: View {
+    let onClose: () -> Void
 
     var body: some View {
-        HStack(spacing: 12) {
-            if let profileImage = profileImage {
+        HStack {
+            Spacer()
+
+            Text("Settings")
+                .font(.headline.weight(.semibold))
+                .foregroundStyle(.primary)
+
+            Spacer()
+
+            Button(action: onClose) {
+                Image(systemName: "xmark")
+                    .font(.headline.weight(.semibold))
+                    .frame(width: 38, height: 38)
+                    .background(Circle().fill(OrtioDesignSystem.elevatedSurface))
+                    .overlay(Circle().stroke(OrtioDesignSystem.subtleBorder, lineWidth: 1))
+            }
+            .buttonStyle(.plain)
+            .foregroundStyle(.primary)
+            .accessibilityLabel("Close settings")
+        }
+    }
+}
+
+private struct SettingsCard<Content: View>: View {
+    let title: String
+    let content: Content
+
+    init(title: String, @ViewBuilder content: () -> Content) {
+        self.title = title
+        self.content = content()
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text(title)
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(OrtioDesignSystem.mutedText)
+                .textCase(.uppercase)
+                .tracking(0.6)
+
+            VStack(spacing: 0) {
+                content
+            }
+            .ortioCardStyle()
+        }
+    }
+}
+
+private struct SettingsProfileCard: View {
+    let title: String
+    let subtitle: String
+    let profileImage: UIImage?
+
+    var body: some View {
+        HStack(spacing: 14) {
+            if let profileImage {
                 Image(uiImage: profileImage)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 50, height: 50)
+                    .frame(width: 62, height: 62)
                     .clipShape(Circle())
             } else {
-                Image(systemName: "person.crop.circle.fill")
-                    .resizable()
-                    .frame(width: 50, height: 50)
-                    .clipShape(Circle())
-                    .foregroundColor(.gray)
+                Circle()
+                    .fill(OrtioDesignSystem.accentSoft)
+                    .frame(width: 62, height: 62)
+                    .overlay {
+                        Image(systemName: "person.crop.circle.fill")
+                            .font(.title)
+                            .foregroundStyle(OrtioDesignSystem.accent)
+                    }
             }
 
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text(title)
-                    .font(.callout)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.primary)
+                    .font(.headline)
+                    .foregroundStyle(.primary)
 
-                Text(subtitle)
-                    .font(.caption)
-                    .foregroundColor(.blue)
+                Text(subtitle.isEmpty ? "Edit profile" : "@\(subtitle)")
+                    .font(.subheadline)
+                    .foregroundStyle(OrtioDesignSystem.mutedText)
             }
 
             Spacer()
 
             Image(systemName: "chevron.right")
-                .font(.system(size: 14, weight: .medium))
-                .foregroundColor(.secondary)
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(.secondary)
         }
+        .padding(18)
+        .ortioCardStyle()
     }
 }

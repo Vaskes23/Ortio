@@ -11,24 +11,13 @@ Top-level SwiftUI container view for the entire app.
 */
 
 import SwiftUI
-import RealityKit
-import SwiftData
 
-
-struct ContentView : View {
+struct ContentView: View {
     var body: some View {
-        TabView{
-            ModelsView(viewModel: ModelsViewModel())
-                .tabItem{
-                    Label("Models", systemImage: "cube")
-                }
-            
-            ImportView(viewModel: ImportViewModel())
-                .tabItem{
-                    Label("Import", systemImage: "tray.and.arrow.down")
-                }
+        NavigationStack {
+            HomeDashboardView()
         }
-        .tint(.accentColor)
+        .tint(.primary)
     }
 }
 
