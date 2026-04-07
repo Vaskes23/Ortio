@@ -8,6 +8,13 @@
 import SwiftData
 import SwiftUI
 
+private enum HomeSearchPresentationState {
+    case idle
+    case expanding
+    case active
+    case collapsing
+}
+
 struct HomeDashboardView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.scenePhase) private var scenePhase
@@ -15,17 +22,19 @@ struct HomeDashboardView: View {
     @Query private var capturedMetadata: [CapturedModelMetadata]
     @Query private var users: [User]
 
+    @Namespace private var searchTransitionNamespace
     @State private var searchViewModel = GlobalSearchViewModel()
     @State private var selectedFilter: LibraryHomeFilter = .all
     @State private var previewItem: LibraryPreviewItem?
     @State private var activeEditor: ModelEditorDestination?
     @State private var expandedNotesItemIDs: Set<String> = []
-    @State private var showingSearch = false
+    @State private var searchPresentationState: HomeSearchPresentationState = .idle
     @State private var showingSettings = false
     @State private var showingTools = false
     @State private var showingCapture = false
     @State private var showingImportLibrary = false
     @State private var showingHelp = false
+    @FocusState private var isSearchFieldFocused: Bool
 
     private var user: User? { users.first }
 
@@ -63,50 +72,105 @@ struct HomeDashboardView: View {
         })
     }
 
+    private var isSearchExpanded: Bool {
+        switch searchPresentationState {
+        case .expanding, .active:
+            return true
+        case .idle, .collapsing:
+            return false
+        }
+    }
+
+    private var showsSearchResults: Bool {
+        switch searchPresentationState {
+        case .expanding, .active:
+            return true
+        case .idle, .collapsing:
+            return false
+        }
+    }
+
+    private var dashboardAnimation: Animation {
+        .spring(response: 0.42, dampingFraction: 0.88)
+    }
+
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             OrtioDesignSystem.shellGradient
                 .ignoresSafeArea()
 
             ScrollView(showsIndicators: false) {
-                VStack(alignment: .leading, spacing: 28) {
+                VStack(alignment: .leading, spacing: 0) {
                     DashboardHeader(
                         user: user,
-                        onSearch: { showingSearch = true },
+                        searchText: $searchViewModel.searchText,
+                        searchPresentationState: searchPresentationState,
+                        namespace: searchTransitionNamespace,
+                        isSearchFieldFocused: $isSearchFieldFocused,
+                        onSearchTap: openSearch,
+                        onCloseSearch: closeSearch,
                         onSettings: { showingSettings = true }
                     )
+                    .padding(.bottom, isSearchExpanded ? 20 : 28)
 
                     QuickActionsRow(
                         selectedFilter: $selectedFilter,
                         onOpenTools: { showingTools = true }
                     )
+                    .frame(height: isSearchExpanded ? 0 : 110, alignment: .top)
+                    .opacity(isSearchExpanded ? 0 : 1)
+                    .offset(x: isSearchExpanded ? 180 : 0)
+                    .clipped()
+                    .allowsHitTesting(!isSearchExpanded)
+                    .animation(dashboardAnimation, value: isSearchExpanded)
 
-                    DashboardSection(
-                        title: selectedFilter.title,
-                        items: filteredItems,
-                        onSelect: selectItem,
-                        onTogglePin: togglePin,
-                        expandedNotesItemIDs: $expandedNotesItemIDs,
-                        onChangeName: presentRename,
-                        onAddNotes: presentNotes,
-                        onToggleNotes: toggleNotes
-                    )
+                    ZStack(alignment: .topLeading) {
+                        VStack(alignment: .leading, spacing: 28) {
+                            DashboardSection(
+                                title: selectedFilter.title,
+                                items: filteredItems,
+                                onSelect: selectItem,
+                                onTogglePin: togglePin,
+                                expandedNotesItemIDs: $expandedNotesItemIDs,
+                                onChangeName: presentRename,
+                                onAddNotes: presentNotes,
+                                onToggleNotes: toggleNotes
+                            )
 
-                    if filteredItems.isEmpty {
-                        EmptyLibraryCard(
-                            onScan: { showingCapture = true },
-                            onImport: { showingImportLibrary = true }
+                            if filteredItems.isEmpty {
+                                EmptyLibraryCard(
+                                    onScan: { showingCapture = true },
+                                    onImport: { showingImportLibrary = true }
+                                )
+                            }
+                        }
+                        .opacity(showsSearchResults ? 0 : 1)
+                        .offset(y: showsSearchResults ? 28 : 0)
+                        .allowsHitTesting(!showsSearchResults)
+                        .animation(dashboardAnimation, value: showsSearchResults)
+
+                        GlobalSearchContent(
+                            viewModel: searchViewModel,
+                            onSelect: selectItem
                         )
+                        .opacity(showsSearchResults ? 1 : 0)
+                        .offset(y: showsSearchResults ? 0 : 34)
+                        .allowsHitTesting(showsSearchResults)
+                        .animation(dashboardAnimation, value: showsSearchResults)
                     }
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 24)
-                .padding(.bottom, 120)
+                .padding(.bottom, isSearchExpanded ? 40 : 120)
             }
 
             ScanPillButton(action: { showingCapture = true })
                 .padding(.horizontal, 20)
                 .padding(.bottom, 28)
+                .opacity(isSearchExpanded ? 0 : 1)
+                .offset(y: isSearchExpanded ? 32 : 0)
+                .allowsHitTesting(!isSearchExpanded)
+                .animation(dashboardAnimation, value: isSearchExpanded)
         }
         .toolbar(.hidden, for: .navigationBar)
         .task {
@@ -121,11 +185,6 @@ struct HomeDashboardView: View {
         .onChange(of: scenePhase) { _, newPhase in
             if newPhase == .active {
                 refreshCapturedItems()
-            }
-        }
-        .fullScreenCover(isPresented: $showingSearch) {
-            GlobalSearchView(viewModel: searchViewModel) {
-                showingSearch = false
             }
         }
         .fullScreenCover(isPresented: $showingSettings) {
@@ -194,6 +253,36 @@ struct HomeDashboardView: View {
 
     private func selectItem(_ item: LibraryItem) {
         previewItem = LibraryPreviewItem(url: item.url)
+    }
+
+    private func openSearch() {
+        guard searchPresentationState == .idle else { return }
+
+        withAnimation(dashboardAnimation) {
+            searchPresentationState = .expanding
+        }
+
+        Task {
+            try? await Task.sleep(for: .milliseconds(280))
+            guard searchPresentationState == .expanding else { return }
+            searchPresentationState = .active
+            isSearchFieldFocused = true
+        }
+    }
+
+    private func closeSearch() {
+        guard searchPresentationState == .active else { return }
+
+        isSearchFieldFocused = false
+        withAnimation(dashboardAnimation) {
+            searchPresentationState = .collapsing
+        }
+
+        Task {
+            try? await Task.sleep(for: .milliseconds(280))
+            guard searchPresentationState == .collapsing else { return }
+            searchPresentationState = .idle
+        }
     }
 
     private func refreshCapturedItems() {
