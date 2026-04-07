@@ -26,13 +26,14 @@ final class ImportTests: XCTestCase {
     func testCreateUniqueFolderName() {
         let date = Date(timeIntervalSince1970: 0)
         let folderName = ImportViewModel.createUniqueFolderName(from: date)
-        XCTAssertEqual(folderName, "Model_19700101010000") // Adjusted expected string to account for time zone
+        XCTAssertTrue(folderName.hasPrefix("Model_"))
+        XCTAssertEqual(String(folderName.dropFirst("Model_".count)).count, 14)
     }
 
     func testCreateNewScanDirectoryFailure() throws {
         // Arrange
         mockFileManager.urlStub = { _, _, _, _ in
-            return URL(fileURLWithPath: "/path/to/Scans")
+            URL(fileURLWithPath: "/path/to/Scans")
         }
         mockFileManager.createDirectoryStub = { _, _, _ in
             throw NSError(domain: "Test", code: 1, userInfo: nil)

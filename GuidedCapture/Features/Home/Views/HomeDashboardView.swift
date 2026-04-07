@@ -9,6 +9,7 @@ import SwiftData
 import SwiftUI
 
 struct HomeDashboardView: View {
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.scenePhase) private var scenePhase
     @Query(sort: \Models.date, order: .reverse) private var storedModels: [Models]
     @Query private var users: [User]
@@ -31,7 +32,7 @@ struct HomeDashboardView: View {
 
     private var storedModelRefreshKey: String {
         storedModels
-            .map { "\($0.name)|\($0.model.path)|\($0.date.timeIntervalSinceReferenceDate)" }
+            .map { "\($0.name)|\($0.favorite)|\($0.model.path)|\($0.date.timeIntervalSinceReferenceDate)" }
             .joined(separator: "\n")
     }
 
@@ -55,9 +56,9 @@ struct HomeDashboardView: View {
 
                     DashboardSection(
                         title: selectedFilter.title,
-                        subtitle: sectionSubtitle,
                         items: filteredItems,
-                        onSelect: selectItem
+                        onSelect: selectItem,
+                        onTogglePin: togglePin
                     )
 
                     if filteredItems.isEmpty {
@@ -78,6 +79,7 @@ struct HomeDashboardView: View {
         }
         .toolbar(.hidden, for: .navigationBar)
         .task {
+            SampleModelSeeder.seedIfNeeded(existingModels: storedModels, context: modelContext)
             searchViewModel.refreshCapturedItems()
         }
         .task(id: storedModelRefreshKey) {
@@ -139,17 +141,21 @@ struct HomeDashboardView: View {
         }
     }
 
-    private var sectionSubtitle: String {
-        switch selectedFilter {
-        case .all: "Your latest captured and imported models."
-        case .captured: "Models discovered from the local capture library."
-        case .imported: "Files brought in through the import flow."
-        case .favorites: "Models you have marked for quick return."
-        }
-    }
-
     private func selectItem(_ item: LibraryItem) {
         previewItem = LibraryPreviewItem(url: item.url)
+    }
+
+    private func togglePin(_ item: LibraryItem) {
+        switch item.source {
+        case .captured:
+            UserDefaults.standard.set(!item.isFavorite, forKey: "favorite_\(item.url.lastPathComponent)")
+            searchViewModel.refreshCapturedItems()
+        case .imported:
+            guard let model = storedModels.first(where: { $0.model == item.url }) else { return }
+            model.favorite.toggle()
+            try? modelContext.save()
+            searchViewModel.updateImportedModels(storedModels)
+        }
     }
 }
 
@@ -160,24 +166,25 @@ private struct DashboardHeader: View {
 
     var body: some View {
         HStack(alignment: .top) {
-            VStack(alignment: .leading, spacing: 10) {
-                Text("Ortio")
-                    .font(.system(size: 30, weight: .bold, design: .rounded))
-                    .foregroundStyle(.primary)
-
-                Text("Capture, browse, and revisit your spatial work.")
-                    .font(.subheadline)
-                    .foregroundStyle(OrtioDesignSystem.mutedText)
-            }
+            Text("Ortio")
+                .font(.system(size: 30, weight: .bold, design: .rounded))
+                .foregroundStyle(.primary)
 
             Spacer()
 
-            HStack(spacing: 10) {
-                CircleIconButton(
-                    systemName: "magnifyingglass",
-                    backgroundColor: OrtioDesignSystem.elevatedSurface,
-                    action: onSearch
-                )
+            HStack(spacing: 0) {
+                Button(action: onSearch) {
+                    Image(systemName: "magnifyingglass")
+                        .font(.headline.weight(.semibold))
+                        .foregroundStyle(.primary)
+                        .frame(width: 46, height: 46)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Search")
+
+                Rectangle()
+                    .fill(OrtioDesignSystem.subtleBorder)
+                    .frame(width: 1, height: 24)
 
                 Button(action: onSettings) {
                     Group {
@@ -193,14 +200,15 @@ private struct DashboardHeader: View {
                                 .background(Circle().fill(OrtioDesignSystem.accent))
                         }
                     }
-                    .frame(width: 48, height: 48)
+                    .frame(width: 34, height: 34)
                     .clipShape(Circle())
-                    .overlay(Circle().stroke(OrtioDesignSystem.subtleBorder, lineWidth: 1))
-                    .shadow(color: OrtioDesignSystem.shadow, radius: 14, x: 0, y: 8)
+                    .padding(.horizontal, 12)
+                    .frame(height: 46)
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel("Open settings")
             }
+            .ortioHeaderGlassCapsule()
         }
     }
 
@@ -242,30 +250,23 @@ private struct QuickActionsRow: View {
 
 private struct DashboardSection: View {
     let title: String
-    let subtitle: String
     let items: [LibraryItem]
     let onSelect: (LibraryItem) -> Void
+    let onTogglePin: (LibraryItem) -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
-            VStack(alignment: .leading, spacing: 6) {
-                Text(title)
-                    .font(.title2.weight(.bold))
-                    .foregroundStyle(.primary)
-
-                Text(subtitle)
-                    .font(.subheadline)
-                    .foregroundStyle(OrtioDesignSystem.mutedText)
-            }
+            Text(title)
+                .font(.title2.weight(.bold))
+                .foregroundStyle(.primary)
 
             VStack(spacing: 12) {
                 ForEach(items) { item in
-                    Button {
-                        onSelect(item)
-                    } label: {
-                        LibraryCard(item: item)
-                    }
-                    .buttonStyle(.plain)
+                    LibraryCard(
+                        item: item,
+                        onSelect: { onSelect(item) },
+                        onTogglePin: { onTogglePin(item) }
+                    )
                 }
             }
         }
@@ -274,39 +275,51 @@ private struct DashboardSection: View {
 
 private struct LibraryCard: View {
     let item: LibraryItem
+    let onSelect: () -> Void
+    let onTogglePin: () -> Void
 
     var body: some View {
-        HStack(spacing: 14) {
-            ZStack {
-                Circle()
-                    .fill(OrtioDesignSystem.accentSoft)
-                    .frame(width: 52, height: 52)
+        HStack(alignment: .top, spacing: 14) {
+            Button(action: onSelect) {
+                HStack(spacing: 14) {
+                    ZStack {
+                        Circle()
+                            .fill(OrtioDesignSystem.accentSoft)
+                            .frame(width: 52, height: 52)
 
-                Image(systemName: item.source.symbolName)
-                    .font(.headline)
-                    .foregroundStyle(.primary)
-            }
+                        Image(systemName: item.source.symbolName)
+                            .font(.headline)
+                            .foregroundStyle(.primary)
+                    }
 
-            VStack(alignment: .leading, spacing: 6) {
-                Text(item.title)
-                    .font(.headline)
-                    .foregroundStyle(.primary)
-                    .multilineTextAlignment(.leading)
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(item.title)
+                            .font(.headline)
+                            .foregroundStyle(.primary)
+                            .multilineTextAlignment(.leading)
 
-                HStack(spacing: 8) {
-                    Text(item.source.title)
-                    Text(item.createdAt.formatted(.dateTime.month().day()))
+                        HStack(spacing: 8) {
+                            Text(item.source.title)
+                            Text(item.createdAt.formatted(.dateTime.month().day()))
+                        }
+                        .font(.subheadline)
+                        .foregroundStyle(OrtioDesignSystem.mutedText)
+                    }
+
+                    Spacer(minLength: 0)
                 }
-                .font(.subheadline)
-                .foregroundStyle(OrtioDesignSystem.mutedText)
+                .contentShape(Rectangle())
             }
+            .buttonStyle(.plain)
 
-            Spacer()
-
-            if item.isFavorite {
-                Image(systemName: "star.fill")
-                    .foregroundStyle(.yellow)
+            Button(action: onTogglePin) {
+                Image(systemName: item.isFavorite ? "pin.fill" : "pin")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(item.isFavorite ? Color.orange : .secondary)
+                    .frame(width: 28, height: 28)
             }
+            .buttonStyle(.plain)
+            .accessibilityLabel(item.isFavorite ? "Unpin design" : "Pin design")
         }
         .padding(.horizontal, 18)
         .padding(.vertical, 16)
@@ -323,9 +336,6 @@ private struct EmptyLibraryCard: View {
         VStack(alignment: .leading, spacing: 14) {
             Text("Nothing here yet")
                 .font(.title3.weight(.semibold))
-
-            Text("Start a fresh scan or import an existing USDZ file to populate your dashboard.")
-                .foregroundStyle(OrtioDesignSystem.mutedText)
 
             HStack(spacing: 12) {
                 Button("Start Scan", action: onScan)
@@ -372,27 +382,9 @@ private struct HomeQuickActionButton: View {
     }
 }
 
-private struct CircleIconButton: View {
-    let systemName: String
-    let backgroundColor: Color
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            Image(systemName: systemName)
-                .font(.headline.weight(.semibold))
-                .frame(width: 48, height: 48)
-                .background(Circle().fill(backgroundColor))
-                .overlay(Circle().stroke(OrtioDesignSystem.subtleBorder, lineWidth: 1))
-                .shadow(color: OrtioDesignSystem.shadow, radius: 14, x: 0, y: 8)
-        }
-        .buttonStyle(.plain)
-        .foregroundStyle(.primary)
-    }
-}
-
 private struct ScanPillButton: View {
     let action: () -> Void
+
     var body: some View {
         Button(action: action) {
             Label("Scan", systemImage: "camera")
@@ -420,26 +412,20 @@ private struct HomeToolsSheet: View {
                     Text("Quick tools")
                         .font(.largeTitle.weight(.bold))
 
-                    Text("Use the Figma-inspired tools sheet to jump into your most common Ortio actions.")
-                        .foregroundStyle(OrtioDesignSystem.mutedText)
-
                     ToolActionCard(
                         title: "New Scan",
-                        subtitle: "Launch the full photogrammetry flow.",
                         systemName: "camera.viewfinder",
                         action: onNewScan
                     )
 
                     ToolActionCard(
                         title: "Import File",
-                        subtitle: "Open the import feature and bring in existing 3D files.",
                         systemName: "square.and.arrow.down",
                         action: onImport
                     )
 
                     ToolActionCard(
                         title: "Preview Help",
-                        subtitle: "Review the object and environment guidance before scanning.",
                         systemName: "questionmark.circle",
                         action: onHelp
                     )
@@ -454,7 +440,6 @@ private struct HomeToolsSheet: View {
 
 private struct ToolActionCard: View {
     let title: String
-    let subtitle: String
     let systemName: String
     let action: () -> Void
 
@@ -471,16 +456,9 @@ private struct ToolActionCard: View {
                         .foregroundStyle(.primary)
                 }
 
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(title)
-                        .font(.headline)
-                        .foregroundStyle(.primary)
-
-                    Text(subtitle)
-                        .font(.subheadline)
-                        .foregroundStyle(OrtioDesignSystem.mutedText)
-                        .multilineTextAlignment(.leading)
-                }
+                Text(title)
+                    .font(.headline)
+                    .foregroundStyle(.primary)
 
                 Spacer()
 

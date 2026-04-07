@@ -131,4 +131,28 @@ final class GlobalSearchViewModelTests: XCTestCase {
         XCTAssertEqual(favoriteItems.count, 1)
         XCTAssertEqual(favoriteItems.first?.title, "Favorite Model.usdz")
     }
+
+    func testFavoriteItemsAreSortedToTopOfRecents() {
+        let olderFavorite = Models(
+            name: "Pinned.usdz",
+            date: Date(timeIntervalSince1970: 1_000),
+            favorite: true,
+            imported: true,
+            size: 1024,
+            model: URL(fileURLWithPath: "/Imports/Pinned.usdz")
+        )
+        let newerRegular = Models(
+            name: "Recent.usdz",
+            date: Date(timeIntervalSince1970: 2_000),
+            favorite: false,
+            imported: true,
+            size: 1024,
+            model: URL(fileURLWithPath: "/Imports/Recent.usdz")
+        )
+
+        viewModel.updateImportedModels([newerRegular, olderFavorite])
+
+        XCTAssertEqual(viewModel.items.first?.title, "Pinned.usdz")
+        XCTAssertTrue(viewModel.items.first?.isFavorite == true)
+    }
 }

@@ -90,6 +90,10 @@ final class GlobalSearchViewModel {
     }
 
     private static func sortItems(lhs: LibraryItem, rhs: LibraryItem) -> Bool {
+        if lhs.isFavorite != rhs.isFavorite {
+            return lhs.isFavorite && !rhs.isFavorite
+        }
+
         if lhs.createdAt == rhs.createdAt {
             return lhs.title.localizedCaseInsensitiveCompare(rhs.title) == .orderedAscending
         }

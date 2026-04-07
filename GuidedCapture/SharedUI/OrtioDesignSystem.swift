@@ -52,4 +52,19 @@ extension View {
     func ortioCardStyle() -> some View {
         modifier(OrtioCardModifier())
     }
+
+    @ViewBuilder
+    func ortioHeaderGlassCapsule() -> some View {
+        if #available(iOS 26, *) {
+            self.glassEffect(.regular.interactive(), in: Capsule(style: .continuous))
+        } else {
+            self
+                .background(.ultraThinMaterial, in: Capsule(style: .continuous))
+                .overlay(
+                    Capsule(style: .continuous)
+                        .stroke(OrtioDesignSystem.subtleBorder, lineWidth: 1)
+                )
+                .shadow(color: OrtioDesignSystem.shadow, radius: 16, x: 0, y: 10)
+        }
+    }
 }
