@@ -8,7 +8,7 @@
 import SwiftData
 import SwiftUI
 
-private enum HomeSearchPresentationState {
+enum HomeSearchPresentationState: Equatable {
     case idle
     case expanding
     case active

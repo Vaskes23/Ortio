@@ -67,4 +67,19 @@ extension View {
                 .shadow(color: OrtioDesignSystem.shadow, radius: 16, x: 0, y: 10)
         }
     }
+
+    @ViewBuilder
+    func ortioHeaderGlassCircle() -> some View {
+        if #available(iOS 26, *) {
+            self.glassEffect(.regular.interactive(), in: Circle())
+        } else {
+            self
+                .background(.ultraThinMaterial, in: Circle())
+                .overlay(
+                    Circle()
+                        .stroke(OrtioDesignSystem.subtleBorder, lineWidth: 1)
+                )
+                .shadow(color: OrtioDesignSystem.shadow, radius: 16, x: 0, y: 10)
+        }
+    }
 }
