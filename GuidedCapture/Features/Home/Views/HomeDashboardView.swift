@@ -17,6 +17,7 @@ struct HomeDashboardView: View {
     @State private var searchViewModel = GlobalSearchViewModel()
     @State private var selectedFilter: LibraryHomeFilter = .all
     @State private var previewItem: LibraryPreviewItem?
+    @State private var activeEditor: ModelEditorDestination?
     @State private var showingSearch = false
     @State private var showingSettings = false
     @State private var showingTools = false
@@ -32,7 +33,7 @@ struct HomeDashboardView: View {
 
     private var storedModelRefreshKey: String {
         storedModels
-            .map { "\($0.name)|\($0.favorite)|\($0.model.path)|\($0.date.timeIntervalSinceReferenceDate)" }
+            .map { "\($0.name)|\($0.favorite)|\($0.notes ?? "")|\($0.model.path)|\($0.date.timeIntervalSinceReferenceDate)" }
             .joined(separator: "\n")
     }
 
@@ -58,7 +59,9 @@ struct HomeDashboardView: View {
                         title: selectedFilter.title,
                         items: filteredItems,
                         onSelect: selectItem,
-                        onTogglePin: togglePin
+                        onTogglePin: togglePin,
+                        onChangeName: presentRename,
+                        onAddNotes: presentNotes
                     )
 
                     if filteredItems.isEmpty {
@@ -103,6 +106,24 @@ struct HomeDashboardView: View {
                 previewItem = nil
             }
         }
+        .sheet(item: $activeEditor) { destination in
+            switch destination {
+            case .rename(let item):
+                RenameModelSheet(
+                    item: item,
+                    onSave: { renameItem(item, to: $0) }
+                )
+                .presentationDetents([.medium])
+                .presentationDragIndicator(.visible)
+            case .notes(let item):
+                ModelNotesSheet(
+                    item: item,
+                    onSave: { updateNotes(for: item, notes: $0) }
+                )
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
+            }
+        }
         .sheet(isPresented: $showingCapture) {
             LoadGuidedCaptureView()
         }
@@ -145,6 +166,14 @@ struct HomeDashboardView: View {
         previewItem = LibraryPreviewItem(url: item.url)
     }
 
+    private func presentRename(for item: LibraryItem) {
+        activeEditor = .rename(item)
+    }
+
+    private func presentNotes(for item: LibraryItem) {
+        activeEditor = .notes(item)
+    }
+
     private func togglePin(_ item: LibraryItem) {
         switch item.source {
         case .captured:
@@ -157,319 +186,54 @@ struct HomeDashboardView: View {
             searchViewModel.updateImportedModels(storedModels)
         }
     }
-}
 
-private struct DashboardHeader: View {
-    let user: User?
-    let onSearch: () -> Void
-    let onSettings: () -> Void
+    private func renameItem(_ item: LibraryItem, to proposedName: String) -> Bool {
+        let trimmedName = proposedName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedName.isEmpty else { return false }
 
-    var body: some View {
-        HStack(alignment: .top) {
-            Text("Ortio")
-                .font(.system(size: 30, weight: .bold, design: .rounded))
-                .foregroundStyle(.primary)
+        switch item.source {
+        case .captured:
+            LibraryItemMetadataStore.setCapturedDisplayName(trimmedName, for: item.url)
+            searchViewModel.refreshCapturedItems()
+            return true
+        case .imported:
+            guard let model = storedModels.first(where: { $0.model == item.url }) else { return false }
+            let originalName = model.name
+            model.name = trimmedName
 
-            Spacer()
-
-            HStack(spacing: 0) {
-                Button(action: onSearch) {
-                    Image(systemName: "magnifyingglass")
-                        .font(.headline.weight(.semibold))
-                        .foregroundStyle(.primary)
-                        .frame(width: 46, height: 46)
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel("Search")
-
-                Rectangle()
-                    .fill(OrtioDesignSystem.subtleBorder)
-                    .frame(width: 1, height: 24)
-
-                Button(action: onSettings) {
-                    Group {
-                        if let profileImage = user?.profileUIImage {
-                            Image(uiImage: profileImage)
-                                .resizable()
-                                .scaledToFill()
-                        } else {
-                            Text(userInitials)
-                                .font(.subheadline.weight(.semibold))
-                                .foregroundStyle(.white)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .background(Circle().fill(OrtioDesignSystem.accent))
-                        }
-                    }
-                    .frame(width: 34, height: 34)
-                    .clipShape(Circle())
-                    .padding(.horizontal, 12)
-                    .frame(height: 46)
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel("Open settings")
-            }
-            .ortioHeaderGlassCapsule()
-        }
-    }
-
-    private var userInitials: String {
-        let parts = (user?.name ?? "Ortio").split(separator: " ")
-        let initials = parts.prefix(2).compactMap(\.first).map(String.init).joined()
-        return initials.isEmpty ? "OR" : initials.uppercased()
-    }
-}
-
-private struct QuickActionsRow: View {
-    @Binding var selectedFilter: LibraryHomeFilter
-    let onOpenTools: () -> Void
-
-    var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 18) {
-                ForEach([LibraryHomeFilter.captured, .imported, .favorites], id: \.id) { filter in
-                    HomeQuickActionButton(
-                        title: filter.title,
-                        systemName: filter.symbolName,
-                        isSelected: selectedFilter == filter
-                    ) {
-                        selectedFilter = filter
-                    }
-                }
-
-                HomeQuickActionButton(
-                    title: "Tools",
-                    systemName: "square.grid.2x2",
-                    isSelected: false,
-                    action: onOpenTools
-                )
-            }
-            .padding(.vertical, 4)
-        }
-    }
-}
-
-private struct DashboardSection: View {
-    let title: String
-    let items: [LibraryItem]
-    let onSelect: (LibraryItem) -> Void
-    let onTogglePin: (LibraryItem) -> Void
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 18) {
-            Text(title)
-                .font(.title2.weight(.bold))
-                .foregroundStyle(.primary)
-
-            VStack(spacing: 12) {
-                ForEach(items) { item in
-                    LibraryCard(
-                        item: item,
-                        onSelect: { onSelect(item) },
-                        onTogglePin: { onTogglePin(item) }
-                    )
-                }
+            do {
+                try modelContext.save()
+                searchViewModel.updateImportedModels(storedModels)
+                return true
+            } catch {
+                model.name = originalName
+                searchViewModel.errorMessage = "Could not rename model: \(error.localizedDescription)"
+                return false
             }
         }
     }
-}
 
-private struct LibraryCard: View {
-    let item: LibraryItem
-    let onSelect: () -> Void
-    let onTogglePin: () -> Void
+    private func updateNotes(for item: LibraryItem, notes: String) -> Bool {
+        switch item.source {
+        case .captured:
+            LibraryItemMetadataStore.setCapturedNotes(notes, for: item.url)
+            searchViewModel.refreshCapturedItems()
+            return true
+        case .imported:
+            guard let model = storedModels.first(where: { $0.model == item.url }) else { return false }
+            let originalNotes = model.notes
+            let trimmedNotes = notes.trimmingCharacters(in: .whitespacesAndNewlines)
+            model.notes = trimmedNotes.isEmpty ? nil : trimmedNotes
 
-    var body: some View {
-        HStack(alignment: .top, spacing: 14) {
-            Button(action: onSelect) {
-                HStack(spacing: 14) {
-                    ZStack {
-                        Circle()
-                            .fill(OrtioDesignSystem.accentSoft)
-                            .frame(width: 52, height: 52)
-
-                        Image(systemName: item.source.symbolName)
-                            .font(.headline)
-                            .foregroundStyle(.primary)
-                    }
-
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text(item.title)
-                            .font(.headline)
-                            .foregroundStyle(.primary)
-                            .multilineTextAlignment(.leading)
-
-                        HStack(spacing: 8) {
-                            Text(item.source.title)
-                            Text(item.createdAt.formatted(.dateTime.month().day()))
-                        }
-                        .font(.subheadline)
-                        .foregroundStyle(OrtioDesignSystem.mutedText)
-                    }
-
-                    Spacer(minLength: 0)
-                }
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-
-            Button(action: onTogglePin) {
-                Image(systemName: item.isFavorite ? "pin.fill" : "pin")
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(item.isFavorite ? Color.orange : .secondary)
-                    .frame(width: 28, height: 28)
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel(item.isFavorite ? "Unpin design" : "Pin design")
-        }
-        .padding(.horizontal, 18)
-        .padding(.vertical, 16)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .ortioCardStyle()
-    }
-}
-
-private struct EmptyLibraryCard: View {
-    let onScan: () -> Void
-    let onImport: () -> Void
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            Text("Nothing here yet")
-                .font(.title3.weight(.semibold))
-
-            HStack(spacing: 12) {
-                Button("Start Scan", action: onScan)
-                    .buttonStyle(.borderedProminent)
-                    .tint(.black)
-
-                Button("Import File", action: onImport)
-                    .buttonStyle(.bordered)
-                    .tint(.primary)
+            do {
+                try modelContext.save()
+                searchViewModel.updateImportedModels(storedModels)
+                return true
+            } catch {
+                model.notes = originalNotes
+                searchViewModel.errorMessage = "Could not update notes: \(error.localizedDescription)"
+                return false
             }
         }
-        .padding(22)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .ortioCardStyle()
-    }
-}
-
-private struct HomeQuickActionButton: View {
-    let title: String
-    let systemName: String
-    let isSelected: Bool
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            VStack(spacing: 10) {
-                ZStack {
-                    Circle()
-                        .fill(isSelected ? OrtioDesignSystem.accentSoft : OrtioDesignSystem.elevatedSurface)
-                        .frame(width: 74, height: 74)
-                        .overlay(Circle().stroke(OrtioDesignSystem.subtleBorder, lineWidth: 1))
-
-                    Image(systemName: systemName)
-                        .font(.title3.weight(.medium))
-                        .foregroundStyle(.primary)
-                }
-
-                Text(title)
-                    .font(.subheadline.weight(.medium))
-                    .foregroundStyle(.primary)
-            }
-        }
-        .buttonStyle(.plain)
-    }
-}
-
-private struct ScanPillButton: View {
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            Label("Scan", systemImage: "camera")
-                .font(.headline.weight(.semibold))
-                .foregroundStyle(.white)
-                .padding(.horizontal, 22)
-                .padding(.vertical, 16)
-                .background(Capsule(style: .continuous).fill(Color.black.opacity(0.88)))
-                .shadow(color: Color.black.opacity(0.18), radius: 24, x: 0, y: 14)
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel("Start new scan")
-    }
-}
-
-private struct HomeToolsSheet: View {
-    let onNewScan: () -> Void
-    let onImport: () -> Void
-    let onHelp: () -> Void
-
-    var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("Quick tools")
-                        .font(.largeTitle.weight(.bold))
-
-                    ToolActionCard(
-                        title: "New Scan",
-                        systemName: "camera.viewfinder",
-                        action: onNewScan
-                    )
-
-                    ToolActionCard(
-                        title: "Import File",
-                        systemName: "square.and.arrow.down",
-                        action: onImport
-                    )
-
-                    ToolActionCard(
-                        title: "Preview Help",
-                        systemName: "questionmark.circle",
-                        action: onHelp
-                    )
-                }
-                .padding(20)
-            }
-            .background(OrtioDesignSystem.shellGradient.ignoresSafeArea())
-            .toolbar(.hidden, for: .navigationBar)
-        }
-    }
-}
-
-private struct ToolActionCard: View {
-    let title: String
-    let systemName: String
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            HStack(spacing: 16) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 18, style: .continuous)
-                        .fill(OrtioDesignSystem.accentSoft)
-                        .frame(width: 58, height: 58)
-
-                    Image(systemName: systemName)
-                        .font(.title3)
-                        .foregroundStyle(.primary)
-                }
-
-                Text(title)
-                    .font(.headline)
-                    .foregroundStyle(.primary)
-
-                Spacer()
-
-                Image(systemName: "chevron.right")
-                    .font(.footnote.weight(.semibold))
-                    .foregroundStyle(.secondary)
-            }
-            .padding(18)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .ortioCardStyle()
-        }
-        .buttonStyle(.plain)
     }
 }

@@ -22,6 +22,11 @@ final class GlobalSearchViewModelTests: XCTestCase {
         viewModel = nil
     }
 
+    override func tearDown() {
+        LibraryItemMetadataStore.clearCapturedMetadata(for: URL(fileURLWithPath: "/Scans/Session/Models/Renamed.usdz"))
+        super.tearDown()
+    }
+
     func testRefreshCapturedItemsLoadsCapturedModelsFromExistingDirectoryContract() {
         let documentsURL = URL(fileURLWithPath: "/Documents", isDirectory: true)
         let scansURL = documentsURL.appendingPathComponent("Scans", isDirectory: true)
@@ -154,5 +159,34 @@ final class GlobalSearchViewModelTests: XCTestCase {
 
         XCTAssertEqual(viewModel.items.first?.title, "Pinned.usdz")
         XCTAssertTrue(viewModel.items.first?.isFavorite == true)
+    }
+
+    func testCapturedMetadataOverridesDisplayNameAndNotes() {
+        let capturedURL = URL(fileURLWithPath: "/Scans/Session/Models/Renamed.usdz")
+        LibraryItemMetadataStore.setCapturedDisplayName("Living Room", for: capturedURL)
+        LibraryItemMetadataStore.setCapturedNotes("North wall needs cleanup", for: capturedURL)
+
+        let item = LibraryItem(capturedURL: capturedURL)
+
+        XCTAssertEqual(item.displayTitle, "Living Room")
+        XCTAssertEqual(item.notes, "North wall needs cleanup")
+    }
+
+    func testFilteredItemsMatchesAgainstNotes() {
+        let capturedItem = LibraryItem(
+            title: "Entry",
+            subtitle: "Photogrammetry capture",
+            url: URL(fileURLWithPath: "/Scans/Entry.usdz"),
+            source: .captured,
+            createdAt: Date(),
+            isFavorite: false,
+            notes: "Needs better lighting near the door"
+        )
+
+        viewModel.replaceCapturedItems([capturedItem])
+        viewModel.searchText = "lighting"
+
+        XCTAssertEqual(viewModel.filteredItems.count, 1)
+        XCTAssertEqual(viewModel.filteredItems.first?.displayTitle, "Entry")
     }
 }
