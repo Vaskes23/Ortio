@@ -24,6 +24,8 @@ struct ImportView: View {
         guard !searchQuery.isEmpty else { return storedModels }
         return storedModels.filter { model in
             model.name.localizedCaseInsensitiveContains(searchQuery)
+                || model.displayTitle.localizedCaseInsensitiveContains(searchQuery)
+                || (model.normalizedNotes ?? "").localizedCaseInsensitiveContains(searchQuery)
         }
     }
 
@@ -94,7 +96,7 @@ struct ImportView: View {
 
     private var importedSection: some View {
         Section("Imported objects") {
-            ForEach(filteredModels, id: \.name) { model in
+            ForEach(filteredModels) { model in
                 FileRow(model: model) {
                     selectedModelForPreview = ImportModel.IdentifiableURL(url: model.model)
                 }
@@ -115,7 +117,7 @@ struct FileRow: View {
 
     var body: some View {
         HStack {
-            Label(model.name, systemImage: "cube.transparent")
+            Label(model.displayTitle, systemImage: "cube.transparent")
                 .lineLimit(1)
             Spacer()
             Text(model.date.formatted(.dateTime.day().month().year()))
@@ -127,7 +129,7 @@ struct FileRow: View {
                     .foregroundStyle(.primary)
             }
             .buttonStyle(.borderless)
-            .accessibilityLabel("Preview \(model.name)")
+            .accessibilityLabel("Preview \(model.displayTitle)")
         }
         .contentShape(Rectangle())
         .contextMenu {

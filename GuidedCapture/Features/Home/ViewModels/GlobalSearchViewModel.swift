@@ -52,13 +52,13 @@ final class GlobalSearchViewModel {
         }
     }
 
-    func refreshCapturedItems() {
+    func refreshCapturedItems(metadataByURL: [URL: CapturedModelMetadataSnapshot] = [:]) {
         Task.detached(priority: .userInitiated) { [capturedLoader] in
             do {
                 let urls = try capturedLoader.urlsInAllModelsFolders()
                     .filter { $0.pathExtension.lowercased() == "usdz" }
                 await MainActor.run {
-                    self.replaceCapturedURLs(urls)
+                    self.replaceCapturedURLs(urls, metadataByURL: metadataByURL)
                 }
             } catch {
                 await MainActor.run {
@@ -74,8 +74,10 @@ final class GlobalSearchViewModel {
         rebuildItems()
     }
 
-    func replaceCapturedURLs(_ urls: [URL]) {
-        let mapped = urls.map(LibraryItem.init(capturedURL:))
+    func replaceCapturedURLs(_ urls: [URL], metadataByURL: [URL: CapturedModelMetadataSnapshot] = [:]) {
+        let mapped = urls.map { url in
+            LibraryItem(capturedURL: url, metadata: metadataByURL[url.standardizedFileURL])
+        }
         capturedItems = mapped.sorted { Self.sortItems(lhs: $0, rhs: $1) }
         rebuildItems()
     }
@@ -95,7 +97,7 @@ final class GlobalSearchViewModel {
         }
 
         if lhs.createdAt == rhs.createdAt {
-            return lhs.title.localizedCaseInsensitiveCompare(rhs.title) == .orderedAscending
+            return lhs.displayTitle.localizedCaseInsensitiveCompare(rhs.displayTitle) == .orderedAscending
         }
         return lhs.createdAt > rhs.createdAt
     }

@@ -108,8 +108,10 @@ struct DashboardSection: View {
     let items: [LibraryItem]
     let onSelect: (LibraryItem) -> Void
     let onTogglePin: (LibraryItem) -> Void
+    @Binding var expandedNotesItemIDs: Set<String>
     let onChangeName: (LibraryItem) -> Void
     let onAddNotes: (LibraryItem) -> Void
+    let onToggleNotes: (LibraryItem) -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
@@ -126,8 +128,10 @@ struct DashboardSection: View {
                         item: item,
                         onSelect: { onSelect(item) },
                         onTogglePin: { onTogglePin(item) },
+                        isNotesExpanded: expandedNotesItemIDs.contains(item.id),
                         onChangeName: { onChangeName(item) },
-                        onAddNotes: { onAddNotes(item) }
+                        onAddNotes: { onAddNotes(item) },
+                        onToggleNotes: { onToggleNotes(item) }
                     )
                 }
             }
@@ -141,37 +145,63 @@ struct LibraryCard: View {
     let item: LibraryItem
     let onSelect: () -> Void
     let onTogglePin: () -> Void
+    let isNotesExpanded: Bool
     let onChangeName: () -> Void
     let onAddNotes: () -> Void
+    let onToggleNotes: () -> Void
 
     var body: some View {
-        HStack(alignment: .top, spacing: 14) {
-            Button(action: onSelect) {
-                HStack(spacing: 14) {
-                    Text(item.displayTitle)
-                        .font(.system(size: 19, weight: .regular))
-                        .foregroundStyle(.primary)
-                        .multilineTextAlignment(.leading)
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(alignment: .top, spacing: 14) {
+                Button(action: onSelect) {
+                    HStack(spacing: 14) {
+                        Text(item.displayTitle)
+                            .font(.system(size: 19, weight: .regular))
+                            .foregroundStyle(.primary)
+                            .multilineTextAlignment(.leading)
 
-                    Spacer(minLength: 0)
+                        Spacer(minLength: 0)
+                    }
+                    .contentShape(Rectangle())
                 }
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
+                .buttonStyle(.plain)
 
-            Button(action: onTogglePin) {
-                Image(systemName: "pin.fill")
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.secondary)
-                    .opacity(item.isFavorite ? 0.9 : 0.18)
-                    .frame(width: 28, height: 28)
+                HStack(spacing: 2) {
+                    Button(action: onToggleNotes) {
+                        Image(systemName: "note.text")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                            .opacity(isNotesExpanded || !item.notes.isEmpty ? 0.9 : 0.18)
+                            .frame(width: 28, height: 28)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(item.notes.isEmpty ? "Show notes" : "Show notes for \(item.displayTitle)")
+
+                    Button(action: onTogglePin) {
+                        Image(systemName: "pin.fill")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                            .opacity(item.isFavorite ? 0.9 : 0.18)
+                            .frame(width: 28, height: 28)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(item.isFavorite ? "Unpin design" : "Pin design")
+                }
             }
-            .buttonStyle(.plain)
-            .accessibilityLabel(item.isFavorite ? "Unpin design" : "Pin design")
+
+            if isNotesExpanded {
+                Text(item.notes.isEmpty ? "No notes added." : item.notes)
+                    .font(.subheadline)
+                    .foregroundStyle(item.notes.isEmpty ? .tertiary : .secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.leading, 1)
+                    .transition(.opacity.combined(with: .move(edge: .top)))
+            }
         }
         .padding(.vertical, 2)
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())
+        .animation(.easeInOut(duration: 0.2), value: isNotesExpanded)
         .contextMenu {
             Button("Change Name", systemImage: "pencil") {
                 onChangeName()

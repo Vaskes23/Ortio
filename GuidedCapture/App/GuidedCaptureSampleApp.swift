@@ -25,6 +25,6 @@ struct GuidedCaptureSampleApp: App {
                         appModel.loadTheme(from: users)
                     }
             }
-        }.modelContainer(for: [Models.self, User.self])
+        }.modelContainer(for: [Models.self, CapturedModelMetadata.self, User.self])
     }
 }

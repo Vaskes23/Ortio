@@ -12,12 +12,14 @@ struct HomeDashboardView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.scenePhase) private var scenePhase
     @Query(sort: \Models.date, order: .reverse) private var storedModels: [Models]
+    @Query private var capturedMetadata: [CapturedModelMetadata]
     @Query private var users: [User]
 
     @State private var searchViewModel = GlobalSearchViewModel()
     @State private var selectedFilter: LibraryHomeFilter = .all
     @State private var previewItem: LibraryPreviewItem?
     @State private var activeEditor: ModelEditorDestination?
+    @State private var expandedNotesItemIDs: Set<String> = []
     @State private var showingSearch = false
     @State private var showingSettings = false
     @State private var showingTools = false
@@ -32,9 +34,33 @@ struct HomeDashboardView: View {
     }
 
     private var storedModelRefreshKey: String {
-        storedModels
-            .map { "\($0.name)|\($0.favorite)|\($0.notes ?? "")|\($0.model.path)|\($0.date.timeIntervalSinceReferenceDate)" }
+        let importedKey = storedModels
+            .map {
+                [
+                    $0.name, $0.displayName ?? "", "\($0.favorite)",
+                    $0.notes ?? "", $0.sampleSeedID ?? "",
+                    $0.model.path, "\($0.date.timeIntervalSinceReferenceDate)"
+                ].joined(separator: "|")
+            }
             .joined(separator: "\n")
+        let capturedKey = capturedMetadata
+            .sorted { $0.modelURL.path < $1.modelURL.path }
+            .map { "\($0.modelURL.path)|\($0.favorite)|\($0.displayName ?? "")|\($0.notes ?? "")" }
+            .joined(separator: "\n")
+        return importedKey + "\n" + capturedKey
+    }
+
+    private var capturedMetadataByURL: [URL: CapturedModelMetadataSnapshot] {
+        Dictionary(uniqueKeysWithValues: capturedMetadata.map { metadata in
+            (
+                metadata.modelURL.standardizedFileURL,
+                CapturedModelMetadataSnapshot(
+                    displayName: metadata.normalizedDisplayName,
+                    notes: metadata.normalizedNotes ?? "",
+                    isFavorite: metadata.favorite
+                )
+            )
+        })
     }
 
     var body: some View {
@@ -60,8 +86,10 @@ struct HomeDashboardView: View {
                         items: filteredItems,
                         onSelect: selectItem,
                         onTogglePin: togglePin,
+                        expandedNotesItemIDs: $expandedNotesItemIDs,
                         onChangeName: presentRename,
-                        onAddNotes: presentNotes
+                        onAddNotes: presentNotes,
+                        onToggleNotes: toggleNotes
                     )
 
                     if filteredItems.isEmpty {
@@ -82,15 +110,17 @@ struct HomeDashboardView: View {
         }
         .toolbar(.hidden, for: .navigationBar)
         .task {
+            ImportedModelMigration.normalizeDisplayNamesIfNeeded(models: storedModels, context: modelContext)
             SampleModelSeeder.seedIfNeeded(existingModels: storedModels, context: modelContext)
-            searchViewModel.refreshCapturedItems()
+            refreshCapturedItems()
         }
         .task(id: storedModelRefreshKey) {
             searchViewModel.updateImportedModels(storedModels)
+            refreshCapturedItems()
         }
         .onChange(of: scenePhase) { _, newPhase in
             if newPhase == .active {
-                searchViewModel.refreshCapturedItems()
+                refreshCapturedItems()
             }
         }
         .fullScreenCover(isPresented: $showingSearch) {
@@ -166,6 +196,10 @@ struct HomeDashboardView: View {
         previewItem = LibraryPreviewItem(url: item.url)
     }
 
+    private func refreshCapturedItems() {
+        searchViewModel.refreshCapturedItems(metadataByURL: capturedMetadataByURL)
+    }
+
     private func presentRename(for item: LibraryItem) {
         activeEditor = .rename(item)
     }
@@ -174,11 +208,29 @@ struct HomeDashboardView: View {
         activeEditor = .notes(item)
     }
 
+    private func toggleNotes(for item: LibraryItem) {
+        if expandedNotesItemIDs.contains(item.id) {
+            expandedNotesItemIDs.remove(item.id)
+        } else {
+            expandedNotesItemIDs.insert(item.id)
+        }
+    }
+
     private func togglePin(_ item: LibraryItem) {
         switch item.source {
         case .captured:
-            UserDefaults.standard.set(!item.isFavorite, forKey: "favorite_\(item.url.lastPathComponent)")
-            searchViewModel.refreshCapturedItems()
+            do {
+                try CapturedModelMetadataStore.update(
+                    url: item.url,
+                    in: capturedMetadata,
+                    context: modelContext
+                ) { metadata in
+                    metadata.favorite.toggle()
+                }
+            } catch {
+                searchViewModel.errorMessage = "Could not update favorite: \(error.localizedDescription)"
+            }
+            refreshCapturedItems()
         case .imported:
             guard let model = storedModels.first(where: { $0.model == item.url }) else { return }
             model.favorite.toggle()
@@ -193,20 +245,31 @@ struct HomeDashboardView: View {
 
         switch item.source {
         case .captured:
-            LibraryItemMetadataStore.setCapturedDisplayName(trimmedName, for: item.url)
-            searchViewModel.refreshCapturedItems()
-            return true
+            do {
+                try CapturedModelMetadataStore.update(
+                    url: item.url,
+                    in: capturedMetadata,
+                    context: modelContext
+                ) { metadata in
+                    metadata.displayName = trimmedName == item.defaultDisplayTitle ? nil : trimmedName
+                }
+                refreshCapturedItems()
+                return true
+            } catch {
+                searchViewModel.errorMessage = "Could not rename model: \(error.localizedDescription)"
+                return false
+            }
         case .imported:
             guard let model = storedModels.first(where: { $0.model == item.url }) else { return false }
-            let originalName = model.name
-            model.name = trimmedName
+            let originalDisplayName = model.displayName
+            model.displayName = trimmedName == model.defaultDisplayTitle ? nil : trimmedName
 
             do {
                 try modelContext.save()
                 searchViewModel.updateImportedModels(storedModels)
                 return true
             } catch {
-                model.name = originalName
+                model.displayName = originalDisplayName
                 searchViewModel.errorMessage = "Could not rename model: \(error.localizedDescription)"
                 return false
             }
@@ -216,9 +279,21 @@ struct HomeDashboardView: View {
     private func updateNotes(for item: LibraryItem, notes: String) -> Bool {
         switch item.source {
         case .captured:
-            LibraryItemMetadataStore.setCapturedNotes(notes, for: item.url)
-            searchViewModel.refreshCapturedItems()
-            return true
+            do {
+                try CapturedModelMetadataStore.update(
+                    url: item.url,
+                    in: capturedMetadata,
+                    context: modelContext
+                ) { metadata in
+                    metadata.notes = notes
+                }
+                expandedNotesItemIDs.insert(item.id)
+                refreshCapturedItems()
+                return true
+            } catch {
+                searchViewModel.errorMessage = "Could not update notes: \(error.localizedDescription)"
+                return false
+            }
         case .imported:
             guard let model = storedModels.first(where: { $0.model == item.url }) else { return false }
             let originalNotes = model.notes
@@ -227,6 +302,7 @@ struct HomeDashboardView: View {
 
             do {
                 try modelContext.save()
+                expandedNotesItemIDs.insert(item.id)
                 searchViewModel.updateImportedModels(storedModels)
                 return true
             } catch {

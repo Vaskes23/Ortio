@@ -13,7 +13,9 @@ import os
 /// Grid view of scanned 3D models with search, favorites, and thumbnail previews.
 /// Delegates model loading and filtering to `ModelsViewModel`.
 struct ModelsView: View {
+    @Environment(\.modelContext) private var modelContext
     @State var viewModel: ModelsViewModel
+    @Query private var capturedMetadata: [CapturedModelMetadata]
     @Query var users: [User]
 
     @State private var scaleEffect: CGFloat = 1.0
@@ -25,16 +27,41 @@ struct ModelsView: View {
         users.first
     }
 
+    private var metadataByURL: [URL: CapturedModelMetadata] {
+        CapturedModelMetadataStore.metadataMap(from: capturedMetadata)
+    }
+
+    private var filteredModels: [ModelsModel.IdentifiableCaptureURL] {
+        let normalizedQuery = viewModel.searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !normalizedQuery.isEmpty else { return viewModel.models }
+
+        return viewModel.models.filter { model in
+            let metadata = metadataByURL[model.url.standardizedFileURL]
+            let displayName = metadata?.normalizedDisplayName ?? model.url.deletingPathExtension().lastPathComponent
+            let notes = metadata?.normalizedNotes ?? ""
+            return displayName.localizedCaseInsensitiveContains(normalizedQuery)
+                || notes.localizedCaseInsensitiveContains(normalizedQuery)
+                || model.url.lastPathComponent.localizedCaseInsensitiveContains(normalizedQuery)
+        }
+    }
+
     let columns = [GridItem(.adaptive(minimum: 120), spacing: 16)]
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 24) {
-                    ForEach(viewModel.filteredModels) { model in
-                        ModelCard(model: model) {
-                            viewModel.selectedModelForPreview = model
-                        }
+                    ForEach(filteredModels) { model in
+                        ModelCard(
+                            model: model,
+                            metadata: metadataByURL[model.url.standardizedFileURL],
+                            onToggleFavorite: {
+                                toggleFavorite(for: model)
+                            },
+                            action: {
+                                viewModel.selectedModelForPreview = model
+                            }
+                        )
                     }
                 }
                 .padding(.horizontal)
@@ -105,6 +132,20 @@ struct ModelsView: View {
             }
         }
     }
+
+    private func toggleFavorite(for model: ModelsModel.IdentifiableCaptureURL) {
+        do {
+            try CapturedModelMetadataStore.update(
+                url: model.url,
+                in: capturedMetadata,
+                context: modelContext
+            ) { metadata in
+                metadata.favorite.toggle()
+            }
+        } catch {
+            viewModel.errorMessage = "Could not update favorite: \(error.localizedDescription)"
+        }
+    }
 }
 
 // MARK: - ProfileAvatar
@@ -141,16 +182,10 @@ struct ProfileAvatar: View {
 /// Favorites are persisted via UserDefaults keyed by filename.
 struct ModelCard: View {
     let model: ModelsModel.IdentifiableCaptureURL
+    let metadata: CapturedModelMetadata?
+    let onToggleFavorite: () -> Void
     let action: () -> Void
     @State private var thumbnailImage: UIImage?
-    @State private var isFavorite: Bool
-
-    init(model: ModelsModel.IdentifiableCaptureURL, action: @escaping () -> Void) {
-        self.model = model
-        self.action = action
-        let key = "favorite_\(model.url.lastPathComponent)"
-        self._isFavorite = State(initialValue: UserDefaults.standard.bool(forKey: key))
-    }
 
     var body: some View {
         VStack(spacing: 8) {
@@ -181,11 +216,7 @@ struct ModelCard: View {
                     VStack {
                         HStack {
                             Spacer()
-                            Button {
-                                isFavorite.toggle()
-                                let key = "favorite_\(model.url.lastPathComponent)"
-                                UserDefaults.standard.set(isFavorite, forKey: key)
-                            } label: {
+                            Button(action: onToggleFavorite) {
                                 Image(systemName: isFavorite ? "star.fill" : "star")
                                     .font(.caption)
                                     .foregroundStyle(isFavorite ? .yellow : .secondary)
@@ -201,13 +232,21 @@ struct ModelCard: View {
             }
             .buttonStyle(.plain)
 
-            Text(model.url.deletingPathExtension().lastPathComponent)
+            Text(displayName)
                 .font(.caption)
                 .foregroundStyle(.primary)
                 .lineLimit(2)
                 .multilineTextAlignment(.center)
         }
         .frame(minHeight: 160)
+    }
+
+    private var displayName: String {
+        metadata?.normalizedDisplayName ?? model.url.deletingPathExtension().lastPathComponent
+    }
+
+    private var isFavorite: Bool {
+        metadata?.favorite ?? false
     }
 
     /// Generates a QuickLook thumbnail for the model file.

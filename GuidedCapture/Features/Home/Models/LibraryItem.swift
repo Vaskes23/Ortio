@@ -7,6 +7,12 @@
 
 import Foundation
 
+struct CapturedModelMetadataSnapshot: Sendable {
+    let displayName: String?
+    let notes: String
+    let isFavorite: Bool
+}
+
 struct LibraryItem: Identifiable, Equatable {
     enum Source: String, CaseIterable, Identifiable {
         case captured
@@ -31,6 +37,7 @@ struct LibraryItem: Identifiable, Equatable {
 
     let id: String
     let title: String
+    let displayNameOverride: String?
     let subtitle: String
     let url: URL
     let source: Source
@@ -40,6 +47,7 @@ struct LibraryItem: Identifiable, Equatable {
 
     init(
         title: String,
+        displayNameOverride: String? = nil,
         subtitle: String,
         url: URL,
         source: Source,
@@ -49,6 +57,7 @@ struct LibraryItem: Identifiable, Equatable {
     ) {
         self.id = "\(source.rawValue):\(url.path)"
         self.title = title
+        self.displayNameOverride = displayNameOverride?.trimmingCharacters(in: .whitespacesAndNewlines)
         self.subtitle = subtitle
         self.url = url
         self.source = source
@@ -57,45 +66,44 @@ struct LibraryItem: Identifiable, Equatable {
         self.notes = notes
     }
 
-    init(capturedURL: URL) {
-        let metadata = LibraryItemMetadataStore.capturedMetadata(for: capturedURL)
-        let title = metadata.displayName ?? capturedURL.deletingPathExtension().lastPathComponent
-        let favoriteKey = "favorite_\(capturedURL.lastPathComponent)"
+    init(capturedURL: URL, metadata: CapturedModelMetadataSnapshot? = nil) {
         let resourceValues = try? capturedURL.resourceValues(forKeys: [.creationDateKey, .contentModificationDateKey])
         self.init(
-            title: title,
+            title: capturedURL.lastPathComponent,
+            displayNameOverride: metadata?.displayName,
             subtitle: "Photogrammetry capture",
             url: capturedURL,
             source: .captured,
             createdAt: resourceValues?.contentModificationDate ?? resourceValues?.creationDate ?? .distantPast,
-            isFavorite: UserDefaults.standard.bool(forKey: favoriteKey),
-            notes: metadata.notes
+            isFavorite: metadata?.isFavorite ?? false,
+            notes: metadata?.notes ?? ""
         )
     }
 
     init(importedModel: Models) {
         self.init(
             title: importedModel.name,
+            displayNameOverride: importedModel.normalizedDisplayName,
             subtitle: "Imported model",
             url: importedModel.model,
             source: .imported,
             createdAt: importedModel.date,
             isFavorite: importedModel.favorite,
-            notes: importedModel.notes ?? ""
+            notes: importedModel.normalizedNotes ?? ""
         )
     }
 
+    var defaultDisplayTitle: String {
+        Models.normalizedDisplayTitle(from: title, fallbackURL: url)
+    }
+
     var displayTitle: String {
-        let trimmedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmedTitle.isEmpty else {
-            return url.deletingPathExtension().lastPathComponent
+        if let trimmedDisplayName = displayNameOverride?.trimmingCharacters(in: .whitespacesAndNewlines),
+           !trimmedDisplayName.isEmpty {
+            return trimmedDisplayName
         }
 
-        if trimmedTitle.lowercased().hasSuffix(".usdz") {
-            return (trimmedTitle as NSString).deletingPathExtension
-        }
-
-        return trimmedTitle
+        return defaultDisplayTitle
     }
 
     func matches(query: String) -> Bool {
@@ -108,67 +116,6 @@ struct LibraryItem: Identifiable, Equatable {
             || subtitle.localizedCaseInsensitiveContains(normalizedQuery)
             || notes.localizedCaseInsensitiveContains(normalizedQuery)
             || url.lastPathComponent.localizedCaseInsensitiveContains(normalizedQuery)
-    }
-}
-
-enum LibraryItemMetadataStore {
-    private static let defaults = UserDefaults.standard
-    private static let displayNameSuffix = "displayName"
-    private static let notesSuffix = "notes"
-
-    struct CapturedMetadata {
-        let displayName: String?
-        let notes: String
-    }
-
-    static func capturedMetadata(for url: URL) -> CapturedMetadata {
-        CapturedMetadata(
-            displayName: trimmedValue(forKey: key(for: url, suffix: displayNameSuffix)),
-            notes: trimmedValue(forKey: key(for: url, suffix: notesSuffix)) ?? ""
-        )
-    }
-
-    static func setCapturedDisplayName(_ displayName: String, for url: URL) {
-        let baseName = url.deletingPathExtension().lastPathComponent
-        let trimmedName = displayName.trimmingCharacters(in: .whitespacesAndNewlines)
-        let key = key(for: url, suffix: displayNameSuffix)
-
-        guard !trimmedName.isEmpty, trimmedName != baseName else {
-            defaults.removeObject(forKey: key)
-            return
-        }
-
-        defaults.set(trimmedName, forKey: key)
-    }
-
-    static func setCapturedNotes(_ notes: String, for url: URL) {
-        let trimmedNotes = notes.trimmingCharacters(in: .whitespacesAndNewlines)
-        let key = key(for: url, suffix: notesSuffix)
-
-        guard !trimmedNotes.isEmpty else {
-            defaults.removeObject(forKey: key)
-            return
-        }
-
-        defaults.set(trimmedNotes, forKey: key)
-    }
-
-    static func clearCapturedMetadata(for url: URL) {
-        defaults.removeObject(forKey: key(for: url, suffix: displayNameSuffix))
-        defaults.removeObject(forKey: key(for: url, suffix: notesSuffix))
-    }
-
-    private static func key(for url: URL, suffix: String) -> String {
-        "capturedMetadata:\(url.standardizedFileURL.path):\(suffix)"
-    }
-
-    private static func trimmedValue(forKey key: String) -> String? {
-        guard let rawValue = defaults.string(forKey: key) else {
-            return nil
-        }
-
-        let trimmedValue = rawValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        return trimmedValue.isEmpty ? nil : trimmedValue
     }
 }
 

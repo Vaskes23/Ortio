@@ -22,11 +22,6 @@ final class GlobalSearchViewModelTests: XCTestCase {
         viewModel = nil
     }
 
-    override func tearDown() {
-        LibraryItemMetadataStore.clearCapturedMetadata(for: URL(fileURLWithPath: "/Scans/Session/Models/Renamed.usdz"))
-        super.tearDown()
-    }
-
     func testRefreshCapturedItemsLoadsCapturedModelsFromExistingDirectoryContract() {
         let documentsURL = URL(fileURLWithPath: "/Documents", isDirectory: true)
         let scansURL = documentsURL.appendingPathComponent("Scans", isDirectory: true)
@@ -60,7 +55,7 @@ final class GlobalSearchViewModelTests: XCTestCase {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
             XCTAssertEqual(self.viewModel.items.count, 1)
             XCTAssertEqual(self.viewModel.items.first?.source, .captured)
-            XCTAssertEqual(self.viewModel.items.first?.title, "Tower")
+            XCTAssertEqual(self.viewModel.items.first?.displayTitle, "Tower")
             expectation.fulfill()
         }
 
@@ -81,7 +76,7 @@ final class GlobalSearchViewModelTests: XCTestCase {
 
         XCTAssertEqual(viewModel.items.count, 1)
         XCTAssertEqual(viewModel.items.first?.source, .imported)
-        XCTAssertEqual(viewModel.items.first?.title, "Imported Lobby.usdz")
+        XCTAssertEqual(viewModel.items.first?.displayTitle, "Imported Lobby")
     }
 
     func testFilteredItemsMatchesAcrossCapturedAndImportedResults() {
@@ -161,15 +156,36 @@ final class GlobalSearchViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.items.first?.isFavorite == true)
     }
 
+    func testImportedDisplayNameOverridesDefaultTitle() {
+        let imported = Models(
+            name: "Imported Lobby.usdz",
+            date: Date(),
+            favorite: false,
+            imported: true,
+            displayName: "Lobby Hero",
+            size: 512,
+            model: URL(fileURLWithPath: "/Imports/Lobby.usdz")
+        )
+
+        viewModel.updateImportedModels([imported])
+
+        XCTAssertEqual(viewModel.items.first?.displayTitle, "Lobby Hero")
+        XCTAssertEqual(viewModel.items.first?.title, "Imported Lobby.usdz")
+    }
+
     func testCapturedMetadataOverridesDisplayNameAndNotes() {
         let capturedURL = URL(fileURLWithPath: "/Scans/Session/Models/Renamed.usdz")
-        LibraryItemMetadataStore.setCapturedDisplayName("Living Room", for: capturedURL)
-        LibraryItemMetadataStore.setCapturedNotes("North wall needs cleanup", for: capturedURL)
+        let metadata = CapturedModelMetadataSnapshot(
+            displayName: "Living Room",
+            notes: "North wall needs cleanup",
+            isFavorite: true
+        )
 
-        let item = LibraryItem(capturedURL: capturedURL)
+        let item = LibraryItem(capturedURL: capturedURL, metadata: metadata)
 
         XCTAssertEqual(item.displayTitle, "Living Room")
         XCTAssertEqual(item.notes, "North wall needs cleanup")
+        XCTAssertTrue(item.isFavorite)
     }
 
     func testFilteredItemsMatchesAgainstNotes() {
@@ -188,5 +204,20 @@ final class GlobalSearchViewModelTests: XCTestCase {
 
         XCTAssertEqual(viewModel.filteredItems.count, 1)
         XCTAssertEqual(viewModel.filteredItems.first?.displayTitle, "Entry")
+    }
+
+    func testReplaceCapturedURLsUsesSwiftDataMetadata() {
+        let capturedURL = URL(fileURLWithPath: "/Scans/Session/Models/Kitchen.usdz")
+        let metadata = CapturedModelMetadataSnapshot(
+            displayName: "Kitchen Pass",
+            notes: "Retake ceiling",
+            isFavorite: true
+        )
+
+        viewModel.replaceCapturedURLs([capturedURL], metadataByURL: [capturedURL: metadata])
+
+        XCTAssertEqual(viewModel.items.first?.displayTitle, "Kitchen Pass")
+        XCTAssertEqual(viewModel.items.first?.notes, "Retake ceiling")
+        XCTAssertEqual(viewModel.items.first?.isFavorite, true)
     }
 }

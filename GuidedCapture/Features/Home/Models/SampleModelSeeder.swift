@@ -18,19 +18,44 @@ enum SampleModelSeeder {
     static func seedIfNeeded(
         existingModels: [Models],
         context: ModelContext,
-        fileManager: FileManager = .default
+        fileManager: FileManager = .default,
+        sampleURLs: [URL]? = nil
     ) {
-        let existingNames = Set(existingModels.map(\.name))
-        let sampleURLs = bundledSampleNames.compactMap { fileName in
+        let sampleURLs = sampleURLs ?? bundledSampleNames.compactMap { fileName in
             Bundle.main.url(forResource: fileName, withExtension: nil)
                 ?? Bundle.main.url(forResource: fileName, withExtension: nil, subdirectory: "MockModels")
         }
 
         guard !sampleURLs.isEmpty else { return }
 
-        for (index, sourceURL) in sampleURLs.enumerated() where !existingNames.contains(sourceURL.lastPathComponent) {
+        for (index, sourceURL) in sampleURLs.enumerated() {
             do {
-                let destinationURL = try copySampleIfNeeded(sourceURL: sourceURL, fileManager: fileManager)
+                let destinationURL = try sampleDestinationURL(sourceURL: sourceURL, fileManager: fileManager)
+                let sampleID = sourceURL.lastPathComponent
+                let matchingModels = existingModels.filter {
+                    $0.sampleSeedID == sampleID
+                        || $0.model.standardizedFileURL == destinationURL.standardizedFileURL
+                        || (
+                            $0.imported
+                                && $0.model.lastPathComponent == sampleID
+                                && $0.model.deletingLastPathComponent().lastPathComponent.hasPrefix("Sample-")
+                        )
+                }
+
+                if let preferredModel = preferredModel(from: matchingModels, defaultName: sampleID) {
+                    migrateLegacyRenameIfNeeded(preferredModel, defaultName: sampleID)
+                    if preferredModel.sampleSeedID != sampleID {
+                        preferredModel.sampleSeedID = sampleID
+                    }
+
+                    for duplicate in matchingModels where duplicate !== preferredModel {
+                        context.delete(duplicate)
+                    }
+
+                    continue
+                }
+
+                try copySampleIfNeeded(sourceURL: sourceURL, destinationURL: destinationURL, fileManager: fileManager)
                 let attributes = try fileManager.attributesOfItem(atPath: destinationURL.path)
                 let fileSize = attributes[.size] as? Double ?? 0
                 let model = Models(
@@ -38,6 +63,7 @@ enum SampleModelSeeder {
                     date: Date().addingTimeInterval(TimeInterval(index)),
                     favorite: false,
                     imported: true,
+                    sampleSeedID: sampleID,
                     size: fileSize,
                     model: destinationURL
                 )
@@ -50,7 +76,37 @@ enum SampleModelSeeder {
         try? context.save()
     }
 
-    private static func copySampleIfNeeded(sourceURL: URL, fileManager: FileManager) throws -> URL {
+    private static func preferredModel(from models: [Models], defaultName: String) -> Models? {
+        models.max { lhs, rhs in
+            score(for: lhs, defaultName: defaultName) < score(for: rhs, defaultName: defaultName)
+        }
+    }
+
+    private static func score(for model: Models, defaultName: String) -> Int {
+        var score = 0
+        if model.displayName != nil || model.name != defaultName {
+            score += 4
+        }
+        if model.favorite {
+            score += 2
+        }
+        if !(model.notes ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            score += 1
+        }
+        return score
+    }
+
+    private static func migrateLegacyRenameIfNeeded(_ model: Models, defaultName: String) {
+        guard model.normalizedDisplayName == nil,
+              model.name != defaultName else {
+            return
+        }
+
+        model.displayName = Models.normalizedDisplayTitle(from: model.name, fallbackURL: model.model)
+        model.name = defaultName
+    }
+
+    static func sampleDestinationURL(sourceURL: URL, fileManager: FileManager) throws -> URL {
         let documentsDirectory = try fileManager.url(
             for: .documentDirectory,
             in: .userDomainMask,
@@ -63,19 +119,20 @@ enum SampleModelSeeder {
             isDirectory: true
         )
 
-        if !fileManager.fileExists(atPath: importsDirectory.path) {
-            try fileManager.createDirectory(at: importsDirectory, withIntermediateDirectories: true)
+        if !fileManager.fileExists(atPath: importsDirectory.path, isDirectory: nil) {
+            try fileManager.createDirectory(atPath: importsDirectory.path, withIntermediateDirectories: true, attributes: nil)
         }
 
-        if !fileManager.fileExists(atPath: sampleDirectory.path) {
-            try fileManager.createDirectory(at: sampleDirectory, withIntermediateDirectories: true)
+        if !fileManager.fileExists(atPath: sampleDirectory.path, isDirectory: nil) {
+            try fileManager.createDirectory(atPath: sampleDirectory.path, withIntermediateDirectories: true, attributes: nil)
         }
 
-        let destinationURL = sampleDirectory.appendingPathComponent(sourceURL.lastPathComponent)
-        if !fileManager.fileExists(atPath: destinationURL.path) {
+        return sampleDirectory.appendingPathComponent(sourceURL.lastPathComponent)
+    }
+
+    private static func copySampleIfNeeded(sourceURL: URL, destinationURL: URL, fileManager: FileManager) throws {
+        if !fileManager.fileExists(atPath: destinationURL.path, isDirectory: nil) {
             try fileManager.copyItem(at: sourceURL, to: destinationURL)
         }
-
-        return destinationURL
     }
 }

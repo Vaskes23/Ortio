@@ -16,7 +16,7 @@ final class SwiftDataModelTests: XCTestCase {
     
     override func setUpWithError() throws {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        modelContainer = try ModelContainer(for: Models.self, User.self, configurations: config)
+        modelContainer = try ModelContainer(for: Models.self, CapturedModelMetadata.self, User.self, configurations: config)
         modelContext = ModelContext(modelContainer)
     }
 
@@ -41,11 +41,27 @@ final class SwiftDataModelTests: XCTestCase {
         
         // Assert
         XCTAssertEqual(model.name, name)
+        XCTAssertNil(model.displayName)
         XCTAssertEqual(model.date, date)
         XCTAssertEqual(model.favorite, favorite)
         XCTAssertEqual(model.imported, imported)
         XCTAssertEqual(model.size, size)
         XCTAssertEqual(model.model, modelURL)
+    }
+
+    func testCapturedModelMetadataInitialization() {
+        let url = URL(fileURLWithPath: "/path/to/capture.usdz")
+        let metadata = CapturedModelMetadata(
+            modelURL: url,
+            displayName: "Living Room",
+            notes: "North corner needs another pass",
+            favorite: true
+        )
+
+        XCTAssertEqual(metadata.modelURL, url)
+        XCTAssertEqual(metadata.normalizedDisplayName, "Living Room")
+        XCTAssertEqual(metadata.normalizedNotes, "North corner needs another pass")
+        XCTAssertTrue(metadata.favorite)
     }
     
     func testModelsUniqueConstraints() throws {
@@ -66,6 +82,91 @@ final class SwiftDataModelTests: XCTestCase {
         let fetchDescriptor = FetchDescriptor<Models>()
         let savedModels = try modelContext.fetch(fetchDescriptor)
         XCTAssertEqual(savedModels.count, 2)
+    }
+
+    @MainActor
+    func testCapturedModelMetadataStoreUpdateReusesExistingRecord() throws {
+        let url = URL(fileURLWithPath: "/path/to/capture.usdz")
+        let first = CapturedModelMetadata(modelURL: url, displayName: "A", notes: nil, favorite: false)
+
+        modelContext.insert(first)
+        try modelContext.save()
+
+        try CapturedModelMetadataStore.update(
+            url: url,
+            in: [first],
+            context: modelContext
+        ) { metadata in
+            metadata.displayName = "B"
+            metadata.notes = "Updated"
+            metadata.favorite = true
+        }
+
+        let savedMetadata = try modelContext.fetch(FetchDescriptor<CapturedModelMetadata>())
+        XCTAssertEqual(savedMetadata.count, 1)
+        XCTAssertEqual(savedMetadata.first?.normalizedDisplayName, "B")
+        XCTAssertEqual(savedMetadata.first?.normalizedNotes, "Updated")
+        XCTAssertTrue(savedMetadata.first?.favorite == true)
+    }
+
+    @MainActor
+    func testSampleSeederKeepsRenamedSampleAndDoesNotInsertDuplicate() throws {
+        let sampleURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString, isDirectory: true)
+            .appendingPathComponent("Untitled Object 2.usdz")
+        try FileManager.default.createDirectory(
+            at: sampleURL.deletingLastPathComponent(),
+            withIntermediateDirectories: true
+        )
+        try Data("sample".utf8).write(to: sampleURL)
+
+        let destinationURL = try SampleModelSeeder.sampleDestinationURL(sourceURL: sampleURL, fileManager: .default)
+        let renamedModel = Models(
+            name: "Kitchen Pass",
+            date: Date(),
+            favorite: true,
+            imported: true,
+            notes: "Keep this version",
+            size: 128,
+            model: destinationURL
+        )
+
+        modelContext.insert(renamedModel)
+        try modelContext.save()
+
+        SampleModelSeeder.seedIfNeeded(
+            existingModels: [renamedModel],
+            context: modelContext,
+            fileManager: .default,
+            sampleURLs: [sampleURL]
+        )
+
+        let savedModels = try modelContext.fetch(FetchDescriptor<Models>())
+
+        XCTAssertEqual(savedModels.count, 1)
+        XCTAssertEqual(savedModels.first?.name, sampleURL.lastPathComponent)
+        XCTAssertEqual(savedModels.first?.displayTitle, "Kitchen Pass")
+        XCTAssertEqual(savedModels.first?.sampleSeedID, sampleURL.lastPathComponent)
+    }
+
+    @MainActor
+    func testImportedModelMigrationMovesLegacyNameIntoDisplayName() throws {
+        let legacyModel = Models(
+            name: "Kitchen Hero",
+            date: Date(),
+            favorite: false,
+            imported: true,
+            size: 1024,
+            model: URL(fileURLWithPath: "/path/to/model.usdz")
+        )
+
+        modelContext.insert(legacyModel)
+        try modelContext.save()
+
+        ImportedModelMigration.normalizeDisplayNamesIfNeeded(models: [legacyModel], context: modelContext)
+
+        XCTAssertEqual(legacyModel.name, "model.usdz")
+        XCTAssertEqual(legacyModel.displayName, "Kitchen Hero")
     }
     
     func testModelsIdentifiable() {
@@ -296,5 +397,12 @@ final class SwiftDataModelTests: XCTestCase {
         let image = UIGraphicsGetImageFromCurrentImageContext()! // swiftlint:disable:this force_unwrapping
         UIGraphicsEndImageContext()
         return image
+    }
+
+    private func configuredSeederFileManager(documentsURL: URL) -> MockFileManager {
+        let fileManager = MockFileManager()
+        fileManager.urlStub = { _, _, _, _ in documentsURL }
+        fileManager.fileExistsStub = { _, _ in true }
+        return fileManager
     }
 }
