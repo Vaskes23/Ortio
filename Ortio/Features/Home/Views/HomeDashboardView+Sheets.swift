@@ -80,28 +80,61 @@ struct ModelNotesSheet: View {
 
     @Environment(\.dismiss) private var dismiss
     @State private var notes: String
+    @StateObject private var recorder = VoiceNoteRecorder()
+    @State private var isTranscribing = false
+    @State private var dictationErrorMessage: String?
     @FocusState private var isNotesFieldFocused: Bool
 
-    init(item: LibraryItem, onSave: @escaping (String) -> Bool) {
+    private let dictationService: WhisperDictationServicing
+
+    init(
+        item: LibraryItem,
+        onSave: @escaping (String) -> Bool,
+        dictationService: WhisperDictationServicing = WhisperDictationService()
+    ) {
         self.item = item
         self.onSave = onSave
+        self.dictationService = dictationService
         _notes = State(initialValue: item.notes)
     }
 
     var body: some View {
         NavigationStack {
             Form {
-                ZStack(alignment: .topLeading) {
-                    TextEditor(text: $notes)
-                        .frame(minHeight: 180)
-                        .focused($isNotesFieldFocused)
+                Section {
+                    ZStack(alignment: .topLeading) {
+                        TextEditor(text: $notes)
+                            .frame(minHeight: 180)
+                            .focused($isNotesFieldFocused)
 
-                    if notes.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                        Text("Add notes")
-                            .foregroundStyle(.tertiary)
-                            .padding(.top, 8)
-                            .padding(.leading, 5)
-                            .allowsHitTesting(false)
+                        if notes.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                            Text("Add notes")
+                                .foregroundStyle(.tertiary)
+                                .padding(.top, 8)
+                                .padding(.leading, 5)
+                                .allowsHitTesting(false)
+                        }
+                    }
+
+                    Button {
+                        Task {
+                            await handleDictationButtonTapped()
+                        }
+                    } label: {
+                        Label(
+                            recorder.isRecording ? "Stop Dictation" : "Dictate with Whisper",
+                            systemImage: recorder.isRecording ? "mic.fill" : "mic"
+                        )
+                        .foregroundStyle(recorder.isRecording ? Color.red : Color.accentColor)
+                    }
+                    .disabled(isTranscribing)
+
+                    if isTranscribing {
+                        HStack(spacing: 8) {
+                            ProgressView()
+                            Text("Transcribing audio…")
+                                .foregroundStyle(.secondary)
+                        }
                     }
                 }
             }
@@ -126,6 +159,47 @@ struct ModelNotesSheet: View {
         .onAppear {
             isNotesFieldFocused = true
         }
+        .alert("Dictation Error", isPresented: dictationErrorPresented) {
+            Button("OK", role: .cancel) {
+                dictationErrorMessage = nil
+            }
+        } message: {
+            Text(dictationErrorMessage ?? "")
+        }
+    }
+
+    private var dictationErrorPresented: Binding<Bool> {
+        Binding(
+            get: { dictationErrorMessage != nil },
+            set: { isPresented in
+                if !isPresented {
+                    dictationErrorMessage = nil
+                }
+            }
+        )
+    }
+
+    @MainActor
+    private func handleDictationButtonTapped() async {
+        do {
+            if recorder.isRecording {
+                let recordedFileURL = try recorder.stopRecording()
+                isTranscribing = true
+                defer { isTranscribing = false }
+
+                let transcript = try await dictationService.transcribe(audioFileURL: recordedFileURL)
+                appendTranscript(transcript)
+            } else {
+                try await recorder.startRecording()
+            }
+        } catch {
+            dictationErrorMessage = error.localizedDescription
+        }
+    }
+
+    private func appendTranscript(_ transcript: String) {
+        let prefix = notes.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "" : "\n"
+        notes += "\(prefix)\(transcript)"
     }
 }
 

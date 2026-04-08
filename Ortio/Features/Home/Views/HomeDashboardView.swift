@@ -170,7 +170,7 @@ struct HomeDashboardView: View {
             }
         }
         .sheet(isPresented: $showingCapture) {
-            LoadGuidedCaptureView()
+            LoadOrtioView()
         }
         .sheet(isPresented: $showingImportLibrary) {
             ImportView(viewModel: ImportViewModel(repository: libraryRepository))
