@@ -1,4 +1,4 @@
-name: GuidedCapture
+name: Ortio
 configFiles:
   Debug: Configuration/SampleCode.xcconfig
   Release: Configuration/SampleCode.xcconfig
@@ -85,20 +85,20 @@ settings:
       COPY_PHASE_STRIP: "NO"
 
 targets:
-  GuidedCapture:
+  Ortio:
     type: application
     platform: iOS
     productName: Ortio
     sources:
-      - path: GuidedCapture
+      - path: Ortio
         excludes:
           - "**/.DS_Store"
           - "Info.plist"
     settings:
       base:
         PRODUCT_NAME: Ortio
-        PRODUCT_BUNDLE_IDENTIFIER: "com.example.apple-samplecode.GuidedCapture${SAMPLE_CODE_DISAMBIGUATOR}"
-        INFOPLIST_FILE: GuidedCapture/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: "com.example.apple-samplecode.Ortio${SAMPLE_CODE_DISAMBIGUATOR}"
+        INFOPLIST_FILE: Ortio/Info.plist
         GENERATE_INFOPLIST_FILE: "YES"
         DEVELOPMENT_TEAM: D763CZ24GN
         CODE_SIGN_STYLE: Automatic
@@ -108,7 +108,7 @@ targets:
         CURRENT_PROJECT_VERSION: "1"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
-        DEVELOPMENT_ASSET_PATHS: "\"GuidedCapture/Preview Content\""
+        DEVELOPMENT_ASSET_PATHS: "\"Ortio/Preview Content\""
         ENABLE_PREVIEWS: "YES"
         INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace: "YES"
         INFOPLIST_KEY_NSCameraUsageDescription: "This app uses the camera to scan objects."
@@ -125,18 +125,18 @@ targets:
         Debug:
           SWIFT_OPTIMIZATION_LEVEL: "-Onone"
 
-  GuidedCaptureTests:
+  OrtioTests:
     type: bundle.unit-test
     platform: iOS
     sources:
-      - path: GuidedCaptureTests
+      - path: OrtioTests
         excludes:
           - "**/.DS_Store"
     dependencies:
-      - target: GuidedCapture
+      - target: Ortio
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: learn.Memorize.MatyasVascak.GuidedCaptureTests
+        PRODUCT_BUNDLE_IDENTIFIER: learn.Memorize.MatyasVascak.OrtioTests
         GENERATE_INFOPLIST_FILE: "YES"
         BUNDLE_LOADER: "$(TEST_HOST)"
         TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Ortio.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Ortio"
@@ -151,10 +151,10 @@ targets:
         TARGETED_DEVICE_FAMILY: "1,2"
 
 schemes:
-  GuidedCapture:
+  Ortio:
     build:
       targets:
-        GuidedCapture: all
+        Ortio: all
     run:
       config: Debug
       environmentVariables:
@@ -164,7 +164,7 @@ schemes:
     test:
       config: Debug
       targets:
-        - GuidedCaptureTests
+        - OrtioTests
     profile:
       config: Release
     analyze:

@@ -4,25 +4,25 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Ortio is an iOS app for 3D object capture and model management. It is built with Swift/SwiftUI and based on Apple's GuidedCapture sample project. Requires a physical device with LiDAR Scanner, A14 Bionic+, and iOS 17+.
+Ortio is an iOS app for 3D object capture and model management. It is built with Swift/SwiftUI and based on Apple's Ortio sample project. Requires a physical device with LiDAR Scanner, A14 Bionic+, and iOS 17+.
 
 ## Build & Test Commands
 
 ```bash
 # Open in Xcode
-open GuidedCapture.xcodeproj
+open Ortio.xcodeproj
 
 # Build (command line)
-xcodebuild -project GuidedCapture.xcodeproj -scheme GuidedCapture -configuration Debug -destination 'platform=iOS,name=<DEVICE_NAME>'
+xcodebuild -project Ortio.xcodeproj -scheme Ortio -configuration Debug -destination 'platform=iOS,name=<DEVICE_NAME>'
 
 # Run all tests
-xcodebuild test -project GuidedCapture.xcodeproj -scheme GuidedCapture -destination 'platform=iOS Simulator,name=iPhone 16'
+xcodebuild test -project Ortio.xcodeproj -scheme Ortio -destination 'platform=iOS Simulator,name=iPhone 16'
 
 # Run a single test class
-xcodebuild test -project GuidedCapture.xcodeproj -scheme GuidedCapture -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:GuidedCaptureTests/ImportViewModelTests
+xcodebuild test -project Ortio.xcodeproj -scheme Ortio -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:OrtioTests/ImportViewModelTests
 
 # Run a single test method
-xcodebuild test -project GuidedCapture.xcodeproj -scheme GuidedCapture -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:GuidedCaptureTests/ImportViewModelTests/testCreateFolderName
+xcodebuild test -project Ortio.xcodeproj -scheme Ortio -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing:OrtioTests/ImportViewModelTests/testCreateFolderName
 ```
 
 ## Architecture
@@ -34,9 +34,9 @@ xcodebuild test -project GuidedCapture.xcodeproj -scheme GuidedCapture -destinat
 
 **Project Structure (feature-based):**
 ```
-GuidedCapture/                          # Main iOS app target
+Ortio/                          # Main iOS app target
 ├── App/                                # App entry point & root navigation
-│   ├── GuidedCaptureSampleApp.swift    # @main entry point
+│   ├── OrtioApp.swift    # @main entry point
 │   └── ContentView.swift              # Main TabView (Models, Import tabs)
 ├── Features/
 │   ├── Capture/                        # 3D object capture
@@ -63,13 +63,13 @@ GuidedCapture/                          # Main iOS app target
 ├── Resources/                          # MP4 tutorial videos
 └── Assets.xcassets/
 
-GuidedCaptureShared/                    # Shared models, networking, utilities
+OrtioShared/                    # Shared models, networking, utilities
 ├── Models/                             # Annotation, Models, Theme, User
 ├── Networking/                         # CloudStorageService, NetworkProtocol
 ├── SupabaseModels/                     # AnnotationRecord, ModelRecord, UserRecord
 └── Utilities/                          # FileManagerProtocol, PathConstants
 
-GuidedCaptureTests/                     # Unit tests
+OrtioTests/                     # Unit tests
 ├── Features/{Import,Models,Settings}/  # Feature-specific tests
 ├── Shared/                             # Shared model tests
 ├── Core/                               # Core/binding tests
@@ -91,7 +91,7 @@ GuidedCaptureTests/                     # Unit tests
 
 ## Testing
 
-Tests are in `GuidedCaptureTests/`, organized by feature to mirror the main target structure. Uses XCTest with Arrange-Act-Assert pattern.
+Tests are in `OrtioTests/`, organized by feature to mirror the main target structure. Uses XCTest with Arrange-Act-Assert pattern.
 
 - `Mocks/FileManagerMocks.swift` provides `MockFileManager` with call tracking and stubbing
 - SwiftData tests use `ModelConfiguration(isStoredInMemoryOnly: true)`
