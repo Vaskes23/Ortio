@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ortio - Onboarding Flow States</title>
+<style>
+  :root {
+    --ios-blue: #007AFF;
+    --ios-bg: #000000;
+    --ios-text: #FFFFFF;
+    --ios-secondary: rgba(255,255,255,0.6);
+    --ios-card-bg: rgba(255,255,255,0.08);
+    --screen-w: 393px;
+    --screen-h: 852px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+    background: #1a1a2e;
+    color: #fff;
+    padding: 40px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    text-align: center;
+    color: rgba(255,255,255,0.5);
+    font-size: 16px;
+    margin-bottom: 48px;
+  }
+  .flow-section {
+    margin-bottom: 60px;
+  }
+  .flow-section h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ios-blue);
+    margin-bottom: 24px;
+    padding-left: 12px;
+    border-left: 3px solid var(--ios-blue);
+  }
+  .screens-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    justify-content: flex-start;
+  }
+  .screen-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .screen-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .state-badge {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .badge-video { background: #5856D6; color: #fff; }
+  .badge-pointcloud { background: #34C759; color: #fff; }
+  .badge-transition { background: #FF9500; color: #fff; }
+
+  /* iPhone frame */
+  .iphone {
+    width: var(--screen-w);
+    height: var(--screen-h);
+    background: var(--ios-bg);
+    border-radius: 47px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 0 3px #333, 0 20px 60px rgba(0,0,0,0.5);
+    flex-shrink: 0;
+  }
+  .status-bar {
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 32px 0;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .dynamic-island {
+    width: 126px;
+    height: 37px;
+    background: #000;
+    border-radius: 20px;
+    position: absolute;
+    top: 11px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+  }
+  .status-icons {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    font-size: 13px;
+  }
+  .home-indicator {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 134px;
+    height: 5px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 3px;
+  }
+
+  /* Screen content */
+  .screen-content {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 54px - 20px);
+    padding: 0 24px;
+  }
+  .cancel-btn {
+    color: var(--ios-blue);
+    font-size: 17px;
+    padding: 12px 0;
+    cursor: pointer;
+    align-self: flex-start;
+  }
+
+  /* Visual area (video or point cloud) */
+  .visual-area {
+    flex: 1;
+    margin: 12px 6px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    min-height: 280px;
+  }
+  .visual-pointcloud {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  }
+  .visual-video {
+    background: linear-gradient(135deg, #2d1b69 0%, #1a1a3e 50%, #11234a 100%);
+  }
+  .pointcloud-dots {
+    position: absolute;
+    inset: 0;
+  }
+  .pointcloud-dots::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image:
+      radial-gradient(circle 2px, rgba(0,122,255,0.6) 100%, transparent 100%),
+      radial-gradient(circle 1.5px, rgba(52,199,89,0.5) 100%, transparent 100%),
+      radial-gradient(circle 1px, rgba(255,149,0,0.4) 100%, transparent 100%);
+    background-size: 20px 20px, 15px 18px, 25px 22px;
+    background-position: 0 0, 7px 9px, 3px 5px;
+    opacity: 0.7;
+  }
+  .visual-label {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    z-index: 1;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .visual-icon {
+    font-size: 48px;
+    margin-bottom: 8px;
+    z-index: 1;
+  }
+  .video-play {
+    width: 60px;
+    height: 60px;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    z-index: 1;
+  }
+  .video-play::after {
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 20px solid rgba(255,255,255,0.6);
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    margin-left: 4px;
+  }
+
+  /* Orbit indicators */
+  .orbit-indicators {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    padding: 12px 0;
+  }
+  .orbit-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.4);
+  }
+  .orbit-dot.active {
+    border-color: var(--ios-blue);
+    color: var(--ios-blue);
+  }
+  .orbit-dot.completed {
+    border-color: #34C759;
+    background: #34C759;
+    color: #fff;
+  }
+
+  /* Text area */
+  .text-area {
+    padding: 8px 0 12px;
+    text-align: center;
+  }
+  .screen-title {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 6px;
+    max-lines: 3;
+  }
+  .screen-detail {
+    font-size: 15px;
+    color: var(--ios-secondary);
+    line-height: 1.4;
+  }
+
+  /* Buttons area */
+  .buttons-area {
+    padding: 8px 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+  }
+  .btn {
+    width: 100%;
+    max-width: 320px;
+    padding: 14px 24px;
+    border-radius: 14px;
+    font-size: 17px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+  }
+  .btn-primary {
+    background: var(--ios-blue);
+    color: #fff;
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--ios-blue);
+  }
+  .btn-finish-highlight {
+    background: var(--ios-blue);
+    color: #fff;
+  }
+
+  /* Flow arrows */
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    color: rgba(255,255,255,0.3);
+    font-size: 24px;
+    padding: 0 8px;
+    align-self: center;
+  }
+
+  .transition-info {
+    margin-top: 12px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    max-width: var(--screen-w);
+    text-align: center;
+    line-height: 1.4;
+  }
+  .transition-info strong {
+    color: var(--ios-blue);
+    font-weight: 600;
+  }
+
+  /* Annotations */
+  .annotation {
+    position: absolute;
+    font-size: 10px;
+    background: rgba(255,149,0,0.9);
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+    z-index: 10;
+    white-space: nowrap;
+  }
+
+  /* Individual screen export class */
+  .export-screen {
+    page-break-after: always;
+  }
+
+  @media print {
+    body { background: #fff; }
+    .screen-container { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Ortio Onboarding Flow</h1>
+<p class="subtitle">All 17 states of the 3D capture onboarding experience &bull; iPhone layout</p>
+
+<!-- ============ SECTION 1: Initial & First Segment ============ -->
+<div class="flow-section">
+  <h2>1. Initial & First Segment</h2>
+  <div class="screens-row">
+
+    <!-- State: tooFewImages -->
+    <div class="screen-container" id="tooFewImages">
+      <span class="screen-label">State 1: tooFewImages</span>
+      <span class="state-badge badge-pointcloud">Point Cloud</span>
+      <div class="iphone">
+        <div class="dynamic-island"></div>
+        <div class="status-bar">
+          <span>02:37</span>
+          <div class="status-icons">
+            <span>&#x2022;&#x2022;&#x2022;</span>
+            <span>&#x1F50B;</span>
+          </div>
+        </div>
+        <div class="screen-content">
+          <div class="cancel-btn">Cancel</div>
+          <div class="visual-area visual-pointcloud">
+            <div class="pointcloud-dots"></div>
+            <div class="visual-icon">&#x2601;</div>
+            <span class="visual-label">Point Cloud</span>
+          </div>
+          <div class="orbit-indicators">
+            <div class="orbit-dot active">1</div>
+            <div class="orbit-dot">2</div>
+            <div class="orbit-dot">3</div>
+          </div>
+          <div class="text-area">
+            <div class="screen-title">Keep moving around your object.</div>
+            <div class="screen-detail">You need at least 20 images of your object to create a model.</div>
+          </div>
+          <div class="buttons-area">
+            <!-- No buttons in this state -->
+          </div>
+        </div>
+        <div class="home-indicator"></div>
+      </div>
+      <div class="transition-info">
+        <strong>continue</strong> &rarr; firstSegment
+      </div>
+    </div>
+
+    <!-- State: firstSegmentNeedsWork -->
+    <div class="screen-container" id="firstSegmentNeedsWork">
+      <span class="screen-label">State 2: firstSegmentNeedsWork</span>
+      <span class="state-badge badge-pointcloud">Point Cloud</span>
+      <div class="iphone">
+        <div class="dynamic-island"></div>
+        <div class="status-bar">
+          <span>02:37</span>
+          <div class="status-icons">
+            <span>&#x2022;&#x2022;&#x2022;</span>
+            <span>&#x1F50B;</span>
+          </div>
+        </div>
+        <div class="screen-content">
+          <div class="cancel-btn">Cancel</div>
+          <div class="visual-area visual-pointcloud">
+            <div class="pointcloud-dots"></div>
+            <div class="visual-icon">&#x2601;</div>
+            <span class="visual-label">Point Cloud</span>
+          </div>
+          <div class="orbit-indicators">
+            <div class="orbit-dot active">1</div>
+            <div class="orbit-dot">2</div>
+            <div class="orbit-dot">3</div>
+          </div>
+          <div class="text-area">
+            <div class="screen-title">Keep going to complete the first segment.</div>
+            <div class="screen-detail">For best quality, capture three segments. Tap Skip if you can't make it all the way around, but your final model may have missing areas.</div>
+          </div>
+          <div class="buttons-area">
+            <div class="btn btn-primary">Continue</div>
+            <div class="btn btn-secondary">Skip</div>
+          </div>
+        </div>
+        <div class="home-indicator"></div>
+      </div>
+      <div class="transition-info">
+        <strong>continue</strong> &rarr; firstSegment<br>
+        <strong>skip (flippable)</strong> &rarr; flipObject<br>
+        <strong>skip (not flippable)</strong> &rarr; captureFromLowerAngle
+      </div>
+    </div>
+
+    <!-- State: firstSegmentComplete -->
+    <div class="screen-container" id="firstSegmentComplete">
+      <span class="screen-label">State 3: firstSegmentComplete</span>
+      <span class="state-badge badge-pointcloud">Point Cloud</span>
+      <div class="iphone">
+        <div class="dynamic-island"></div>
+        <div class="status-bar">
+          <span>02:37</span>
+          <div class="status-icons">
+            <span>&#x2022;&#x2022;&#x2022;</span>
+            <span>&#x1F50B;</span>
+          </div>
+        </div>
+        <div class="screen-content">
+          <div class="cancel-btn">Cancel</div>
+          <div class="visual-area visual-pointcloud">
+            <div class="pointcloud-dots"></div>
+            <div class="visual-icon">&#x2705;</div>
+            <span class="visual-label">Point Cloud</span>
+          </div>
+          <div class="orbit-indicators">
+            <div class="orbit-dot completed">&#x2713;</div>
+            <div class="orbit-dot">2</div>
+            <div class="orbit-dot">3</div>
+          </div>
+          <div class="text-area">
+            <div class="screen-title">First segment complete.</div>
+            <div class="screen-detail">For best quality, capture three segments.</div>
+          </div>
+          <div class="buttons-area">
+            <div class="btn btn-primary">Continue</div>
+            <div class="btn btn-secondary">Finish</div>
+          </div>
+        </div>
+        <div class="home-indicator"></div>
+      </div>
+      <div class="transition-info">
+        <strong>finish</strong> &rarr; reconstruction<br>
+        <strong>continue (flippable)</strong> &rarr; flipObject<br>
+        <strong>continue (not flippable)</strong> &rarr; flippingObjectNotRecommended
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ SECTION 2: Flip Object Path ============ -->
+<div class="flow-section">
+  <h2>2. Flip Object Path (Flippable Objects)</h2>
+  <div class="screens-row">
+
+    <!-- State: flipObject -->
+    <div class="screen-container" id="flipObject">
+      <span class="screen-label">State 4: flipObject</span>
+      <span class="state-badge badge-video">Tutorial Video</span>
+      <div class="iphone">
+        <div class="dynamic-island"></div>
+        <div class="status-bar">
+          <span>02:37</span>
+          <div class="status-icons">
+            <span>&#x2022;&#x2022;&#x2022;</span>
+            <span>&#x1F50B;</span>
+          </div>
+        </div>
+        <div class="screen-content">
+          <div class="cancel-btn">Cancel</div>
+          <div class="visual-area visual-video">
+            <div class="video-play"></div>
+            <span class="visual-label">ScanPasses-iPhone-FixedHeight-2</span>
+          </div>
+          <div class="orbit-indicators">
+            <div class="orbit-dot completed">&#x2713;</div>
+            <div class="orbit-dot active">2</div>
+            <div class="orbit-dot">3</div>
+          </div>
+          <div class="text-area">
+            <div class="screen-title">Flip object on its side and capture again.</div>
+            <div class="screen-detail">Make sure that areas you captured previously can still be seen. Avoid flipping your object if it changes the shape.</div>
+          </div>
+          <div class="buttons-area">
+            <div class="btn btn-primary">Continue</div>
+            <div class="btn btn-secondary">Can't flip your object?</div>
+          </div>
+        </div>
+        <div class="home-indicator"></div>
+      </div>
+      <div class="transition-info">
+        <strong>continue</strong> &rarr; secondSegment<br>
+        <strong>objectCannotBeFlipped</strong> &rarr; captureFromLowerAngle
+      </div>
+    </div>
+
+    <!-- State: flippingObjectNotRecommended -->
+    <div class="screen-container" id="flippingObjectNotRecommended">
+      <span class="screen-label">State 5: flippingObjectNotRecommended</span>
+      <span class="state-badge badge-pointcloud">Point Cloud</span>
+      <div class="iphone">
+        <div class="dynamic-island"></div>
+        <div class="status-bar">
+          <span>02:37</span>
+          <div class="status-icons">
+            <span>&#x2022;&#x2022;&#x2022;</span>
+            <span>&#x1F50B;</span>
+          </div>
+        </div>
+        <div class="screen-content">
+          <div class="cancel-btn">Cancel</div>
+          <div class="visual-area visual-pointcloud">
+            <div class="pointcloud-dots"></div>
+            <div class="visual-icon">&#x26A0;&#xFE0F;</div>
+            <span class="visual-label">Point Cloud</span>
+          </div>
+          <div class="orbit-indicators">
+            <div class="orbit-dot completed">&#x2713;</div>
+            <div class="orbit-dot">2</div>
+            <div class="orbit-dot">3</div>
+          </div>
+          <div class="text-area">
+            <div class="screen-title">Flipping this object is not recommended.</div>
+            <div class="screen-detail">Your object may have single color surfaces or be too reflective to add more segments. Tap Continue to capture more detail without flipping, or Flip Object Anyway.</div>
+          </div>
+          <div class="buttons-area">
+            <div class="btn btn-primary">Continue</div>
+            <div class="btn btn-secondary">Flip object anyway</div>
+          </div>
+        </div>
+        <div class="home-indicator"></div>
+      </div>
+      <div class="transition-info">
+        <strong>continue</strong> &rarr; captureFromLowerAngle<br>
+        <strong>flipObjectAnyway</strong> &rarr; flipObject
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ SECTION 3: Non-Flippable Path ============ -->
+<div class="flow-section">
+  <h2>3. Non-Flippable Object Path</h2>
+  <div class="screens-row">
+
+    <!-- State: captureFromLowerAngle -->
+    <div class="screen-container" id="captureFromLowerAngle">
+      <span class="screen-label">State 6: captureFromLowerAngle</span>
+      <span class="state-badge badge-video">Tutorial Video</span>
+      <div class="iphone">
+        <div class="dynamic-island"></div>
+        <div class="status-bar">
+          <span>02:37</span>
+          <div class="status-icons">
+            <span>&#x2022;&#x2022;&#x2022;</span>
+            <span>&#x1F50B;</span>
+          </div>
+        </div>
+        <div class="screen-content">
+          <div class="cancel-btn">Cancel</div>
+          <div class="visual-area visual-video">
+            <div class="video-play"></div>
+            <span class="visual-label">ScanPasses-iPhone-unflippable-low</span>
+          </div>
+          <div class="orbit-indicators">
+            <div class="orbit-dot completed">&#x2713;</div>
+            <div class="orbit-dot active">2</div>
+            <div class="orbit-dot">3</div>
+          </div>
+          <div class="text-area">
+            <div class="screen-title">Capture your object again from a lower angle.</div>
+            <div class="screen-detail">Move down to be level with the base of your object and capture again.</div>
+          </div>
+          <div class="buttons-area">
+            <div class="btn btn-primary">Continue</div>
+            <div class="btn btn-secondary">Finish</div>
+          </div>
+        </div>
+        <div class="home-indicator"></div>
+      </div>
+      <div class="transition-info">
+        <strong>finish</strong> &rarr; reconstruction<br>
+        <strong>continue</strong> &rarr; additionalOrbitOnCurrentSegment
+      </div>
+    </div>
+
+    <!-- State: captureFromHigherAngle -->
+    <div class="screen-container" id="captureFromHigherAngle">
+      <span class="screen-label">State 7: captureFromHigherAngle</span>
+      <span class="state-badge badge-video">Tutorial Video</span>
+      <div class="iphone">
+        <div class="dynamic-island"></div>
+        <div class="status-bar">
+          <span>02:37</span>
+          <div class="status-icons">
+            <span>&#x2022;&#x2022;&#x2022;</span>
+            <span>&#x1F50B;</span>
+          </div>
+        </div>
+        <div class="screen-content">
+          <div class="cancel-btn">Cancel</div>
+          <div class="visual-area visual-video">
+            <div class="video-play"></div>
+            <span class="visual-label">ScanPasses-iPhone-unflippable-high</span>
+          </div>
+          <div class="orbit-indicators">
+            <div class="orbit-dot completed">&#x2713;</div>
+            <div class="orbit-dot completed">&#x2713;</div>
+            <div class="orbit-dot active">3</div>
+          </div>
+          <div class="text-area">
+            <div class="screen-title">Capture your object again from a higher angle.</div>
+            <div class="screen-detail">Move above your object and make sure that areas you captured previously can still be seen.</div>
+          </div>
+          <div class="buttons-area">
+            <div class="btn btn-primary">Continue</div>
+            <div class="btn btn-secondary">Finish</div>
+          </div>
+        </div>
+        <div class="home-indicator"></div>
+      </div>
+      <div class="transition-info">
+        <strong>finish</strong> &rarr; reconstruction<br>
+        <strong>continue</strong> &rarr; additionalOrbitOnCurrentSegment
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ SECTION 4: Second Segment ============ -->
+<div class="flow-section">
+  <h2>4. Second Segment</h2>
+  <div class="screens-row">
+
+    <!-- State: secondSegmentNeedsWork -->
+    <div class="screen-container" id="secondSegmentNeedsWork">
+      <span class="screen-label">State 8: secondSegmentNeedsWork</span>
+      <span class="state-badge badge-pointcloud">Point Cloud</span>
+      <div class="iphone">
+        <div class="dynamic-island"></div>
+        <div class="status-bar">
+          <span>02:37</span>
+          <div class="status-icons">
+            <span>&#x2022;&#x2022;&#x2022;</span>
+            <span>&#x1F50B;</span>
+          </div>
+        </div>
+        <div class="screen-content">
+          <div class="cancel-btn">Cancel</div>
+          <div class="visual-area visual-pointcloud">
+            <div class="pointcloud-dots"></div>
+            <div class="visual-icon">&#x2601;</div>
+            <span class="visual-label">Point Cloud</span>
+          </div>
+          <div class="orbit-indicators">
+            <div class="orbit-dot completed">&#x2713;</div>
+            <div class="orbit-dot active">2</div>
+            <div class="orbit-dot">3</div>
+          </div>
+          <div class="text-area">
+            <div class="screen-title">Keep going to complete the second segment.</div>
+            <div class="screen-detail">For best quality, capture three segments. Tap Skip if you can't make it all the way around but your final model may have missing areas.</div>
+          </div>
+          <div class="buttons-area">
+            <div class="btn btn-primary">Continue</div>
+            <div class="btn btn-secondary">Skip</div>
+          </div>
+        </div>
+        <div class="home-indicator"></div>
+      </div>
+      <div class="transition-info">
+        <strong>continue</strong> &rarr; dismiss<br>
+        <strong>skip (flippable)</strong> &rarr; flipObjectASecondTime<br>
+        <strong>skip (not flippable)</strong> &rarr; captureFromHigherAngle
+      </div>
+    </div>
+
+    <!-- State: secondSegmentComplete -->
+    <div class="screen-container" id="secondSegmentComplete">
+      <span class="screen-label">State 9: secondSegmentComplete</span>
+      <span class="state-badge badge-pointcloud">Point Cloud</span>
+      <div class="iphone">
+        <div class="dynamic-island"></div>
+        <div class="status-bar">
+          <span>02:37</span>
+          <div class="status-icons">
+            <span>&#x2022;&#x2022;&#x2022;</span>
+            <span>&#x1F50B;</span>
+          </div>
+        </div>
+        <div class="screen-content">
+          <div class="cancel-btn">Cancel</div>
+          <div class="visual-area visual-pointcloud">
+            <div class="pointcloud-dots"></div>
+            <div class="visual-icon">&#x2705;</div>
+            <span class="visual-label">Point Cloud</span>
+          </div>
+          <div class="orbit-indicators">
+            <div class="orbit-dot completed">&#x2713;</div>
+            <div class="orbit-dot completed">&#x2713;</div>
+            <div class="orbit-dot">3</div>
+          </div>
+          <div class="text-area">
+            <div class="screen-title">Second segment complete.</div>
+            <div class="screen-detail">For best quality, capture three segments.</div>
+          </div>
+          <div class="buttons-area">
+            <div class="btn btn-primary">Continue</div>
+            <div class="btn btn-secondary">Finish</div>
+          </div>
+        </div>
+        <div class="home-indicator"></div>
+      </div>
+      <div class="transition-info">
+        <strong>continue (flippable)</strong> &rarr; flipObjectASecondTime<br>
+        <strong>continue (not flippable)</strong> &rarr; captureFromHigherAngle
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ SECTION 5: Second Flip & Third Segment ============ -->
+<div class="flow-section">
+  <h2>5. Second Flip & Third Segment</h2>
+  <div class="screens-row">
+
+    <!-- State: flipObjectASecondTime -->
+    <div class="screen-container" id="flipObjectASecondTime">
+      <span class="screen-label">State 10: flipObjectASecondTime</span>
+      <span class="state-badge badge-video">Tutorial Video</span>
+      <div class="iphone">
+        <div class="dynamic-island"></div>
+        <div class="status-bar">
+          <span>02:37</span>
+          <div class="status-icons">
+            <span>&#x2022;&#x2022;&#x2022;</span>
+            <span>&#x1F50B;</span>
+          </div>
+        </div>
+        <div class="screen-content">
+          <div class="cancel-btn">Cancel</div>
+          <div class="visual-area visual-video">
+            <div class="video-play"></div>
+            <span class="visual-label">ScanPasses-iPhone-FixedHeight-3</span>
+          </div>
+          <div class="orbit-indicators">
+            <div class="orbit-dot completed">&#x2713;</div>
+            <div class="orbit-dot completed">&#x2713;</div>
+            <div class="orbit-dot active">3</div>
+          </div>
+          <div class="text-area">
+            <div class="screen-title">Flip object on the opposite side and capture again.</div>
+            <div class="screen-detail">Make sure that areas you captured previously can still be seen. Avoid flipping your object if it changes the shape.</div>
+          </div>
+          <div class="buttons-area">
+            <div class="btn btn-primary">Continue</div>
+            <div class="btn btn-secondary">Finish</div>
+          </div>
+        </div>
+        <div class="home-indicator"></div>
+      </div>
+      <div class="transition-info">
+        <strong>finish</strong> &rarr; reconstruction<br>
+        <strong>continue</strong> &rarr; thirdSegment
+      </div>
+    </div>
+
+    <!-- State: thirdSegmentNeedsWork -->
+    <div class="screen-container" id="thirdSegmentNeedsWork">
+      <span class="screen-label">State 11: thirdSegmentNeedsWork</span>
+      <span class="state-badge badge-pointcloud">Point Cloud</span>
+      <div class="iphone">
+        <div class="dynamic-island"></div>
+        <div class="status-bar">
+          <span>02:37</span>
+          <div class="status-icons">
+            <span>&#x2022;&#x2022;&#x2022;</span>
+            <span>&#x1F50B;</span>
+          </div>
+        </div>
+        <div class="screen-content">
+          <div class="cancel-btn">Cancel</div>
+          <div class="visual-area visual-pointcloud">
+            <div class="pointcloud-dots"></div>
+            <div class="visual-icon">&#x2601;</div>
+            <span class="visual-label">Point Cloud</span>
+          </div>
+          <div class="orbit-indicators">
+            <div class="orbit-dot completed">&#x2713;</div>
+            <div class="orbit-dot completed">&#x2713;</div>
+            <div class="orbit-dot active">3</div>
+          </div>
+          <div class="text-area">
+            <div class="screen-title">Keep going to complete the final segment.</div>
+            <div class="screen-detail">For best quality, capture three segments. When you're done, tap Finish to complete your object.</div>
+          </div>
+          <div class="buttons-area">
+            <div class="btn btn-primary">Continue</div>
+            <div class="btn btn-secondary">Finish</div>
+          </div>
+        </div>
+        <div class="home-indicator"></div>
+      </div>
+      <div class="transition-info">
+        <strong>finish</strong> &rarr; reconstruction<br>
+        <strong>continue</strong> &rarr; dismiss
+      </div>
+    </div>
+
+    <!-- State: thirdSegmentComplete -->
+    <div class="screen-container" id="thirdSegmentComplete">
+      <span class="screen-label">State 12: thirdSegmentComplete</span>
+      <span class="state-badge badge-pointcloud">Point Cloud</span>
+      <div class="iphone">
+        <div class="dynamic-island"></div>
+        <div class="status-bar">
+          <span>02:37</span>
+          <div class="status-icons">
+            <span>&#x2022;&#x2022;&#x2022;</span>
+            <span>&#x1F50B;</span>
+          </div>
+        </div>
+        <div class="screen-content">
+          <div class="cancel-btn">Cancel</div>
+          <div class="visual-area visual-pointcloud">
+            <div class="pointcloud-dots"></div>
+            <div class="visual-icon">&#x1F389;</div>
+            <span class="visual-label">Point Cloud</span>
+          </div>
+          <div class="orbit-indicators">
+            <div class="orbit-dot completed">&#x2713;</div>
+            <div class="orbit-dot completed">&#x2713;</div>
+            <div class="orbit-dot completed">&#x2713;</div>
+          </div>
+          <div class="text-area">
+            <div class="screen-title">All segments complete.</div>
+            <div class="screen-detail">Tap Finish to process your object.</div>
+          </div>
+          <div class="buttons-area">
+            <div class="btn btn-finish-highlight">Finish</div>
+          </div>
+        </div>
+        <div class="home-indicator"></div>
+      </div>
+      <div class="transition-info">
+        <strong>finish</strong> &rarr; reconstruction
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ SECTION 6: Terminal States ============ -->
+<div class="flow-section">
+  <h2>6. Terminal States</h2>
+  <div class="screens-row">
+
+    <!-- State: additionalOrbitOnCurrentSegment -->
+    <div class="screen-container" id="additionalOrbitOnCurrentSegment">
+      <span class="screen-label">State 13: additionalOrbit</span>
+      <span class="state-badge badge-transition">Transition</span>
+      <div class="iphone">
+        <div class="dynamic-island"></div>
+        <div class="status-bar">
+          <span>02:37</span>
+          <div class="status-icons">
+            <span>&#x2022;&#x2022;&#x2022;</span>
+            <span>&#x1F50B;</span>
+          </div>
+        </div>
+        <div class="screen-content">
+          <div class="cancel-btn">Cancel</div>
+          <div class="visual-area visual-pointcloud">
+            <div class="pointcloud-dots"></div>
+            <div class="visual-icon">&#x1F504;</div>
+            <span class="visual-label">Additional Orbit Capture</span>
+          </div>
+          <div class="orbit-indicators">
+            <div class="orbit-dot completed">&#x2713;</div>
+            <div class="orbit-dot active">2</div>
+            <div class="orbit-dot">3</div>
+          </div>
+          <div class="text-area">
+            <div class="screen-title">Capturing additional orbit...</div>
+            <div class="screen-detail">Continue moving around the object to capture more detail from this angle.</div>
+          </div>
+          <div class="buttons-area">
+          </div>
+        </div>
+        <div class="home-indicator"></div>
+      </div>
+      <div class="transition-info">
+        Begins new orbit on current segment.<br>
+        Triggered from lower/higher angle states.
+      </div>
+    </div>
+
+    <!-- State: reconstruction -->
+    <div class="screen-container" id="reconstruction">
+      <span class="screen-label">State 14: reconstruction</span>
+      <span class="state-badge badge-transition">Transition</span>
+      <div class="iphone">
+        <div class="dynamic-island"></div>
+        <div class="status-bar">
+          <span>02:37</span>
+          <div class="status-icons">
+            <span>&#x2022;&#x2022;&#x2022;</span>
+            <span>&#x1F50B;</span>
+          </div>
+        </div>
+        <div class="screen-content" style="justify-content: center; align-items: center;">
+          <div style="text-align: center;">
+            <div style="width: 60px; height: 60px; border: 3px solid var(--ios-blue); border-top-color: transparent; border-radius: 50%; margin: 0 auto 24px; animation: spin 1s linear infinite;"></div>
+            <div class="screen-title" style="margin-bottom: 8px;">Processing your object...</div>
+            <div class="screen-detail">This may take a moment.</div>
+          </div>
+        </div>
+        <div class="home-indicator"></div>
+      </div>
+      <div class="transition-info">
+        Session moves to .finishing state.<br>
+        Onboarding overlay dismisses.
+      </div>
+    </div>
+
+    <!-- State: dismiss -->
+    <div class="screen-container" id="dismiss">
+      <span class="screen-label">State 15: dismiss</span>
+      <span class="state-badge badge-transition">Transition</span>
+      <div class="iphone">
+        <div class="dynamic-island"></div>
+        <div class="status-bar">
+          <span>02:37</span>
+          <div class="status-icons">
+            <span>&#x2022;&#x2022;&#x2022;</span>
+            <span>&#x1F50B;</span>
+          </div>
+        </div>
+        <div class="screen-content" style="justify-content: center; align-items: center;">
+          <div style="text-align: center;">
+            <div style="font-size: 64px; margin-bottom: 16px;">&#x1F4F7;</div>
+            <div class="screen-title" style="margin-bottom: 8px;">Returning to capture</div>
+            <div class="screen-detail">Onboarding overlay dismissed. Camera view resumes.</div>
+          </div>
+        </div>
+        <div class="home-indicator"></div>
+      </div>
+      <div class="transition-info">
+        Onboarding view is dismissed.<br>
+        User returns to live camera capture.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ Flow Diagram ============ -->
+<div class="flow-section">
+  <h2>Complete State Transition Diagram</h2>
+  <div style="background: rgba(255,255,255,0.05); border-radius: 16px; padding: 32px; font-family: 'SF Mono', 'Menlo', monospace; font-size: 13px; line-height: 2; color: rgba(255,255,255,0.8); overflow-x: auto;">
+<pre style="white-space: pre; margin:0;">
+tooFewImages
+    |
+    | continue
+    v
+firstSegment ---------> firstSegmentNeedsWork
+                              |           |
+                    continue  |           | skip
+                       |      v           v
+                       |  firstSegment  <span style="color:#5856D6">flipObject</span> / <span style="color:#5856D6">captureFromLowerAngle</span>
+                       v
+               firstSegmentComplete
+              /         |          \
+        finish    continue(flip)   continue(no flip)
+           |           |                |
+           v           v                v
+     reconstruction  <span style="color:#5856D6">flipObject</span>    flippingObjectNotRecommended
+                       |              /              \
+                 continue        continue        flipObjectAnyway
+                       |           |                  |
+                       v           v                  v
+               secondSegment  <span style="color:#5856D6">captureFromLowerAngle</span>  <span style="color:#5856D6">flipObject</span>
+                  /      \
+           needsWork    complete
+              |    |       |     \
+         continue skip  continue  finish
+           |    |       |    |       |
+           v    v       v    v       v
+        dismiss ...   ...  ...  reconstruction
+
+<span style="color:#5856D6">Purple = Shows Tutorial Video</span>
+<span style="color:#34C759">Green = Shows Point Cloud</span>
+<span style="color:#FF9500">Orange = Transition State</span>
+</pre>
+  </div>
+</div>
+
+<style>
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+</style>
+
+</body>
+</html>

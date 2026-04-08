@@ -19,7 +19,7 @@ The following documents describe deferred shared-framework and visionOS prototyp
 
 ## Current Supported Build Graph
 
-- `GuidedCapture`
-- `GuidedCaptureTests`
+- `Ortio`
+- `OrtioTests`
 
 Archived prototype code now lives under [../DeferredPrototypes/README.md](/Users/matyasvascak/Desktop/Code/Ortio/DeferredPrototypes/README.md).

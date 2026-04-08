@@ -28,7 +28,7 @@ Configuration/Secrets.xcconfig
 .build/
 
 # visionOS Build Artifacts
-GuidedCaptureVision/RealityComposerAssets/
+OrtioVision/RealityComposerAssets/
 
 # Claude Code - track project settings and hooks, ignore local settings
 .claude/settings.local.json

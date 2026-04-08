@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="393" height="852" viewBox="0 0 393 852">
+  <defs>
+    <linearGradient id="videoGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2d1b69"/>
+      <stop offset="100%" stop-color="#11234a"/>
+    </linearGradient>
+    <clipPath id="screenClip">
+      <rect width="393" height="852" rx="47" ry="47"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#screenClip)">
+    <rect width="393" height="852" fill="#000000"/>
+
+    <!-- Status bar -->
+    <text x="36" y="23" fill="#FFFFFF" font-family="-apple-system, SF Pro Text, Helvetica Neue, sans-serif" font-size="15" font-weight="600">9:41</text>
+    <g transform="translate(311, 11)">
+      <rect x="0" y="5" width="3" height="7" rx="1" fill="#FFFFFF"/>
+      <rect x="5" y="3" width="3" height="9" rx="1" fill="#FFFFFF"/>
+      <rect x="10" y="1" width="3" height="11" rx="1" fill="#FFFFFF"/>
+      <rect x="15" y="0" width="3" height="12" rx="1" fill="#FFFFFF"/>
+    </g>
+    <g transform="translate(335, 11)">
+      <path d="M0,8 Q6,-6 12,8" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M2,6 Q6,-3 10,6" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="6" cy="9" r="1.5" fill="#FFFFFF"/>
+    </g>
+    <g transform="translate(352, 12)">
+      <rect x="0" y="0" width="25" height="12" rx="3" ry="3" fill="none" stroke="#FFFFFF" stroke-width="1"/>
+      <rect x="25" y="3" width="2" height="5" rx="1" fill="#FFFFFF"/>
+      <rect x="2" y="2" width="20" height="8" rx="1.5" fill="#FFFFFF"/>
+    </g>
+
+    <!-- Dynamic Island -->
+    <rect x="133.5" y="11" width="126" height="37" rx="18.5" ry="18.5" fill="#000000"/>
+
+    <!-- Cancel button -->
+    <text x="20" y="68" fill="#007AFF" font-family="-apple-system, SF Pro Text, Helvetica Neue, sans-serif" font-size="17" font-weight="400">Cancel</text>
+
+    <!-- Video area -->
+    <rect x="0" y="90" width="393" height="420" fill="url(#videoGrad)"/>
+    <!-- Play icon -->
+    <circle cx="196" cy="300" r="40" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+    <polygon points="184,278 184,322 218,300" fill="rgba(255,255,255,0.5)"/>
+    <!-- Video label -->
+    <text x="196" y="360" fill="rgba(255,255,255,0.4)" font-family="-apple-system, SF Pro Text, Helvetica Neue, sans-serif" font-size="13" font-weight="500" text-anchor="middle">TUTORIAL VIDEO</text>
+
+    <!-- Orbit indicators -->
+    <g transform="translate(133, 540)">
+      <!-- Orbit 1 - completed (green check) -->
+      <circle cx="28" cy="14" r="14" fill="#34C759"/>
+      <path d="M20,14 L25,19 L36,9" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="46" y1="14" x2="58" y2="14" stroke="#333333" stroke-width="1.5"/>
+      <!-- Orbit 2 - active (blue ring) -->
+      <circle cx="76" cy="14" r="14" fill="none" stroke="#007AFF" stroke-width="2.5"/>
+      <text x="76" y="19" fill="#007AFF" font-family="-apple-system, SF Pro Text, Helvetica Neue, sans-serif" font-size="14" font-weight="600" text-anchor="middle">2</text>
+      <line x1="94" y1="14" x2="106" y2="14" stroke="#333333" stroke-width="1.5"/>
+      <!-- Orbit 3 - empty -->
+      <circle cx="124" cy="14" r="14" fill="none" stroke="#333333" stroke-width="1.5"/>
+      <text x="124" y="19" fill="#555555" font-family="-apple-system, SF Pro Text, Helvetica Neue, sans-serif" font-size="14" font-weight="600" text-anchor="middle">3</text>
+    </g>
+
+    <!-- Title -->
+    <text x="196" y="610" fill="#FFFFFF" font-family="-apple-system, SF Pro Display, Helvetica Neue, sans-serif" font-size="22" font-weight="700" text-anchor="middle">
+      <tspan x="196" dy="0">Flip object on its side</tspan>
+      <tspan x="196" dy="28">and capture again.</tspan>
+    </text>
+
+    <!-- Detail text -->
+    <text x="196" y="678" fill="#999999" font-family="-apple-system, SF Pro Text, Helvetica Neue, sans-serif" font-size="15" font-weight="400" text-anchor="middle">
+      <tspan x="196" dy="0">Keep previously captured areas visible</tspan>
+      <tspan x="196" dy="22">so the segments can be connected.</tspan>
+    </text>
+
+    <!-- Continue button (blue bg, white text) -->
+    <rect x="20" y="738" width="353" height="50" rx="14" fill="#007AFF"/>
+    <text x="196" y="769" fill="#FFFFFF" font-family="-apple-system, SF Pro Text, Helvetica Neue, sans-serif" font-size="17" font-weight="600" text-anchor="middle">Continue</text>
+
+    <!-- Can't flip button (blue text) -->
+    <text x="196" y="815" fill="#007AFF" font-family="-apple-system, SF Pro Text, Helvetica Neue, sans-serif" font-size="17" font-weight="600" text-anchor="middle">Can't flip your object?</text>
+
+    <!-- Home indicator -->
+    <rect x="148" y="832" width="97" height="5" rx="2.5" fill="#FFFFFF" opacity="0.3"/>
+  </g>
+</svg>

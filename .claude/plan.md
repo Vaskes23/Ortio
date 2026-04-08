@@ -5,8 +5,8 @@
 The Ortio codebase has grown organically and now suffers from:
 
 1. **14 Swift files scattered in the project root** — feature code (Settings, Import, Models) lives outside any folder
-2. **5 fully duplicate files** between root and `GuidedCaptureShared/` (FileManagerProtocol, Models, User, Theme, PathConstants)
-3. **Flat `GuidedCapture/` folder** with 28 files mixing capture, onboarding, UI utilities, and app-level code
+2. **5 fully duplicate files** between root and `OrtioShared/` (FileManagerProtocol, Models, User, Theme, PathConstants)
+3. **Flat `Ortio/` folder** with 28 files mixing capture, onboarding, UI utilities, and app-level code
 4. **No feature-based grouping** — Views, ViewModels, and Models for the same feature are not co-located
 5. **Tests are flat** — all 13 test files in one directory with no sub-grouping
 
@@ -16,9 +16,9 @@ The Ortio codebase has grown organically and now suffers from:
 
 ```
 Ortio/
-├── GuidedCapture/                          # Main iOS app target
+├── Ortio/                          # Main iOS app target
 │   ├── App/                                # App entry point & root navigation
-│   │   ├── GuidedCaptureSampleApp.swift
+│   │   ├── OrtioApp.swift
 │   │   └── ContentView.swift
 │   │
 │   ├── Features/
@@ -28,7 +28,7 @@ Ortio/
 │   │   │   │   ├── CaptureOverlayView.swift
 │   │   │   │   ├── CaptureOverlayView+Buttons.swift
 │   │   │   │   ├── CaptureOverlayView+LocalizedString.swift
-│   │   │   │   ├── LoadGuidedCaptureView.swift
+│   │   │   │   ├── LoadOrtioView.swift
 │   │   │   │   ├── ModelView.swift
 │   │   │   │   ├── FeedbackView.swift
 │   │   │   │   ├── HelpPageView.swift
@@ -88,7 +88,7 @@ Ortio/
 │   ├── Preview Content/                    # (already exists)
 │   └── Info.plist
 │
-├── GuidedCaptureShared/                    # Shared framework (canonical location for shared code)
+├── OrtioShared/                    # Shared framework (canonical location for shared code)
 │   ├── Models/
 │   │   ├── Annotation.swift
 │   │   ├── Models.swift                    ← KEEP (delete root duplicate)
@@ -105,8 +105,8 @@ Ortio/
 │       ├── FileManagerProtocol.swift       ← KEEP (delete root duplicate)
 │       └── PathConstants.swift             ← KEEP (delete root duplicate)
 │
-├── GuidedCaptureVision/                    # visionOS target (unchanged)
-│   ├── GuidedCaptureVisionApp.swift
+├── OrtioVision/                    # visionOS target (unchanged)
+│   ├── OrtioVisionApp.swift
 │   ├── ViewModels/
 │   │   └── ModelViewerViewModel.swift
 │   └── Views/
@@ -115,10 +115,10 @@ Ortio/
 │       ├── ModelViewerView.swift
 │       └── SettingsView.swift
 │
-├── GuidedCaptureWidgets/                   # Widgets target (unchanged)
+├── OrtioWidgets/                   # Widgets target (unchanged)
 │   └── (4 files, unchanged)
 │
-├── GuidedCaptureTests/                     # Tests (restructured)
+├── OrtioTests/                     # Tests (restructured)
 │   ├── Features/
 │   │   ├── Import/
 │   │   │   ├── ImportTests.swift
@@ -135,7 +135,7 @@ Ortio/
 │   │   └── SwiftDataModelTests.swift
 │   ├── Core/
 │   │   ├── BindingExtensionTests.swift
-│   │   └── GuidedCaptureTests.swift
+│   │   └── OrtioTests.swift
 │   └── Mocks/
 │       ├── FileManagerMocks.swift
 │       └── MockNetworkService.swift
@@ -152,15 +152,15 @@ Ortio/
 
 ### Phase 1: Delete Duplicate Files (Low Risk)
 
-**Goal:** Eliminate the 5 identical duplicate files from the project root. The canonical versions in `GuidedCaptureShared/` are kept.
+**Goal:** Eliminate the 5 identical duplicate files from the project root. The canonical versions in `OrtioShared/` are kept.
 
-| Delete (root)               | Keep (GuidedCaptureShared)                        |
+| Delete (root)               | Keep (OrtioShared)                        |
 |----------------------------|--------------------------------------------------|
-| `./FileManagerProtocol.swift` | `GuidedCaptureShared/Utilities/FileManagerProtocol.swift` |
-| `./Models.swift`            | `GuidedCaptureShared/Models/Models.swift`         |
-| `./Theme.swift`             | `GuidedCaptureShared/Models/Theme.swift`          |
-| `./User.swift`              | `GuidedCaptureShared/Models/User.swift`           |
-| `./PathConstants.swift`     | `GuidedCaptureShared/Utilities/PathConstants.swift` |
+| `./FileManagerProtocol.swift` | `OrtioShared/Utilities/FileManagerProtocol.swift` |
+| `./Models.swift`            | `OrtioShared/Models/Models.swift`         |
+| `./Theme.swift`             | `OrtioShared/Models/Theme.swift`          |
+| `./User.swift`              | `OrtioShared/Models/User.swift`           |
+| `./PathConstants.swift`     | `OrtioShared/Utilities/PathConstants.swift` |
 
 **Risk:** If the Xcode project references the root copies (not the Shared ones), removing them will break the build. Must check `project.pbxproj` file references first and update them to point to the Shared versions.
 
@@ -170,32 +170,32 @@ Ortio/
 
 ### Phase 2: Create Feature Directories & Move Root Files (Medium Risk)
 
-**Goal:** Move the 9 remaining root-level feature files into proper feature folders under `GuidedCapture/Features/`.
+**Goal:** Move the 9 remaining root-level feature files into proper feature folders under `Ortio/Features/`.
 
 Create directories:
 ```
-GuidedCapture/Features/Models/Views/
-GuidedCapture/Features/Models/ViewModels/
-GuidedCapture/Features/Models/Models/
-GuidedCapture/Features/Import/Views/
-GuidedCapture/Features/Import/ViewModels/
-GuidedCapture/Features/Import/Models/
-GuidedCapture/Features/Settings/Views/
-GuidedCapture/Features/Settings/ViewModels/
+Ortio/Features/Models/Views/
+Ortio/Features/Models/ViewModels/
+Ortio/Features/Models/Models/
+Ortio/Features/Import/Views/
+Ortio/Features/Import/ViewModels/
+Ortio/Features/Import/Models/
+Ortio/Features/Settings/Views/
+Ortio/Features/Settings/ViewModels/
 ```
 
 Move files:
 | From (root)             | To                                                    |
 |------------------------|-------------------------------------------------------|
-| `ModelsView.swift`      | `GuidedCapture/Features/Models/Views/`                |
-| `ModelsViewModel.swift`  | `GuidedCapture/Features/Models/ViewModels/`           |
-| `ModelsModel.swift`      | `GuidedCapture/Features/Models/Models/`               |
-| `ImportView.swift`       | `GuidedCapture/Features/Import/Views/`                |
-| `ImportViewModel.swift`   | `GuidedCapture/Features/Import/ViewModels/`           |
-| `ImportModel.swift`       | `GuidedCapture/Features/Import/Models/`               |
-| `SettingsView.swift`      | `GuidedCapture/Features/Settings/Views/`              |
-| `SettingsViewModel.swift`  | `GuidedCapture/Features/Settings/ViewModels/`         |
-| `EditProfileView.swift`    | `GuidedCapture/Features/Settings/Views/`              |
+| `ModelsView.swift`      | `Ortio/Features/Models/Views/`                |
+| `ModelsViewModel.swift`  | `Ortio/Features/Models/ViewModels/`           |
+| `ModelsModel.swift`      | `Ortio/Features/Models/Models/`               |
+| `ImportView.swift`       | `Ortio/Features/Import/Views/`                |
+| `ImportViewModel.swift`   | `Ortio/Features/Import/ViewModels/`           |
+| `ImportModel.swift`       | `Ortio/Features/Import/Models/`               |
+| `SettingsView.swift`      | `Ortio/Features/Settings/Views/`              |
+| `SettingsViewModel.swift`  | `Ortio/Features/Settings/ViewModels/`         |
+| `EditProfileView.swift`    | `Ortio/Features/Settings/Views/`              |
 
 **Risk:** Xcode project file references must be updated. Moving files on disk alone is not enough — `project.pbxproj` has hardcoded relative paths.
 
@@ -203,34 +203,34 @@ Move files:
 
 ---
 
-### Phase 3: Organize GuidedCapture/ Into Sub-groups (Medium Risk)
+### Phase 3: Organize Ortio/ Into Sub-groups (Medium Risk)
 
-**Goal:** Group the 28 files in `GuidedCapture/` into logical sub-folders.
+**Goal:** Group the 28 files in `Ortio/` into logical sub-folders.
 
 Create directories:
 ```
-GuidedCapture/App/
-GuidedCapture/Features/Capture/Views/
-GuidedCapture/Features/Capture/ViewModels/
-GuidedCapture/Features/Capture/Models/
-GuidedCapture/Features/Capture/Utilities/
-GuidedCapture/Features/Onboarding/Views/
-GuidedCapture/Features/Onboarding/ViewModels/
-GuidedCapture/SharedUI/
+Ortio/App/
+Ortio/Features/Capture/Views/
+Ortio/Features/Capture/ViewModels/
+Ortio/Features/Capture/Models/
+Ortio/Features/Capture/Utilities/
+Ortio/Features/Onboarding/Views/
+Ortio/Features/Onboarding/ViewModels/
+Ortio/SharedUI/
 ```
 
 Move files:
 
 **App/ (2 files):**
-- `GuidedCaptureSampleApp.swift` → `GuidedCapture/App/`
-- `ContentView.swift` → `GuidedCapture/App/`
+- `OrtioApp.swift` → `Ortio/App/`
+- `ContentView.swift` → `Ortio/App/`
 
 **Features/Capture/Views/ (9 files):**
 - `CapturePrimaryView.swift`
 - `CaptureOverlayView.swift`
 - `CaptureOverlayView+Buttons.swift`
 - `CaptureOverlayView+LocalizedString.swift`
-- `LoadGuidedCaptureView.swift`
+- `LoadOrtioView.swift`
 - `ModelView.swift`
 - `FeedbackView.swift`
 - `HelpPageView.swift`
@@ -273,12 +273,12 @@ Move files:
 
 Create directories:
 ```
-GuidedCaptureTests/Features/Import/
-GuidedCaptureTests/Features/Models/
-GuidedCaptureTests/Features/Settings/
-GuidedCaptureTests/Shared/
-GuidedCaptureTests/Core/
-GuidedCaptureTests/Mocks/       (rename from mocks/)
+OrtioTests/Features/Import/
+OrtioTests/Features/Models/
+OrtioTests/Features/Settings/
+OrtioTests/Shared/
+OrtioTests/Core/
+OrtioTests/Mocks/       (rename from mocks/)
 ```
 
 Move files:
@@ -294,7 +294,7 @@ Move files:
 | `ModelStructTests.swift`            | `Shared/`                                 |
 | `SwiftDataModelTests.swift`         | `Shared/`                                 |
 | `BindingExtensionTests.swift`       | `Core/`                                   |
-| `GuidedCaptureTests.swift`          | `Core/`                                   |
+| `OrtioTests.swift`          | `Core/`                                   |
 | `mocks/FileManagerMocks.swift`      | `Mocks/`                                  |
 | `mocks/MockNetworkService.swift`    | `Mocks/`                                  |
 
@@ -317,7 +317,7 @@ After each phase, the `project.pbxproj` file must be updated to reflect the new 
 | 1 | 1 | Check which duplicate files Xcode references | None | Read project.pbxproj |
 | 2 | 1 | Delete 5 duplicate root files | Low | Build succeeds |
 | 3 | 2 | Create feature dirs, move 9 root files | Medium | Build succeeds |
-| 4 | 3 | Create sub-dirs in GuidedCapture/, move 28 files | Medium | Build succeeds |
+| 4 | 3 | Create sub-dirs in Ortio/, move 28 files | Medium | Build succeeds |
 | 5 | 4 | Reorganize test files | Low | Tests pass |
 | 6 | 5 | Update project.pbxproj (or regenerate via XcodeGen) | Medium | Full build + test |
 | 7 | — | Update CLAUDE.md to reflect new structure | None | — |
@@ -341,5 +341,5 @@ After each phase, the `project.pbxproj` file must be updated to reflect the new 
 - **No code modifications** — only file moves and deletions
 - **No renaming** of types, functions, or files
 - **No architectural changes** to AppDataModel (splitting it would be a separate task)
-- **GuidedCaptureVision/** and **GuidedCaptureWidgets/** — unchanged (separate targets)
-- **GuidedCaptureShared/** internal organization — unchanged (already well-structured)
+- **OrtioVision/** and **OrtioWidgets/** — unchanged (separate targets)
+- **OrtioShared/** internal organization — unchanged (already well-structured)

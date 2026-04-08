@@ -5,7 +5,8 @@
       "command": "npx",
       "args": ["-y", "xcodebuildmcp@latest", "mcp"],
       "env": {
-        "XCODEBUILDMCP_SENTRY_DISABLED": "true"
+        "XCODEBUILDMCP_SENTRY_DISABLED": "true",
+        "XCODEBUILDMCP_ENABLED_WORKFLOWS": "simulator,ui-automation"
       }
     }
   }
