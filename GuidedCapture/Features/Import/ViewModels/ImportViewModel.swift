@@ -42,16 +42,16 @@ class ImportViewModel {
 
     /// Creates a new timestamped scan directory under `Documents/Scans/`.
     /// Returns the directory URL, or nil if creation fails.
-    internal func createNewScanDirectory() -> URL? {
-        repository.createNewScanDirectory()
+    internal func createNewScanDirectory() async -> URL? {
+        await repository.createNewScanDirectory()
     }
 
     // MARK: - Import Operations
 
     /// Deletes models at the given offsets, removing both the file system directory and SwiftData record.
-    func deleteModel(at offsets: IndexSet, from storedModels: [Models], context: ModelContext) {
+    func deleteModel(at offsets: IndexSet, from storedModels: [Models], context: ModelContext) async {
         do {
-            try repository.deleteImportedModels(at: offsets, from: storedModels, context: context)
+            try await repository.deleteImportedModels(at: offsets, from: storedModels, context: context)
         } catch {
             Self.logger.error("Error deleting imported model: \(error.localizedDescription)")
             errorMessage = "Delete failed: \(error.localizedDescription)"
@@ -59,12 +59,12 @@ class ImportViewModel {
     }
 
     /// Processes the result of the file importer, importing each selected file.
-    func handleImport(result: Result<[URL], Error>, existingModels: [Models], context: ModelContext) {
+    func handleImport(result: Result<[URL], Error>, existingModels: [Models], context: ModelContext) async {
         switch result {
         case .success(let urls):
             for url in urls {
                 do {
-                    try repository.importFile(url, existingModels: existingModels, context: context)
+                    try await repository.importFile(url, existingModels: existingModels, context: context)
                 } catch {
                     Self.logger.error("File handling error: \(error.localizedDescription)")
                     errorMessage = "Import failed: \(error.localizedDescription)"

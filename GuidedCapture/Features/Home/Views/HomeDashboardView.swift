@@ -27,6 +27,8 @@ struct HomeDashboardView: View {
     @State private var showingCapture = false
     @State private var showingImportLibrary = false
     @State private var showingHelp = false
+    @State private var hasBootstrappedLibrary = false
+    @State private var libraryRefreshToken = 0
     @State private var searchAnimationTask: Task<Void, Never>?
     @FocusState private var isSearchFieldFocused: Bool
 
@@ -38,23 +40,6 @@ struct HomeDashboardView: View {
 
     private var displayedItems: [LibraryItem] {
         searchTransition.usesSearchResults ? searchViewModel.filteredItems : filteredItems
-    }
-
-    private var storedModelRefreshKey: String {
-        let importedKey = storedModels
-            .map {
-                [
-                    $0.name, $0.displayName ?? "", "\($0.favorite)",
-                    $0.notes ?? "", $0.sampleSeedID ?? "",
-                    $0.model.path, "\($0.date.timeIntervalSinceReferenceDate)"
-                ].joined(separator: "|")
-            }
-            .joined(separator: "\n")
-        let capturedKey = capturedMetadata
-            .sorted { $0.modelURL.path < $1.modelURL.path }
-            .map { "\($0.modelURL.path)|\($0.favorite)|\($0.displayName ?? "")|\($0.notes ?? "")" }
-            .joined(separator: "\n")
-        return importedKey + "\n" + capturedKey
     }
 
     private var capturedMetadataByURL: [URL: CapturedModelMetadataSnapshot] {
@@ -145,20 +130,19 @@ struct HomeDashboardView: View {
         }
         .toolbar(.hidden, for: .navigationBar)
         .task {
-            libraryRepository.normalizeImportedModelDisplayNamesIfNeeded(models: storedModels, context: modelContext)
-            libraryRepository.seedSampleModelsIfNeeded(existingModels: storedModels, context: modelContext)
-            libraryRepository.pruneMissingImportedModelsIfNeeded(models: storedModels, context: modelContext)
-            refreshCapturedItems()
+            await bootstrapLibraryIfNeeded()
         }
-        .task(id: storedModelRefreshKey) {
+        .task(id: libraryRefreshToken) {
             searchViewModel.updateImportedModels(storedModels)
-            refreshCapturedItems()
+            await refreshCapturedItems()
         }
         .onChange(of: scenePhase) { _, newPhase in
             if newPhase == .active {
-                refreshCapturedItems()
+                requestLibraryRefresh()
             }
         }
+        .onChange(of: storedModels.count) { _, _ in requestLibraryRefresh() }
+        .onChange(of: capturedMetadata.count) { _, _ in requestLibraryRefresh() }
         .fullScreenCover(isPresented: $showingSettings) {
             SettingsView()
         }
@@ -221,6 +205,19 @@ struct HomeDashboardView: View {
         } message: {
             Text(searchViewModel.errorMessage ?? "")
         }
+    }
+
+    private func requestLibraryRefresh() {
+        libraryRefreshToken &+= 1
+    }
+
+    private func bootstrapLibraryIfNeeded() async {
+        guard !hasBootstrappedLibrary else { return }
+        hasBootstrappedLibrary = true
+        libraryRepository.normalizeImportedModelDisplayNamesIfNeeded(models: storedModels, context: modelContext)
+        libraryRepository.seedSampleModelsIfNeeded(existingModels: storedModels, context: modelContext)
+        await libraryRepository.pruneMissingImportedModelsIfNeeded(models: storedModels, context: modelContext)
+        requestLibraryRefresh()
     }
 
     private func selectItem(_ item: LibraryItem) {
@@ -289,8 +286,8 @@ struct HomeDashboardView: View {
         }
     }
 
-    private func refreshCapturedItems() {
-        searchViewModel.refreshCapturedItems(metadataByURL: capturedMetadataByURL)
+    private func refreshCapturedItems() async {
+        await searchViewModel.refreshCapturedItems(metadataByURL: capturedMetadataByURL)
     }
 
     private func presentRename(for item: LibraryItem) {
@@ -317,8 +314,7 @@ struct HomeDashboardView: View {
                 capturedMetadata: capturedMetadata,
                 context: modelContext
             )
-            refreshCapturedItems()
-            searchViewModel.updateImportedModels(storedModels)
+            requestLibraryRefresh()
         } catch {
             searchViewModel.errorMessage = "Could not update favorite: \(error.localizedDescription)"
         }
@@ -333,8 +329,7 @@ struct HomeDashboardView: View {
                 capturedMetadata: capturedMetadata,
                 context: modelContext
             )
-            refreshCapturedItems()
-            searchViewModel.updateImportedModels(storedModels)
+            requestLibraryRefresh()
             return true
         } catch {
             searchViewModel.errorMessage = "Could not rename model: \(error.localizedDescription)"
@@ -352,8 +347,7 @@ struct HomeDashboardView: View {
                 context: modelContext
             )
             expandedNotesItemIDs.insert(item.id)
-            refreshCapturedItems()
-            searchViewModel.updateImportedModels(storedModels)
+            requestLibraryRefresh()
             return true
         } catch {
             searchViewModel.errorMessage = "Could not update notes: \(error.localizedDescription)"

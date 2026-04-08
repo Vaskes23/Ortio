@@ -31,7 +31,7 @@ final class ImportTests: XCTestCase {
         XCTAssertEqual(String(folderName.dropFirst("Model_".count)).count, 14)
     }
 
-    func testCreateNewScanDirectoryFailure() throws {
+    func testCreateNewScanDirectoryFailure() async throws {
         // Arrange
         mockFileManager.urlStub = { _, _, _, _ in
             URL(fileURLWithPath: "/path/to/Scans")
@@ -41,7 +41,7 @@ final class ImportTests: XCTestCase {
         }
         
         // Act
-        let newScanDirectory = viewModel.createNewScanDirectory()
+        let newScanDirectory = await viewModel.createNewScanDirectory()
         
         // Assert
         XCTAssertNil(newScanDirectory)

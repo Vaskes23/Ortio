@@ -105,7 +105,9 @@ struct ModelsView: View {
                     .sensoryFeedback(.selection, trigger: showingHelp)
                 }
             }
-            .onAppear(perform: viewModel.loadModelsFromDirectories)
+            .task {
+                await viewModel.loadModelsFromDirectories()
+            }
             .fullScreenCover(item: $viewModel.selectedModelForPreview, onDismiss: {
                 viewModel.selectedModelForPreview = nil
             }, content: { item in

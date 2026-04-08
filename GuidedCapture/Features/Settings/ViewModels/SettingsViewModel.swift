@@ -52,20 +52,19 @@ class SettingsViewModel {
     }
 
     /// Loads the existing user from SwiftData, or creates a default one if none exists.
-    func loadUser(from users: [User], context: ModelContext, themeController: ThemeController) {
+    func loadUser(from users: [User], context: ModelContext) {
         do {
             user = try repository.loadOrCreateUser(from: users, context: context)
             name = user.name
-            themeController.apply(theme: user.theme)
         } catch {
             Self.logger.error("Failed to load user: \(error)")
             errorMessage = "Failed to load settings: \(error.localizedDescription)"
         }
     }
 
-    func saveTheme(using themeController: ThemeController, context: ModelContext) {
+    func saveTheme(_ theme: Theme, context: ModelContext) {
         do {
-            try repository.saveTheme(themeController.selectedTheme, for: user, context: context)
+            try repository.saveTheme(theme, for: user, context: context)
         } catch {
             Self.logger.error("Failed to save theme: \(error)")
             errorMessage = "Failed to save theme: \(error.localizedDescription)"

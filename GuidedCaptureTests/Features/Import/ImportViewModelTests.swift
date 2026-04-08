@@ -63,20 +63,20 @@ final class ImportViewModelTests: XCTestCase {
 
     // MARK: - createNewScanDirectory Tests
 
-    func testCreateNewScanDirectoryFailureWhenDocumentsDirectoryNotFound() throws {
+    func testCreateNewScanDirectoryFailureWhenDocumentsDirectoryNotFound() async throws {
         // Arrange
         mockFileManager.urlStub = { _, _, _, _ in
             throw NSError(domain: "Test", code: 1, userInfo: [NSLocalizedDescriptionKey: "Documents directory not found"])
         }
 
         // Act
-        let result = viewModel.createNewScanDirectory()
+        let result = await viewModel.createNewScanDirectory()
 
         // Assert
         XCTAssertNil(result)
     }
 
-    func testCreateNewScanDirectoryFailureWhenDirectoryCreationFails() throws {
+    func testCreateNewScanDirectoryFailureWhenDirectoryCreationFails() async throws {
         // Arrange
         let documentsURL = URL(fileURLWithPath: "/path/to/Documents")
 
@@ -89,13 +89,13 @@ final class ImportViewModelTests: XCTestCase {
         }
 
         // Act
-        let result = viewModel.createNewScanDirectory()
+        let result = await viewModel.createNewScanDirectory()
 
         // Assert
         XCTAssertNil(result)
     }
 
-    func testCreateNewScanDirectoryFailureWhenDirectoryDoesNotExistAfterCreation() throws {
+    func testCreateNewScanDirectoryFailureWhenDirectoryDoesNotExistAfterCreation() async throws {
         // Arrange
         let documentsURL = URL(fileURLWithPath: "/path/to/Documents")
 
@@ -112,13 +112,13 @@ final class ImportViewModelTests: XCTestCase {
         }
 
         // Act
-        let result = viewModel.createNewScanDirectory()
+        let result = await viewModel.createNewScanDirectory()
 
         // Assert
         XCTAssertNil(result)
     }
 
-    func testCreateNewScanDirectoryFailureWhenDirectoryDoesNotExist() throws {
+    func testCreateNewScanDirectoryFailureWhenDirectoryDoesNotExist() async throws {
         // Arrange
         let documentsURL = URL(fileURLWithPath: "/path/to/Documents")
 
@@ -129,13 +129,13 @@ final class ImportViewModelTests: XCTestCase {
         mockFileManager.fileExistsStub = { _, _ in false }
 
         // Act
-        let result = viewModel.createNewScanDirectory()
+        let result = await viewModel.createNewScanDirectory()
 
         // Assert
         XCTAssertNil(result)
     }
 
-    func testCreateNewScanDirectorySuccess() {
+    func testCreateNewScanDirectorySuccess() async {
         let documentsURL = URL(fileURLWithPath: "/path/to/Documents")
 
         mockFileManager.urlStub = { _, _, _, _ in documentsURL }
@@ -147,7 +147,7 @@ final class ImportViewModelTests: XCTestCase {
             return false
         }
 
-        let result = viewModel.createNewScanDirectory()
+        let result = await viewModel.createNewScanDirectory()
 
         XCTAssertNotNil(result)
         XCTAssertEqual(mockFileManager.createDirectoryCallCount, 1)

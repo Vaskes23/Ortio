@@ -14,6 +14,7 @@ struct GuidedCaptureSampleApp: App {
 
     @StateObject private var themeController = ThemeController()
     @Query private var users: [User]
+    private var themeRefreshKey: String { users.first?.theme.rawValue ?? "missing-user" }
 
     var body: some Scene {
         WindowGroup {
@@ -21,7 +22,7 @@ struct GuidedCaptureSampleApp: App {
                 ContentView()
                     .environmentObject(themeController)
                     .preferredColorScheme(themeController.selectedTheme.colorScheme)
-                    .onAppear {
+                    .task(id: themeRefreshKey) {
                         themeController.applyStoredTheme(from: users)
                     }
             }

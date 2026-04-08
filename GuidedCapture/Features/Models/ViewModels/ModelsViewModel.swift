@@ -46,9 +46,9 @@ class ModelsViewModel {
         }
     }
 
-    func loadModelsFromDirectories() {
+    func loadModelsFromDirectories() async {
         do {
-            let modelURLs = try repository.capturedModelURLs()
+            let modelURLs = try await repository.capturedModelURLs()
             let usdzURLs = modelURLs.filter { $0.pathExtension == "usdz" }
             models = usdzURLs.map { ModelsModel.IdentifiableCaptureURL(url: $0) }
         } catch {
@@ -57,7 +57,7 @@ class ModelsViewModel {
         }
     }
 
-    func urlsInAllModelsFolders() throws -> [URL] {
-        try repository.capturedModelURLs()
+    func urlsInAllModelsFolders() async throws -> [URL] {
+        try await repository.capturedModelURLs()
     }
 }

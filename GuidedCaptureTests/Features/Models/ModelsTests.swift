@@ -25,7 +25,7 @@ final class ModelsTests: XCTestCase {
         viewModel = nil
     }
 
-    func testUrlsInAllModelsFolders() throws {
+    func testUrlsInAllModelsFolders() async throws {
         // Arrange
         let expectedURLs = [
             URL(fileURLWithPath: "/path/to/Documents/Scans/Session1/Models/model1.usdz"),
@@ -51,13 +51,13 @@ final class ModelsTests: XCTestCase {
         }
 
         // Act
-        let modelURLs = try viewModel.urlsInAllModelsFolders()
+        let modelURLs = try await viewModel.urlsInAllModelsFolders()
 
         // Assert
         XCTAssertEqual(modelURLs, expectedURLs)
     }
 
-    func testLoadModelsFromDirectories() throws {
+    func testLoadModelsFromDirectories() async throws {
         // Arrange
         let expectedURLs = [
             URL(fileURLWithPath: "/path/to/Documents/Scans/Session1/Models/model1.usdz"),
@@ -82,17 +82,7 @@ final class ModelsTests: XCTestCase {
             path == "/path/to/Documents/Scans/Session1/Models"
         }
         
-        let expectation = self.expectation(description: "Load models from directories")
-        
-        // Act
-        viewModel.loadModelsFromDirectories()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            // Assert
-            XCTAssertEqual(self.viewModel.models.map { $0.url }, expectedURLs)
-            expectation.fulfill()
-        }
-        
-        waitForExpectations(timeout: 20, handler: nil)
+        await viewModel.loadModelsFromDirectories()
+        XCTAssertEqual(viewModel.models.map { $0.url }, expectedURLs)
     }
 }

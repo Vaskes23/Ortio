@@ -92,21 +92,14 @@ final class GuidedCaptureTests: XCTestCase {
 
     // MARK: - Performance Tests
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        measure {
-            // Put the code you want to measure the time of here.
-            let mockFileManager = MockFileManager()
-            let viewModel = ModelsViewModel(fileManager: mockFileManager)
-
-            // Setup realistic file system
-            mockFileManager.setupRealisticFileSystem()
-
-            // Perform operations
-            for _ in 0..<100 {
-                _ = try? viewModel.urlsInAllModelsFolders()
-            }
+    func testPerformanceExample() async throws {
+        let mockFileManager = MockFileManager()
+        let viewModel = ModelsViewModel(fileManager: mockFileManager)
+        mockFileManager.setupRealisticFileSystem()
+        for _ in 0..<100 {
+            _ = try? await viewModel.urlsInAllModelsFolders()
         }
+        XCTAssertGreaterThan(mockFileManager.contentsOfDirectoryCallCount, 0)
     }
 
     // MARK: - Test Coverage Verification
@@ -132,7 +125,7 @@ final class GuidedCaptureTests: XCTestCase {
 
     // MARK: - Mock Verification Tests
 
-    func testMockFileManagerCallTracking() {
+    func testMockFileManagerCallTracking() async {
         // Arrange
         let mockFileManager = MockFileManager()
         let viewModel = ModelsViewModel(fileManager: mockFileManager)
@@ -142,7 +135,7 @@ final class GuidedCaptureTests: XCTestCase {
         mockFileManager.setupSuccessfulDirectoryListing(at: URL(fileURLWithPath: "/test/Scans"), returning: [])
 
         // Act
-        _ = try? viewModel.urlsInAllModelsFolders()
+        _ = try? await viewModel.urlsInAllModelsFolders()
 
         // Assert
         XCTAssertGreaterThan(mockFileManager.urlCallCount, 0)
