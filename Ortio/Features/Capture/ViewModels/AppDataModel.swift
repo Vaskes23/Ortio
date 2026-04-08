@@ -8,17 +8,19 @@ A data model that maintains the state of the app.
 import Combine
 import RealityKit
 import SwiftUI
-import SwiftData
 import os
 
 @MainActor
 @available(iOS 17.0, *)
 class AppDataModel: ObservableObject, Identifiable {
+    private enum CaptureModelError: LocalizedError {
+        case missingCaptureFolders
+    }
+
     let logger = Logger(subsystem: OrtioApp.subsystem,
                                 category: "AppDataModel")
-
-    /// The currently selected theme for the app (light, dark, or system).
-    @Published var selectedTheme: Theme = .system
+    private let captureStorage: any LibraryFileStoreProtocol
+    private let captureFileManager: FileManagerProtocol
 
     /// The session that manages the object capture phase.
     ///
@@ -33,9 +35,9 @@ class AppDataModel: ObservableObject, Identifiable {
         }
     }
 
-    static let minNumImages = 10
+    nonisolated(unsafe) static let minNumImages = 10
 
-    static let bundleForLocalizedStrings = { return Bundle.main }() // swiftlint:disable:this implicit_return
+    nonisolated(unsafe) static let bundleForLocalizedStrings = { return Bundle.main }() // swiftlint:disable:this implicit_return
 
     /// The object that manages the reconstruction process of a set of images of an object into a 3D model.
     ///
@@ -43,7 +45,7 @@ class AppDataModel: ObservableObject, Identifiable {
     private(set) var photogrammetrySession: PhotogrammetrySession?
 
     /// The folder set when a new capture session starts.
-    private(set) var scanFolderManager: CaptureFolderManager!
+    private(set) var scanFolderManager: CaptureFolderManager?
 
     @Published var messageList = TimedMessageList()
 
@@ -87,19 +89,36 @@ class AppDataModel: ObservableObject, Identifiable {
     /// ``objectCaptureSession``.
     @Published private(set) var showPreviewModel = false
 
-    private init(objectCaptureSession: ObjectCaptureSession) {
+    private var captureStartupTask: Task<Void, Never>?
+    private var cleanupTask: Task<Void, Never>?
+
+    private init(
+        objectCaptureSession: ObjectCaptureSession,
+        captureStorage: any LibraryFileStoreProtocol,
+        captureFileManager: FileManagerProtocol
+    ) {
+        self.captureStorage = captureStorage
+        self.captureFileManager = captureFileManager
         self.objectCaptureSession = objectCaptureSession
         state = .ready
     }
 
     // Leaves the model state in ready.
-    init() {
+    init(
+        captureStorage: any LibraryFileStoreProtocol = LibraryFileStore(),
+        captureFileManager: FileManagerProtocol = FileManager.default
+    ) {
+        self.captureStorage = captureStorage
+        self.captureFileManager = captureFileManager
         state = .ready
+        performStateTransition(from: .notSet, to: .ready)
     }
 
     deinit {
-        DispatchQueue.main.async {
-            self.detachListeners()
+        captureStartupTask?.cancel()
+        cleanupTask?.cancel()
+        for task in tasks {
+            task.cancel()
         }
     }
 
@@ -169,16 +188,21 @@ class AppDataModel: ObservableObject, Identifiable {
     }
 
     /// Creates a new object capture session.
-    private func startNewCapture() -> Bool {
+    private func startNewCapture() async -> Bool {
         logger.log("startNewCapture() called...")
         if !ObjectCaptureSession.isSupported {
             logger.warning("ObjectCaptureSession is not supported on this device. Skipping capture setup.")
             return false
         }
 
-        guard let folderManager = CaptureFolderManager() else {
+        guard let rootScanFolder = await captureStorage.createNewScanDirectory() else {
             return false
         }
+        guard let layout = await captureStorage.prepareCaptureDirectories(in: rootScanFolder) else {
+            await captureStorage.removeTransientCaptureArtifacts(in: rootScanFolder, preservingModels: false)
+            return false
+        }
+        let folderManager = CaptureFolderManager(layout: layout, fileManager: captureFileManager)
 
         scanFolderManager = folderManager
         objectCaptureSession = ObjectCaptureSession()
@@ -188,12 +212,12 @@ class AppDataModel: ObservableObject, Identifiable {
         }
 
         var configuration = ObjectCaptureSession.Configuration()
-        configuration.checkpointDirectory = scanFolderManager.snapshotsFolder
+        configuration.checkpointDirectory = folderManager.snapshotsFolder
         configuration.isOverCaptureEnabled = true
         logger.log("Enabling overcapture...")
 
         // Starts the initial segment and sets the output locations.
-        session.start(imagesDirectory: scanFolderManager.imagesFolder,
+        session.start(imagesDirectory: folderManager.imagesFolder,
                       configuration: configuration)
 
         if case let .failed(error) = session.state {
@@ -220,7 +244,9 @@ class AppDataModel: ObservableObject, Identifiable {
     /// and ``ModelState/reconstructing``.
     private func startReconstruction() throws {
         logger.debug("startReconstruction() called.")
-
+        guard let scanFolderManager else {
+            throw CaptureModelError.missingCaptureFolders
+        }
         var configuration = PhotogrammetrySession.Configuration()
         configuration.checkpointDirectory = scanFolderManager.snapshotsFolder
         photogrammetrySession = try PhotogrammetrySession(
@@ -281,6 +307,7 @@ class AppDataModel: ObservableObject, Identifiable {
         currentFeedback = feedback
     }
 
+    // swiftlint:disable:next cyclomatic_complexity
     private func performStateTransition(from fromState: ModelState, to toState: ModelState) {
         if fromState == .failed {
             error = nil
@@ -288,36 +315,45 @@ class AppDataModel: ObservableObject, Identifiable {
 
         switch toState {
             case .ready:
-                guard startNewCapture() else {
-                    logger.error("Starting new capture failed!")
-                    break
+                captureStartupTask?.cancel()
+                captureStartupTask = Task { [weak self] in
+                    guard let self else { return }
+                    guard await self.startNewCapture() else {
+                        self.logger.error("Starting new capture failed!")
+                        return
+                    }
                 }
             case .capturing:
                 orbitState = .initial
             case .prepareToReconstruct:
-                // Cleans up the session to free GPU and memory resources.
                 objectCaptureSession = nil
                 do {
                     try startReconstruction()
                 } catch {
                     logger.error("Reconstructing failed!")
+                    switchToErrorState(error: error)
                 }
-            case .restart, .completed:
+            case .restart:
+                scheduleCaptureCleanup(preservingModels: false)
+                reset()
+            case .completed:
                 reset()
             case .viewing:
                 photogrammetrySession = nil
-
-                // Removes snapshots folder to free up space after generating the model.
-                let snapshotsFolder = scanFolderManager.snapshotsFolder
-                DispatchQueue.global(qos: .background).async {
-                    try? FileManager.default.removeItem(at: snapshotsFolder)
-                }
-
+                scheduleCaptureCleanup(preservingModels: true)
             case .failed:
+                scheduleCaptureCleanup(preservingModels: false)
                 logger.error("App failed state error=\(String(describing: self.error!))") // swiftlint:disable:this force_unwrapping
-                // Shows error screen.
             default:
                 break
+        }
+    }
+
+    private func scheduleCaptureCleanup(preservingModels: Bool) {
+        cleanupTask?.cancel()
+        guard let rootScanFolder = scanFolderManager?.rootScanFolder else { return }
+        cleanupTask = Task { [captureStorage] in
+            await captureStorage.removeTransientCaptureArtifacts(in: rootScanFolder, preservingModels: preservingModels)
         }
     }
 
@@ -337,28 +373,6 @@ class AppDataModel: ObservableObject, Identifiable {
         }
         return currentState
     }
-
-    // MARK: - Theme Management
-
-    /// Loads the theme preference from the first user in SwiftData.
-    func loadTheme(from users: [User]) {
-        if let user = users.first {
-            selectedTheme = user.theme
-            logger.debug("Loaded theme: \(user.theme.description)")
-        }
-    }
-
-    /// Saves the currently selected theme to the user's SwiftData record.
-    func saveTheme(user: User, context: ModelContext) {
-        user.theme = selectedTheme
-        do {
-            try context.save()
-            logger.debug("Saved theme: \(self.selectedTheme.description)")
-        } catch {
-            logger.error("Failed to save theme: \(error)")
-        }
-    }
-
 }
 
 extension AppDataModel {

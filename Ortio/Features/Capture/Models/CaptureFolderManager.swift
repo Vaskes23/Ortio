@@ -5,7 +5,6 @@ Abstract:
 A class that supports the creation, listing, and filename support of a capture folder.
 */
 
-import Dispatch
 import Foundation
 import os
 
@@ -14,6 +13,7 @@ class CaptureFolderManager: ObservableObject {
                                 category: "CaptureFolderManager")
 
     private let logger = CaptureFolderManager.logger
+    private let fileManager: FileManagerProtocol
     
 //    @Query(sort: \CreatedModels.date, order: .reverse) var storedModels: [CreatedModels]
 
@@ -32,28 +32,12 @@ class CaptureFolderManager: ObservableObject {
 
     @Published var shots: [ShotFileInfo] = []
 
-    init?() {
-        guard let newFolder = CaptureFolderManager.createNewScanDirectory() else {
-            logger.error("Unable to create a new scan directory.")
-            return nil
-        }
-        rootScanFolder = newFolder
-
-        // Creates the subdirectories.
-        imagesFolder = newFolder.appendingPathComponent("Images/")
-        guard CaptureFolderManager.createDirectoryRecursively(imagesFolder) else {
-            return nil
-        }
-
-        snapshotsFolder = newFolder.appendingPathComponent("Snapshots/")
-        guard CaptureFolderManager.createDirectoryRecursively(snapshotsFolder) else {
-            return nil
-        }
-
-        modelsFolder = newFolder.appendingPathComponent("Models/")
-        guard CaptureFolderManager.createDirectoryRecursively(modelsFolder) else {
-            return nil
-        }
+    init(layout: CaptureDirectoryLayout, fileManager: FileManagerProtocol = FileManager.default) {
+        self.fileManager = fileManager
+        rootScanFolder = layout.rootScanFolder
+        imagesFolder = layout.imagesFolder
+        snapshotsFolder = layout.snapshotsFolder
+        modelsFolder = layout.modelsFolder
     }
 
     func loadShots() async throws {
@@ -61,7 +45,7 @@ class CaptureFolderManager: ObservableObject {
 
         var newShots: [ShotFileInfo] = []
 
-        let imgUrls = try FileManager.default
+        let imgUrls = try fileManager
             .contentsOfDirectory(at: imagesFolder,
                                  includingPropertiesForKeys: [],
                                  options: [.skipsHiddenFiles])
@@ -128,88 +112,7 @@ class CaptureFolderManager: ObservableObject {
             .appendingPathExtension(heicImageExtension)
     }
 
-    /// Creates a new Scans directory based on the current timestamp in the top level Documents
-    /// folder.
-    /// - Returns: The new Scans folder's file URL, or `nil` on error.
-    static func createNewScanDirectory() -> URL? {
-        guard let capturesFolder = rootScansFolder() else {
-            logger.error("Can't get user document dir!")
-            return nil
-        }
-
-        let formatter = ISO8601DateFormatter()
-        let timestamp = formatter.string(from: Date())
-        let newCaptureDir = capturesFolder
-            .appendingPathComponent(timestamp, isDirectory: true)
-
-        logger.log("Creating capture path: \"\(String(describing: newCaptureDir))\"")
-        let capturePath = newCaptureDir.path
-        do {
-            try FileManager.default.createDirectory(atPath: capturePath,
-                                                    withIntermediateDirectories: true)
-        } catch {
-            logger.error("Failed to create capturepath=\"\(capturePath)\" error=\(String(describing: error))")
-            return nil
-        }
-        var isDir: ObjCBool = false
-        let exists = FileManager.default.fileExists(atPath: capturePath, isDirectory: &isDir)
-        guard exists && isDir.boolValue else {
-            return nil
-        }
-
-        return newCaptureDir
-    }
-
-    // - MARK: Private interface below.
-
-    /// Creates all path components for the output directory.
-    /// - Parameter outputDir: A URL for the new output directory.
-    /// - Returns: A Boolean value that indicates whether the method succeeds,
-    /// otherwise `false` if it encounters an error, such as if the file already
-    /// exists or the method couldn't create the file.
-    private static func createDirectoryRecursively(_ outputDir: URL) -> Bool {
-        guard outputDir.isFileURL else {
-            return false
-        }
-        let expandedPath = outputDir.path
-        var isDirectory: ObjCBool = false
-        let fileManager = FileManager()
-        guard !fileManager.fileExists(atPath: outputDir.path, isDirectory: &isDirectory) else {
-            logger.error("File already exists at \(expandedPath, privacy: .private)")
-            return false
-        }
-
-        logger.log("Creating dir recursively: \"\(expandedPath, privacy: .private)\"")
-
-        let result: ()? = try? fileManager.createDirectory(atPath: expandedPath,
-                                                           withIntermediateDirectories: true)
-
-        guard result != nil else {
-            return false
-        }
-
-        var isDir: ObjCBool = false
-        guard fileManager.fileExists(atPath: expandedPath, isDirectory: &isDir) && isDir.boolValue else {
-            logger.error("Dir \"\(expandedPath, privacy: .private)\" doesn't exist after creation!")
-            return false
-        }
-
-        logger.log("... success creating dir.")
-        return true
-    }
-
     // Constants this sample appends in front of the capture id to get a file basename.
     private static let imageStringPrefix = "IMG_"
     private static let heicImageExtension = "HEIC"
-
-    /// Returns the app documents folder for all our captures.
-    private static func rootScansFolder() -> URL? {
-        guard let documentsFolder =
-                try? FileManager.default.url(for: .documentDirectory,
-                                             in: .userDomainMask,
-                                             appropriateFor: nil, create: false) else {
-            return nil
-        }
-        return documentsFolder.appendingPathComponent("Scans/", isDirectory: true)
-    }
 }

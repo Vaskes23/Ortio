@@ -9,6 +9,7 @@
 import XCTest
 @testable import Ortio
 
+@MainActor
 final class ModelsViewModelTests: XCTestCase {
     var mockFileManager: MockFileManager!
     var viewModel: ModelsViewModel!
@@ -25,76 +26,76 @@ final class ModelsViewModelTests: XCTestCase {
 
     // MARK: - urlsInAllModelsFolders Tests
     
-    func testUrlsInAllModelsFoldersWithNoSessions() throws {
+    func testUrlsInAllModelsFoldersWithNoSessions() async throws {
         // Arrange
         let documentsURL = URL(fileURLWithPath: "/path/to/Documents")
         let scansFolderURL = documentsURL.appendingPathComponent("Scans")
         
-        mockFileManager.urlStub = { directory, domain, url, shouldCreate in
-            return documentsURL
+        mockFileManager.urlStub = { _, _, _, _ in
+            documentsURL
         }
-        
-        mockFileManager.contentsOfDirectoryStub = { url, keys, mask in
+
+        mockFileManager.contentsOfDirectoryStub = { url, _, _ in
             if url == scansFolderURL {
                 return [] // No sessions
             } else {
                 return []
             }
         }
-        
-        mockFileManager.fileExistsStub = { path, isDirectory in
-            return false
+
+        mockFileManager.fileExistsStub = { _, _ in
+            false
         }
 
         // Act
-        let modelURLs = try viewModel.urlsInAllModelsFolders()
+        let modelURLs = try await viewModel.urlsInAllModelsFolders()
         
         // Assert
         XCTAssertEqual(modelURLs.count, 0)
     }
     
-    func testUrlsInAllModelsFoldersWithSessionsButNoModelsFolder() throws {
+    func testUrlsInAllModelsFoldersWithSessionsButNoModelsFolder() async throws {
         // Arrange
         let documentsURL = URL(fileURLWithPath: "/path/to/Documents")
         let scansFolderURL = documentsURL.appendingPathComponent("Scans")
         let session1URL = scansFolderURL.appendingPathComponent("Session1")
         let models1URL = session1URL.appendingPathComponent("Models")
         
-        mockFileManager.urlStub = { directory, domain, url, shouldCreate in
-            return documentsURL
+        mockFileManager.urlStub = { _, _, _, _ in
+            documentsURL
         }
-        
-        mockFileManager.contentsOfDirectoryStub = { url, keys, mask in
+
+        mockFileManager.contentsOfDirectoryStub = { url, _, _ in
             if url == scansFolderURL {
                 return [session1URL]
             } else {
                 return []
             }
         }
-        
-        mockFileManager.fileExistsStub = { path, isDirectory in
-            return false // Models folder doesn't exist
+
+        mockFileManager.fileExistsStub = { _, _ in
+            false // Models folder doesn't exist
         }
 
         // Act
-        let modelURLs = try viewModel.urlsInAllModelsFolders()
+        let modelURLs = try await viewModel.urlsInAllModelsFolders()
         
         // Assert
         XCTAssertEqual(modelURLs.count, 0)
     }
     
-    func testUrlsInAllModelsFoldersWithEmptyModelsFolder() throws {
+    func testUrlsInAllModelsFoldersWithEmptyModelsFolder() async throws {
         // Arrange
         let documentsURL = URL(fileURLWithPath: "/path/to/Documents")
         let scansFolderURL = documentsURL.appendingPathComponent("Scans")
         let session1URL = scansFolderURL.appendingPathComponent("Session1")
         let models1URL = session1URL.appendingPathComponent("Models")
         
-        mockFileManager.urlStub = { directory, domain, url, shouldCreate in
-            return documentsURL
+        mockFileManager.urlStub = { _, _, _, _ in
+            documentsURL
         }
-        
-        mockFileManager.contentsOfDirectoryStub = { url, keys, mask in
+
+        mockFileManager.contentsOfDirectoryStub = { url, _, _ in
             if url == scansFolderURL {
                 return [session1URL]
             } else if url == models1URL {
@@ -103,71 +104,66 @@ final class ModelsViewModelTests: XCTestCase {
                 return []
             }
         }
-        
-        mockFileManager.fileExistsStub = { path, isDirectory in
-            return path == models1URL.path
+
+        mockFileManager.fileExistsStub = { path, _ in
+            path == models1URL.path
         }
 
         // Act
-        let modelURLs = try viewModel.urlsInAllModelsFolders()
+        let modelURLs = try await viewModel.urlsInAllModelsFolders()
         
         // Assert
         XCTAssertEqual(modelURLs.count, 0)
     }
     
-    func testUrlsInAllModelsFoldersWhenDocumentsDirectoryNotFound() throws {
+    func testUrlsInAllModelsFoldersWhenDocumentsDirectoryNotFound() async throws {
         // Arrange
-        mockFileManager.urlStub = { directory, domain, url, shouldCreate in
+        mockFileManager.urlStub = { _, _, _, _ in
             throw NSError(domain: "Test", code: 1, userInfo: [NSLocalizedDescriptionKey: "Documents directory not found"])
         }
-        
+
         // Act & Assert
-        XCTAssertThrowsError(try viewModel.urlsInAllModelsFolders()) { error in
-            XCTAssertEqual((error as NSError).domain, "Test")
-            XCTAssertEqual((error as NSError).code, 1)
-        }
+        await XCTAssertThrowsErrorAsync(
+            { try await self.viewModel.urlsInAllModelsFolders() },
+            errorHandler: { error in
+                XCTAssertEqual((error as NSError).domain, "Test")
+                XCTAssertEqual((error as NSError).code, 1)
+            }
+        )
     }
     
-    func testUrlsInAllModelsFoldersWhenScansDirectoryNotFound() throws {
+    func testUrlsInAllModelsFoldersWhenScansDirectoryNotFound() async throws {
         // Arrange
         let documentsURL = URL(fileURLWithPath: "/path/to/Documents")
         
-        mockFileManager.urlStub = { directory, domain, url, shouldCreate in
-            return documentsURL
+        mockFileManager.urlStub = { _, _, _, _ in
+            documentsURL
         }
-        
-        mockFileManager.contentsOfDirectoryStub = { url, keys, mask in
+
+        mockFileManager.contentsOfDirectoryStub = { _, _, _ in
             throw NSError(domain: "Test", code: 2, userInfo: [NSLocalizedDescriptionKey: "Scans directory not found"])
         }
         
         // Act & Assert
-        XCTAssertThrowsError(try viewModel.urlsInAllModelsFolders()) { error in
-            XCTAssertEqual((error as NSError).domain, "Test")
-            XCTAssertEqual((error as NSError).code, 2)
-        }
+        await XCTAssertThrowsErrorAsync(
+            { try await self.viewModel.urlsInAllModelsFolders() },
+            errorHandler: { error in
+                XCTAssertEqual((error as NSError).domain, "Test")
+                XCTAssertEqual((error as NSError).code, 2)
+            }
+        )
     }
     
     // MARK: - loadModelsFromDirectories Tests
     
-    @MainActor
-    func testLoadModelsFromDirectoriesWithError() throws {
+    func testLoadModelsFromDirectoriesWithError() async throws {
         // Arrange
-        mockFileManager.urlStub = { directory, domain, url, shouldCreate in
+        mockFileManager.urlStub = { _, _, _, _ in
             throw NSError(domain: "Test", code: 1, userInfo: [NSLocalizedDescriptionKey: "Documents directory not found"])
         }
-        
-        let expectation = self.expectation(description: "Load models from directories with error")
-        
-        // Act
-        viewModel.loadModelsFromDirectories()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            // Assert
-            XCTAssertEqual(self.viewModel.models.count, 0)
-            expectation.fulfill()
-        }
-        
-        waitForExpectations(timeout: 5, handler: nil)
+
+        await viewModel.loadModelsFromDirectories()
+        XCTAssertEqual(viewModel.models.count, 0)
     }
     
     // MARK: - Initialization Tests
@@ -194,4 +190,22 @@ final class ModelsViewModelTests: XCTestCase {
         XCTAssertEqual(viewModelWithCustom.models.count, 0)
         XCTAssertNil(viewModelWithCustom.selectedModelForPreview)
     }
-} 
+
+    func testIdentifiableCaptureURLUsesStableStandardizedPathIdentity() {
+        let url = URL(fileURLWithPath: "/tmp/Models/Example.usdz")
+        let identifiableURL = ModelsModel.IdentifiableCaptureURL(url: url)
+        XCTAssertEqual(identifiableURL.id, url.standardizedFileURL.path)
+    }
+}
+
+private func XCTAssertThrowsErrorAsync<T>(
+    _ expression: () async throws -> T,
+    _ errorHandler: (Error) -> Void
+) async {
+    do {
+        _ = try await expression()
+        XCTFail("Expected expression to throw an error")
+    } catch {
+        errorHandler(error)
+    }
+}

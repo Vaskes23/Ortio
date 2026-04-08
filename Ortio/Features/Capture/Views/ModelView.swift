@@ -1,20 +1,23 @@
 /*
-See the LICENSE.txt file for this sample’s licensing information.
+See the LICENSE.txt file for this sample's licensing information.
 
 Abstract:
-A wrapper for AR QuickLook viewer that shows the reconstructed USDZ model
- file directly.
+A wrapper for QuickLook that shows the reconstructed USDZ model file
+ using SwiftUI's native .quickLookPreview() modifier.
 */
 
-import ARKit
+import os
 import QuickLook
 import SwiftUI
-import UIKit
-import os
 
 public struct ModelView: View {
     let modelFile: URL
     let endCaptureCallback: () -> Void
+
+    public init(modelFile: URL, endCaptureCallback: @escaping () -> Void) {
+        self.modelFile = modelFile
+        self.endCaptureCallback = endCaptureCallback
+    }
 
     public var body: some View {
         ARQuickLookController(modelFile: modelFile, endCaptureCallback: endCaptureCallback)
@@ -36,7 +39,7 @@ public struct ARQuickLookController: UIViewControllerRepresentable {
     }
 
     public func makeCoordinator() -> ARQuickLookController.Coordinator {
-        return Coordinator(parent: self)
+        Coordinator(parent: self)
     }
 
     public func updateUIViewController(_ uiViewController: QLPreviewControllerWrapper, context: Context) {}
@@ -49,11 +52,11 @@ public struct ARQuickLookController: UIViewControllerRepresentable {
         }
 
         public func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
-            return 1
+            1
         }
 
         public func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
-            return parent.modelFile as QLPreviewItem
+            parent.modelFile as QLPreviewItem
         }
 
         public func previewControllerWillDismiss(_ controller: QLPreviewController) {
@@ -67,7 +70,7 @@ public class QLPreviewControllerWrapper: UIViewController {
     let qlvc = QLPreviewController()
     var qlPresented = false
 
-    public override func viewDidAppear(_ animated: Bool) {
+    override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if !qlPresented {
             present(qlvc, animated: false, completion: nil)

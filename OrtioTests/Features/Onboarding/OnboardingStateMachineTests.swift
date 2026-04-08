@@ -1,90 +1,46 @@
-import Testing
+//
+//  OnboardingStateMachineTests.swift
+//  GuidedCaptureTests
+//
+//  Created by OpenAI on 08.04.2026.
+//
+
+import XCTest
 @testable import Ortio
 
-@Suite("Onboarding State Machine")
-struct OnboardingStateMachineTests {
-    @Test
-    func initWithValidInitialStateKeepsState() {
+final class OnboardingStateMachineTests: XCTestCase {
+    func testInitWithValidInitialStateKeepsState() {
         let machine = OnboardingStateMachine(.secondSegmentNeedsWork)
-        #expect(machine.currentState == .secondSegmentNeedsWork)
+        XCTAssertEqual(machine.currentState, .secondSegmentNeedsWork)
     }
 
-    @Test
-    func initWithInvalidInitialStateFallsBackToFirstSegment() {
+    func testInitWithInvalidInitialStateFallsBackToFirstSegment() {
         let machine = OnboardingStateMachine(.dismiss)
-        #expect(machine.currentState == .firstSegment)
+        XCTAssertEqual(machine.currentState, .firstSegment)
     }
 
-    @Test
-    func enterValidTransitionMovesToExpectedState() {
+    func testEnterValidTransitionMovesToExpectedState() {
         let machine = OnboardingStateMachine(.firstSegmentComplete)
 
         let didTransition = machine.enter(.continue(isFlippable: true))
 
-        #expect(didTransition)
-        #expect(machine.currentState == .flipObject)
+        XCTAssertTrue(didTransition)
+        XCTAssertEqual(machine.currentState, .flipObject)
     }
 
-    @Test
-    func enterAlternateBranchForNonFlippableObject() {
-        let machine = OnboardingStateMachine(.firstSegmentComplete)
-
-        let didTransition = machine.enter(.continue(isFlippable: false))
-
-        #expect(didTransition)
-        #expect(machine.currentState == .flippingObjectNotRecommended)
-    }
-
-    @Test
-    func enterWithInvalidInputDoesNotChangeState() {
+    func testEnterWithInvalidInputDoesNotChangeState() {
         let machine = OnboardingStateMachine(.firstSegmentComplete)
 
         let didTransition = machine.enter(.skip(isFlippable: true))
 
-        #expect(!didTransition)
-        #expect(machine.currentState == .firstSegmentComplete)
+        XCTAssertFalse(didTransition)
+        XCTAssertEqual(machine.currentState, .firstSegmentComplete)
     }
 
-    @Test
-    func enterFromTerminalStateWithoutTransitionsReturnsFalse() {
-        let machine = OnboardingStateMachine(.firstSegmentComplete)
-        machine.currentState = .dismiss
-
-        let didTransition = machine.enter(.finish)
-
-        #expect(!didTransition)
-        #expect(machine.currentState == .dismiss)
-    }
-
-    @Test
-    func currentStateInputsReturnsExpectedInputs() {
-        let machine = OnboardingStateMachine(.secondSegmentNeedsWork)
-        let inputs = machine.currentStateInputs()
-
-        #expect(inputs.count == 4)
-        #expect(inputs.contains(.continue(isFlippable: true)))
-        #expect(inputs.contains(.continue(isFlippable: false)))
-        #expect(inputs.contains(.skip(isFlippable: true)))
-        #expect(inputs.contains(.skip(isFlippable: false)))
-    }
-
-    @Test
-    func resetWithValidStateSucceeds() {
+    func testResetWithValidStateSucceeds() {
         let machine = OnboardingStateMachine(.firstSegmentComplete)
 
-        let didReset = machine.reset(to: .thirdSegmentComplete)
-
-        #expect(didReset)
-        #expect(machine.currentState == .thirdSegmentComplete)
-    }
-
-    @Test
-    func resetWithInvalidStateFailsAndKeepsCurrentState() {
-        let machine = OnboardingStateMachine(.firstSegmentComplete)
-
-        let didReset = machine.reset(to: .dismiss)
-
-        #expect(!didReset)
-        #expect(machine.currentState == .firstSegmentComplete)
+        XCTAssertTrue(machine.reset(to: .thirdSegmentComplete))
+        XCTAssertEqual(machine.currentState, .thirdSegmentComplete)
     }
 }

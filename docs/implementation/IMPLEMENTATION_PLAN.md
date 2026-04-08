@@ -1,3 +1,5 @@
+> Historical note: this is an archived prototype plan for the deferred shared-framework and visionOS direction. The active repo is stabilized around the iOS app only.
+
 # Ortio XR System - Implementation Plan (Broken into Parts)
 
 ## Overview

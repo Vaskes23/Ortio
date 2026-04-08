@@ -5,28 +5,24 @@
 //  Created by Matyas Vascak on 22.06.2024.
 //
 
+import os
 import SwiftUI
 import SwiftData
 import PhotosUI
-import os
 
 /// Form for editing user profile: name, username, and photo.
-/// Loads the user from SwiftData via `@Query` on appear.
 struct EditProfileView: View {
     private static let logger = Logger(
         subsystem: OrtioApp.subsystem,
         category: "EditProfileView"
     )
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
-    @Query var users: [User]
 
-    @State private var user: User?
+    @Bindable var viewModel: SettingsViewModel
     @State private var selectedImage: UIImage?
     @State private var selectedPhotosPickerItem: PhotosPickerItem?
-    @Binding var name: String
     @State private var username: String = ""
-    @State private var errorMessage: String?
 
     @State private var rotationAngle: Double = 0
     @State private var isFlipped: Bool = false
@@ -77,7 +73,7 @@ struct EditProfileView: View {
                         Image(systemName: "person")
                             .foregroundColor(.gray)
                             .frame(width: 20)
-                        TextField("Name", text: $name)
+                        TextField("Name", text: $viewModel.name)
                             .font(.callout)
                     }
 
@@ -99,7 +95,8 @@ struct EditProfileView: View {
             saveUser()
         })
         .onAppear {
-            loadUser()
+            username = viewModel.user.username
+            selectedImage = viewModel.user.profileUIImage
         }
         .onChange(of: selectedPhotosPickerItem) { newItem in
             Task {
@@ -118,52 +115,23 @@ struct EditProfileView: View {
         .navigationTitle("Edit Profile")
         .navigationBarTitleDisplayMode(.inline)
         .alert("Error", isPresented: Binding(
-            get: { errorMessage != nil },
-            set: { if !$0 { errorMessage = nil } }
+            get: { viewModel.errorMessage != nil },
+            set: { if !$0 { viewModel.errorMessage = nil } }
         )) {
-            Button("OK") { errorMessage = nil }
+            Button("OK") { viewModel.errorMessage = nil }
         } message: {
-            Text(errorMessage ?? "")
+            Text(viewModel.errorMessage ?? "")
         }
     }
 
     private func saveUser() {
-        guard let user else { return }
-        user.name = name
-        user.username = username
-        if let selectedImage = selectedImage {
-            user.updateProfileImage(selectedImage)
-        }
-
-        do {
-            try modelContext.save()
-            presentationMode.wrappedValue.dismiss()
-        } catch {
-            Self.logger.error("Failed to save user: \(error)")
-            errorMessage = "Failed to save profile: \(error.localizedDescription)"
-        }
-    }
-
-    /// Loads the existing user from the `@Query`, or creates a default one.
-    private func loadUser() {
-        if let existingUser = users.first {
-            user = existingUser
-            name = existingUser.name
-            username = existingUser.username
-            selectedImage = existingUser.profileUIImage
-        } else {
-            let newUser = User()
-            modelContext.insert(newUser)
-            do {
-                try modelContext.save()
-                user = newUser
-                name = newUser.name
-                username = newUser.username
-                selectedImage = newUser.profileUIImage
-            } catch {
-                Self.logger.error("Failed to save default user: \(error)")
-                errorMessage = "Failed to create profile: \(error.localizedDescription)"
-            }
+        let didSave = viewModel.saveProfile(
+            username: username,
+            selectedImage: selectedImage,
+            context: modelContext
+        )
+        if didSave {
+            dismiss()
         }
     }
 }

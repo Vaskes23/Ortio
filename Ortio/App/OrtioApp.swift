@@ -12,19 +12,20 @@ import SwiftData
 struct OrtioApp: App {
     static let subsystem: String = "com.example.apple-samplecode.Ortio"
 
-    @StateObject private var appModel = AppDataModel()
+    @StateObject private var themeController = ThemeController()
     @Query private var users: [User]
-    @Environment(\.modelContext) private var modelContext
+    private var themeRefreshKey: String { users.first?.theme.rawValue ?? "missing-user" }
 
     var body: some Scene {
         WindowGroup {
             if #available(iOS 17.0, *) {
                 ContentView()
-                    .environmentObject(appModel)
-                    .onAppear {
-                        appModel.loadTheme(from: users)
+                    .environmentObject(themeController)
+                    .preferredColorScheme(themeController.selectedTheme.colorScheme)
+                    .task(id: themeRefreshKey) {
+                        themeController.applyStoredTheme(from: users)
                     }
             }
-        }.modelContainer(for: [Models.self, User.self])
+        }.modelContainer(for: [Models.self, CapturedModelMetadata.self, User.self])
     }
 }

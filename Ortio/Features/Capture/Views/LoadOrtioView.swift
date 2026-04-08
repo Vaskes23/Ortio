@@ -8,7 +8,7 @@ struct LoadOrtioView: View {
     static let logger = Logger(subsystem: OrtioApp.subsystem,
                                 category: "ContentView")
 
-    @EnvironmentObject var appModel: AppDataModel
+    @StateObject private var appModel = AppDataModel()
 
     @State private var showReconstructionView: Bool = false
     @State private var showErrorAlert: Bool = false

@@ -1,3 +1,5 @@
+> Historical note: this progress log includes deferred shared-framework and visionOS prototype work. It is retained for reference only.
+
 # Ortio XR System - Implementation Progress Report
 
 **Date:** 2026-02-12

@@ -1,96 +1,90 @@
-import Testing
-import Foundation
+//
+//  SettingsViewModelTests.swift
+//  GuidedCaptureTests
+//
+//  Created by OpenAI on 08.04.2026.
+//
+
+import XCTest
 import SwiftData
 @testable import Ortio
 
-@Suite("Settings View Model")
-struct SettingsViewModelTests {
-    @Test
-    func initReadsBooleanFlagsFromUserDefaults() {
-        clearUserDefaults()
-        defer { clearUserDefaults() }
+@MainActor
+final class SettingsViewModelTests: XCTestCase {
+    private var suiteName: String!
+    private var userDefaults: UserDefaults!
+    private var repository: UserSettingsRepository!
+    private var viewModel: SettingsViewModel!
 
-        UserDefaults.standard.set(true, forKey: "notificationsEnabled")
-        UserDefaults.standard.set(false, forKey: "soundEffectsEnabled")
-        UserDefaults.standard.set(true, forKey: "receiveEmailsEnabled")
-
-        let viewModel = SettingsViewModel()
-
-        #expect(viewModel.notificationsEnabled)
-        #expect(!viewModel.soundEffectsEnabled)
-        #expect(viewModel.receiveEmailsEnabled)
+    override func setUpWithError() throws {
+        suiteName = "SettingsViewModelTests-\(UUID().uuidString)"
+        userDefaults = UserDefaults(suiteName: suiteName)
+        userDefaults.removePersistentDomain(forName: suiteName)
+        repository = UserSettingsRepository(userDefaults: userDefaults)
+        viewModel = SettingsViewModel(repository: repository)
     }
 
-    @Test
-    func updatingFlagsPersistsToUserDefaults() {
-        clearUserDefaults()
-        defer { clearUserDefaults() }
+    override func tearDownWithError() throws {
+        userDefaults.removePersistentDomain(forName: suiteName)
+        suiteName = nil
+        userDefaults = nil
+        repository = nil
+        viewModel = nil
+    }
 
-        let viewModel = SettingsViewModel()
+    func testInitReadsBooleanFlagsFromUserDefaults() throws {
+        userDefaults.set(true, forKey: "notificationsEnabled")
+        userDefaults.set(false, forKey: "soundEffectsEnabled")
+        userDefaults.set(true, forKey: "receiveEmailsEnabled")
 
+        let reloadedViewModel = SettingsViewModel(repository: UserSettingsRepository(userDefaults: userDefaults))
+
+        XCTAssertTrue(reloadedViewModel.notificationsEnabled)
+        XCTAssertFalse(reloadedViewModel.soundEffectsEnabled)
+        XCTAssertTrue(reloadedViewModel.receiveEmailsEnabled)
+    }
+
+    func testUpdatingFlagsPersistsToUserDefaults() {
         viewModel.notificationsEnabled = true
         viewModel.soundEffectsEnabled = true
         viewModel.receiveEmailsEnabled = false
 
-        #expect(UserDefaults.standard.bool(forKey: "notificationsEnabled"))
-        #expect(UserDefaults.standard.bool(forKey: "soundEffectsEnabled"))
-        #expect(!UserDefaults.standard.bool(forKey: "receiveEmailsEnabled"))
+        XCTAssertTrue(userDefaults.bool(forKey: "notificationsEnabled"))
+        XCTAssertTrue(userDefaults.bool(forKey: "soundEffectsEnabled"))
+        XCTAssertFalse(userDefaults.bool(forKey: "receiveEmailsEnabled"))
     }
 
-    @Test
-    func loadUserUsesExistingUser() throws {
-        clearUserDefaults()
-        defer { clearUserDefaults() }
-
-        let (modelContainer, modelContext) = try makeInMemoryContext()
-        _ = modelContainer
+    func testLoadUserUsesExistingUser() throws {
+        let (_, context) = try makeInMemoryContext()
         let existingUser = User(username: "alice", name: "Alice", theme: .dark, profileImage: nil)
-        let viewModel = SettingsViewModel()
 
-        viewModel.loadUser(from: [existingUser], context: modelContext)
+        viewModel.loadUser(from: [existingUser], context: context)
 
-        #expect(viewModel.user.username == "alice")
-        #expect(viewModel.name == "Alice")
-        #expect(viewModel.selectedTheme == .dark)
+        XCTAssertEqual(viewModel.user.username, "alice")
+        XCTAssertEqual(viewModel.name, "Alice")
     }
 
-    @Test
-    func loadUserCreatesDefaultUserWhenMissing() throws {
-        clearUserDefaults()
-        defer { clearUserDefaults() }
+    func testLoadUserCreatesDefaultUserWhenMissing() throws {
+        let (_, context) = try makeInMemoryContext()
 
-        let (modelContainer, modelContext) = try makeInMemoryContext()
-        _ = modelContainer
-        let viewModel = SettingsViewModel()
+        viewModel.loadUser(from: [], context: context)
 
-        viewModel.loadUser(from: [], context: modelContext)
-
-        let users = try modelContext.fetch(FetchDescriptor<User>())
-        #expect(users.count == 1)
-        #expect(viewModel.name == "Placeholder User")
-        #expect(viewModel.selectedTheme == .light)
+        let users = try context.fetch(FetchDescriptor<User>())
+        XCTAssertEqual(users.count, 1)
+        XCTAssertEqual(viewModel.name, "Placeholder User")
     }
 
-    @Test
-    func saveThemePersistsOnCurrentUser() throws {
-        clearUserDefaults()
-        defer { clearUserDefaults() }
-
-        let (modelContainer, modelContext) = try makeInMemoryContext()
-        _ = modelContainer
+    func testSaveThemePersistsSelection() throws {
+        let (_, context) = try makeInMemoryContext()
         let user = User(username: "alice", name: "Alice", theme: .light, profileImage: nil)
-        modelContext.insert(user)
-        try modelContext.save()
-
-        let viewModel = SettingsViewModel()
+        context.insert(user)
+        try context.save()
         viewModel.user = user
-        viewModel.selectedTheme = .dark
+        viewModel.saveTheme(.dark, context: context)
 
-        viewModel.saveTheme(context: modelContext)
-
-        let users = try modelContext.fetch(FetchDescriptor<User>())
-        #expect(users.first?.theme == .dark)
-        #expect(viewModel.errorMessage == nil)
+        let users = try context.fetch(FetchDescriptor<User>())
+        XCTAssertEqual(users.first?.theme, .dark)
+        XCTAssertNil(viewModel.errorMessage)
     }
 
     private func makeInMemoryContext() throws -> (ModelContainer, ModelContext) {
@@ -98,11 +92,5 @@ struct SettingsViewModelTests {
         let modelContainer = try ModelContainer(for: User.self, configurations: config)
         let modelContext = ModelContext(modelContainer)
         return (modelContainer, modelContext)
-    }
-
-    private func clearUserDefaults() {
-        UserDefaults.standard.removeObject(forKey: "notificationsEnabled")
-        UserDefaults.standard.removeObject(forKey: "soundEffectsEnabled")
-        UserDefaults.standard.removeObject(forKey: "receiveEmailsEnabled")
     }
 }

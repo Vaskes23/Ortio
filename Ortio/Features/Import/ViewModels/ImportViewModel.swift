@@ -12,10 +12,11 @@ import os
 
 /// Handles file import operations and scan directory management.
 /// Accepts `FileManagerProtocol` for dependency injection in tests.
+@MainActor
 @Observable
 class ImportViewModel {
     @ObservationIgnored
-    private let fileManager: FileManagerProtocol
+    private let repository: LibraryRepositoryProtocol
 
     /// Set when an import or delete operation fails. Drives the error alert in ImportView.
     var errorMessage: String?
@@ -34,142 +35,52 @@ class ImportViewModel {
         return formatter
     }()
 
-    init(fileManager: FileManagerProtocol = FileManager.default) {
-        self.fileManager = fileManager
+    init(repository: LibraryRepositoryProtocol = LibraryRepository()) {
+        self.repository = repository
+    }
+
+    convenience init(fileManager: FileManagerProtocol) {
+        self.init(repository: LibraryRepository(fileManager: fileManager))
     }
 
     /// Returns a unique folder name based on the file's creation date (e.g. "Model_20240507120000").
     static func createUniqueFolderName(from date: Date?) -> String {
-        let dateString = timestampFormatter.string(from: date ?? Date())
-        return "Model_\(dateString)"
+        LibraryRepository.createUniqueFolderName(from: date)
     }
 
     /// Creates a new timestamped scan directory under `Documents/Scans/`.
     /// Returns the directory URL, or nil if creation fails.
-    internal func createNewScanDirectory() -> URL? {
-        guard let capturesFolder = rootScansFolder() else {
-            Self.logger.error("Can't get user document dir!")
-            return nil
-        }
-
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        let timestamp = formatter.string(from: Date())
-        let newCaptureDir = capturesFolder.appendingPathComponent(timestamp, isDirectory: true)
-
-        Self.logger.debug("Creating capture path: \(newCaptureDir)")
-        let capturePath = newCaptureDir.path
-        do {
-            try fileManager.createDirectory(atPath: capturePath, withIntermediateDirectories: true, attributes: nil)
-            var url = URL(fileURLWithPath: capturePath)
-            var resourceValues = URLResourceValues()
-            resourceValues.isExcludedFromBackup = true
-            try url.setResourceValues(resourceValues)
-        } catch {
-            Self.logger.error("Failed to create capture path: \(capturePath) error: \(error)")
-            return nil
-        }
-
-        var isDir: ObjCBool = false
-        let exists = fileManager.fileExists(atPath: capturePath, isDirectory: &isDir)
-        guard exists && isDir.boolValue else {
-            return nil
-        }
-
-        return newCaptureDir
-    }
-
-    private func rootScansFolder() -> URL? {
-        guard let documentsFolder = try? fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) else {
-            return nil
-        }
-        return documentsFolder.appendingPathComponent(PathConstants.scans, isDirectory: true)
+    internal func createNewScanDirectory() async -> URL? {
+        await repository.createNewScanDirectory()
     }
 
     // MARK: - Import Operations
 
     /// Deletes models at the given offsets, removing both the file system directory and SwiftData record.
-    func deleteModel(at offsets: IndexSet, from storedModels: [Models], context: ModelContext) {
-        for index in offsets {
-            let modelToDelete = storedModels[index]
-            let fileURL = modelToDelete.model
-            let parentDirectory = fileURL.deletingLastPathComponent()
-
-            do {
-                if FileManager.default.fileExists(atPath: parentDirectory.path) {
-                    try FileManager.default.removeItem(at: parentDirectory)
-                    Self.logger.debug("Parent directory deleted: \(parentDirectory.path)")
-                }
-            } catch {
-                Self.logger.error("Error deleting parent directory: \(error)")
-            }
-
-            context.delete(modelToDelete)
+    func deleteModel(at offsets: IndexSet, from storedModels: [Models], context: ModelContext) async {
+        do {
+            try await repository.deleteImportedModels(at: offsets, from: storedModels, context: context)
+        } catch {
+            Self.logger.error("Error deleting imported model: \(error.localizedDescription)")
+            errorMessage = "Delete failed: \(error.localizedDescription)"
         }
     }
 
     /// Processes the result of the file importer, importing each selected file.
-    func handleImport(result: Result<[URL], Error>, existingModels: [Models], context: ModelContext) {
+    func handleImport(result: Result<[URL], Error>, existingModels: [Models], context: ModelContext) async {
         switch result {
         case .success(let urls):
             for url in urls {
-                importSingleFile(url, existingModels: existingModels, context: context)
+                do {
+                    try await repository.importFile(url, existingModels: existingModels, context: context)
+                } catch {
+                    Self.logger.error("File handling error: \(error.localizedDescription)")
+                    errorMessage = "Import failed: \(error.localizedDescription)"
+                }
             }
         case .failure(let error):
             Self.logger.error("Import error: \(error)")
             errorMessage = "Failed to import: \(error.localizedDescription)"
         }
-    }
-
-    /// Copies a single file into `Documents/Imports/<uniqueFolder>/` and inserts a SwiftData record.
-    /// Skips files that have already been imported.
-    private func importSingleFile(_ url: URL, existingModels: [Models], context: ModelContext) {
-        guard url.startAccessingSecurityScopedResource() else {
-            Self.logger.error("Failed to get access to file: \(url)")
-            return
-        }
-
-        let alreadyImported = existingModels.contains { $0.model == url }
-        if alreadyImported {
-            Self.logger.info("Model already imported: \(url.lastPathComponent)")
-            url.stopAccessingSecurityScopedResource()
-            return
-        }
-
-        do {
-            let fm = FileManager.default
-            let documentsDirectory = try fm.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            let rootDirectory = documentsDirectory.appendingPathComponent(PathConstants.imports, isDirectory: true)
-
-            if !fm.fileExists(atPath: rootDirectory.path) {
-                try fm.createDirectory(at: rootDirectory, withIntermediateDirectories: true)
-            }
-
-            let creationDate = try url.resourceValues(forKeys: [.creationDateKey]).creationDate
-            let uniqueFolderName = ImportViewModel.createUniqueFolderName(from: creationDate)
-            let modelFolderURL = rootDirectory.appendingPathComponent(uniqueFolderName, isDirectory: true)
-            try fm.createDirectory(at: modelFolderURL, withIntermediateDirectories: true)
-
-            let destinationURL = modelFolderURL.appendingPathComponent(url.lastPathComponent)
-            try fm.copyItem(at: url, to: destinationURL)
-
-            let fileDate = creationDate ?? Date()
-            let fileSize = try fm.attributesOfItem(atPath: destinationURL.path)[.size] as? Double ?? 0
-            let newModel = Models(
-                name: url.lastPathComponent,
-                date: fileDate,
-                favorite: false,
-                imported: true,
-                size: fileSize,
-                model: destinationURL
-            )
-
-            context.insert(newModel)
-        } catch {
-            Self.logger.error("File handling error: \(error)")
-            errorMessage = "Import failed: \(error.localizedDescription)"
-        }
-
-        url.stopAccessingSecurityScopedResource()
     }
 }

@@ -15,7 +15,7 @@ import UniformTypeIdentifiers
 struct ImportView: View {
     @State var viewModel: ImportViewModel
     @State private var presentImporter = false
-    @State private var selectedModelForPreview: ImportModel.IdentifiableURL?
+    @State private var selectedModelForPreview: LibraryPreviewItem?
     @State private var searchQuery = ""
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Models.date, order: .reverse) var storedModels: [Models] = []
@@ -24,6 +24,8 @@ struct ImportView: View {
         guard !searchQuery.isEmpty else { return storedModels }
         return storedModels.filter { model in
             model.name.localizedCaseInsensitiveContains(searchQuery)
+                || model.displayTitle.localizedCaseInsensitiveContains(searchQuery)
+                || (model.normalizedNotes ?? "").localizedCaseInsensitiveContains(searchQuery)
         }
     }
 
@@ -58,7 +60,9 @@ struct ImportView: View {
                 allowedContentTypes: [.usd, .usdz, .realityFile],
                 allowsMultipleSelection: true,
                 onCompletion: { result in
-                    viewModel.handleImport(result: result, existingModels: storedModels, context: modelContext)
+                    Task {
+                        await viewModel.handleImport(result: result, existingModels: storedModels, context: modelContext)
+                    }
                 }
             )
             .alert("Error", isPresented: Binding(
@@ -69,7 +73,7 @@ struct ImportView: View {
             } message: {
                 Text(viewModel.errorMessage ?? "")
             }
-            .sheet(item: $selectedModelForPreview, onDismiss: {
+            .fullScreenCover(item: $selectedModelForPreview, onDismiss: {
                 selectedModelForPreview = nil
             }, content: { item in
                 ModelView(modelFile: item.url, endCaptureCallback: {
@@ -94,14 +98,25 @@ struct ImportView: View {
 
     private var importedSection: some View {
         Section("Imported objects") {
-            ForEach(filteredModels, id: \.name) { model in
+            ForEach(filteredModels) { model in
                 FileRow(model: model) {
-                    selectedModelForPreview = ImportModel.IdentifiableURL(url: model.model)
+                    presentPreview(for: model.model)
                 }
             }
             .onDelete { offsets in
-                viewModel.deleteModel(at: offsets, from: storedModels, context: modelContext)
+                Task {
+                    await viewModel.deleteModel(at: offsets, from: storedModels, context: modelContext)
+                }
             }
+        }
+    }
+
+    private func presentPreview(for url: URL) {
+        switch LibraryPreviewItem.previewableResult(for: url) {
+        case .success(let item):
+            selectedModelForPreview = item
+        case .failure(let error):
+            viewModel.errorMessage = error.localizedDescription
         }
     }
 }
@@ -115,7 +130,7 @@ struct FileRow: View {
 
     var body: some View {
         HStack {
-            Label(model.name, systemImage: "cube.transparent")
+            Label(model.displayTitle, systemImage: "cube.transparent")
                 .lineLimit(1)
             Spacer()
             Text(model.date.formatted(.dateTime.day().month().year()))
@@ -127,7 +142,7 @@ struct FileRow: View {
                     .foregroundStyle(.primary)
             }
             .buttonStyle(.borderless)
-            .accessibilityLabel("Preview \(model.name)")
+            .accessibilityLabel("Preview \(model.displayTitle)")
         }
         .contentShape(Rectangle())
         .contextMenu {

@@ -8,10 +8,10 @@
 
 import Foundation
 
-struct ModelsModel{
+struct ModelsModel {
 
     struct IdentifiableCaptureURL: Identifiable {
-        let id = UUID()
         let url: URL
+        var id: String { url.standardizedFileURL.path }
     }
 }

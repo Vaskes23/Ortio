@@ -19,9 +19,9 @@ class MockFileManager: FileManagerProtocol {
     var createDirectoryStub: ((String, Bool, [FileAttributeKey: Any]?) throws -> Void)?
     var attributesOfItemStub: ((String) throws -> [FileAttributeKey: Any])?
     var copyItemStub: ((URL, URL) throws -> Void)?
+    var removeItemStub: ((URL) throws -> Void)?
     
     // Additional properties for more complex testing scenarios
-    var removeItemStub: ((URL) throws -> Void)?
     var moveItemStub: ((URL, URL) throws -> Void)?
     var linkItemStub: ((URL, URL) throws -> Void)?
     var trashItemStub: ((URL) throws -> URL)?
@@ -33,6 +33,7 @@ class MockFileManager: FileManagerProtocol {
     var createDirectoryCallCount = 0
     var attributesOfItemCallCount = 0
     var copyItemCallCount = 0
+    var removeItemCallCount = 0
     
     // Properties to store last called parameters
     var lastContentsOfDirectoryURL: URL?
@@ -41,8 +42,13 @@ class MockFileManager: FileManagerProtocol {
     var lastCreateDirectoryParameters: (path: String, withIntermediateDirectories: Bool, attributes: [FileAttributeKey: Any]?)?
     var lastAttributesOfItemPath: String?
     var lastCopyItemParameters: (srcURL: URL, dstURL: URL)?
+    var lastRemoveItemURL: URL?
     
-    func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?, options mask: FileManager.DirectoryEnumerationOptions) throws -> [URL] {
+    func contentsOfDirectory(
+        at url: URL,
+        includingPropertiesForKeys keys: [URLResourceKey]?,
+        options mask: FileManager.DirectoryEnumerationOptions
+    ) throws -> [URL] {
         contentsOfDirectoryCallCount += 1
         lastContentsOfDirectoryURL = url
         return try contentsOfDirectoryStub?(url, keys, mask) ?? []
@@ -54,7 +60,12 @@ class MockFileManager: FileManagerProtocol {
         return fileExistsStub?(path, isDirectory) ?? false
     }
 
-    func url(for directory: FileManager.SearchPathDirectory, in domain: FileManager.SearchPathDomainMask, appropriateFor url: URL?, create shouldCreate: Bool) throws -> URL {
+    func url(
+        for directory: FileManager.SearchPathDirectory,
+        in domain: FileManager.SearchPathDomainMask,
+        appropriateFor url: URL?,
+        create shouldCreate: Bool
+    ) throws -> URL {
         urlCallCount += 1
         lastURLCallParameters = (directory, domain, url, shouldCreate)
         return try urlStub?(directory, domain, url, shouldCreate) ?? URL(fileURLWithPath: "")
@@ -77,6 +88,12 @@ class MockFileManager: FileManagerProtocol {
         lastCopyItemParameters = (srcURL, dstURL)
         try copyItemStub?(srcURL, dstURL)
     }
+
+    func removeItem(at URL: URL) throws {
+        removeItemCallCount += 1
+        lastRemoveItemURL = URL
+        try removeItemStub?(URL)
+    }
     
     // MARK: - Reset Methods
     
@@ -87,6 +104,7 @@ class MockFileManager: FileManagerProtocol {
         createDirectoryCallCount = 0
         attributesOfItemCallCount = 0
         copyItemCallCount = 0
+        removeItemCallCount = 0
     }
     
     func resetLastCalledParameters() {
@@ -96,6 +114,7 @@ class MockFileManager: FileManagerProtocol {
         lastCreateDirectoryParameters = nil
         lastAttributesOfItemPath = nil
         lastCopyItemParameters = nil
+        lastRemoveItemURL = nil
     }
     
     func resetAll() {
@@ -120,7 +139,7 @@ extension MockFileManager {
     
     /// Convenience method to set up a successful directory listing
     func setupSuccessfulDirectoryListing(at url: URL, returning contents: [URL]) {
-        contentsOfDirectoryStub = { directoryURL, keys, mask in
+        contentsOfDirectoryStub = { directoryURL, _, _ in
             if directoryURL == url {
                 return contents
             }
@@ -130,7 +149,7 @@ extension MockFileManager {
     
     /// Convenience method to set up a successful URL retrieval
     func setupURL(for directory: FileManager.SearchPathDirectory, returning url: URL) {
-        urlStub = { searchDirectory, domain, appropriateFor, shouldCreate in
+        urlStub = { searchDirectory, _, _, _ in
             if searchDirectory == directory {
                 return url
             }
@@ -140,14 +159,14 @@ extension MockFileManager {
     
     /// Convenience method to set up a successful directory creation
     func setupSuccessfulDirectoryCreation() {
-        createDirectoryStub = { path, withIntermediateDirectories, attributes in
+        createDirectoryStub = { _, _, _ in
             // Success - do nothing
         }
     }
-    
+
     /// Convenience method to set up a failed directory creation
     func setupFailedDirectoryCreation(with error: Error) {
-        createDirectoryStub = { path, withIntermediateDirectories, attributes in
+        createDirectoryStub = { _, _, _ in
             throw error
         }
     }
@@ -164,14 +183,21 @@ extension MockFileManager {
     
     /// Convenience method to set up successful file copy
     func setupSuccessfulFileCopy() {
-        copyItemStub = { srcURL, dstURL in
+        copyItemStub = { _, _ in
+            // Success - do nothing
+        }
+    }
+
+    /// Convenience method to set up successful file removal.
+    func setupSuccessfulRemoveItem() {
+        removeItemStub = { _ in
             // Success - do nothing
         }
     }
     
     /// Convenience method to set up a failed file copy
     func setupFailedFileCopy(with error: Error) {
-        copyItemStub = { srcURL, dstURL in
+        copyItemStub = { _, _ in
             throw error
         }
     }
@@ -195,7 +221,7 @@ extension MockFileManager {
         setupURL(for: .documentDirectory, returning: documentsURL)
         
         // Setup directory listing
-        contentsOfDirectoryStub = { url, keys, mask in
+        contentsOfDirectoryStub = { url, _, _ in
             switch url {
             case scansFolderURL:
                 return [session1URL, session2URL]
@@ -219,4 +245,3 @@ extension MockFileManager {
         }
     }
 }
-

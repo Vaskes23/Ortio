@@ -1,3 +1,5 @@
+> Historical note: this guide documents deferred prototype work for shared-framework and visionOS targets. Those targets are currently archived under `/DeferredPrototypes/` and are not part of the supported build.
+
 # OrtioShared Framework Setup Guide
 
 This guide explains how to configure the Xcode project to add the `OrtioShared` framework and `OrtioVision` (visionOS) targets.

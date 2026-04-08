@@ -9,6 +9,7 @@
 import XCTest
 @testable import Ortio
 
+@MainActor
 final class ModelsTests: XCTestCase {
 
     var mockFileManager: MockFileManager!
@@ -24,75 +25,64 @@ final class ModelsTests: XCTestCase {
         viewModel = nil
     }
 
-    func testUrlsInAllModelsFolders() throws {
+    func testUrlsInAllModelsFolders() async throws {
         // Arrange
         let expectedURLs = [
-            URL(string: "file:///path/to/Documents/Scans/Session1/Models/model1.usdz")!,
-            URL(string: "file:///path/to/Documents/Scans/Session1/Models/model2.usdz")!
+            URL(fileURLWithPath: "/path/to/Documents/Scans/Session1/Models/model1.usdz"),
+            URL(fileURLWithPath: "/path/to/Documents/Scans/Session1/Models/model2.usdz")
         ]
-        
-        mockFileManager.urlStub = { directory, domain, url, shouldCreate in
-            return URL(string: "file:///path/to/Documents")!
+
+        mockFileManager.urlStub = { _, _, _, _ in
+            URL(fileURLWithPath: "/path/to/Documents")
         }
-        
-        mockFileManager.contentsOfDirectoryStub = { url, keys, mask in
-            if url.absoluteString == "file:///path/to/Documents/Scans/" {
-                return [URL(string: "file:///path/to/Documents/Scans/Session1")!]
-            } else if url.absoluteString == "file:///path/to/Documents/Scans/Session1/Models/" {
+
+        mockFileManager.contentsOfDirectoryStub = { url, _, _ in
+            if url.path == "/path/to/Documents/Scans" {
+                return [URL(fileURLWithPath: "/path/to/Documents/Scans/Session1")]
+            } else if url.path == "/path/to/Documents/Scans/Session1/Models" {
                 return expectedURLs
             } else {
                 return []
             }
         }
-        
-        mockFileManager.fileExistsStub = { path, isDirectory in
-            return path == "/path/to/Documents/Scans/Session1/Models"
+
+        mockFileManager.fileExistsStub = { path, _ in
+            path == "/path/to/Documents/Scans/Session1/Models"
         }
 
         // Act
-        let modelURLs = try viewModel.urlsInAllModelsFolders()
-        
+        let modelURLs = try await viewModel.urlsInAllModelsFolders()
+
         // Assert
         XCTAssertEqual(modelURLs, expectedURLs)
     }
 
-    @MainActor
-    func testLoadModelsFromDirectories() throws {
+    func testLoadModelsFromDirectories() async throws {
         // Arrange
         let expectedURLs = [
-            URL(string: "file:///path/to/Documents/Scans/Session1/Models/model1.usdz")!,
-            URL(string: "file:///path/to/Documents/Scans/Session1/Models/model2.usdz")!
+            URL(fileURLWithPath: "/path/to/Documents/Scans/Session1/Models/model1.usdz"),
+            URL(fileURLWithPath: "/path/to/Documents/Scans/Session1/Models/model2.usdz")
         ]
-        
-        mockFileManager.urlStub = { directory, domain, url, shouldCreate in
-            return URL(string: "file:///path/to/Documents")!
+
+        mockFileManager.urlStub = { _, _, _, _ in
+            URL(fileURLWithPath: "/path/to/Documents")
         }
-        
-        mockFileManager.contentsOfDirectoryStub = { url, keys, mask in
-            if url.absoluteString == "file:///path/to/Documents/Scans/" {
-                return [URL(string: "file:///path/to/Documents/Scans/Session1")!]
-            } else if url.absoluteString == "file:///path/to/Documents/Scans/Session1/Models/" {
+
+        mockFileManager.contentsOfDirectoryStub = { url, _, _ in
+            if url.path == "/path/to/Documents/Scans" {
+                return [URL(fileURLWithPath: "/path/to/Documents/Scans/Session1")]
+            } else if url.path == "/path/to/Documents/Scans/Session1/Models" {
                 return expectedURLs
             } else {
                 return []
             }
         }
-        
-        mockFileManager.fileExistsStub = { path, isDirectory in
-            return path == "/path/to/Documents/Scans/Session1/Models"
+
+        mockFileManager.fileExistsStub = { path, _ in
+            path == "/path/to/Documents/Scans/Session1/Models"
         }
         
-        let expectation = self.expectation(description: "Load models from directories")
-        
-        // Act
-        viewModel.loadModelsFromDirectories()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            // Assert
-            XCTAssertEqual(self.viewModel.models.map { $0.url }, expectedURLs)
-            expectation.fulfill()
-        }
-        
-        waitForExpectations(timeout: 20, handler: nil)
+        await viewModel.loadModelsFromDirectories()
+        XCTAssertEqual(viewModel.models.map { $0.url }, expectedURLs)
     }
 }
