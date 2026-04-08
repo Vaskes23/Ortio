@@ -23,7 +23,7 @@ final class GlobalSearchViewModelTests: XCTestCase {
         viewModel = nil
     }
 
-    func testRefreshCapturedItemsLoadsCapturedModelsFromExistingDirectoryContract() {
+    func testRefreshCapturedItemsLoadsCapturedModelsFromExistingDirectoryContract() async {
         let documentsURL = URL(fileURLWithPath: "/Documents", isDirectory: true)
         let scansURL = documentsURL.appendingPathComponent("Scans", isDirectory: true)
         let sessionURL = scansURL.appendingPathComponent("Session1", isDirectory: true)
@@ -49,18 +49,10 @@ final class GlobalSearchViewModelTests: XCTestCase {
             return false
         }
 
-        let expectation = expectation(description: "captured items refresh")
-
-        viewModel.refreshCapturedItems()
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-            XCTAssertEqual(self.viewModel.items.count, 1)
-            XCTAssertEqual(self.viewModel.items.first?.source, .captured)
-            XCTAssertEqual(self.viewModel.items.first?.displayTitle, "Tower")
-            expectation.fulfill()
-        }
-
-        waitForExpectations(timeout: 2)
+        await viewModel.refreshCapturedItems()
+        XCTAssertEqual(viewModel.items.count, 1)
+        XCTAssertEqual(viewModel.items.first?.source, .captured)
+        XCTAssertEqual(viewModel.items.first?.displayTitle, "Tower")
     }
 
     func testUpdateImportedModelsAddsImportedItems() {

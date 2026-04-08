@@ -31,7 +31,7 @@ final class LibraryRepositoryTests: XCTestCase {
         container = nil
     }
 
-    func testCapturedModelURLsLoadsModelsAcrossSessionFolders() throws {
+    func testCapturedModelURLsLoadsModelsAcrossSessionFolders() async throws {
         let documentsURL = URL(fileURLWithPath: "/Documents", isDirectory: true)
         let scansURL = documentsURL.appendingPathComponent("Scans", isDirectory: true)
         let sessionURL = scansURL.appendingPathComponent("Session1", isDirectory: true)
@@ -57,12 +57,12 @@ final class LibraryRepositoryTests: XCTestCase {
             return false
         }
 
-        let urls = try repository.capturedModelURLs()
+        let urls = try await repository.capturedModelURLs()
 
         XCTAssertEqual(urls, [capturedURL])
     }
 
-    func testImportFileCopiesFileAndInsertsModel() throws {
+    func testImportFileCopiesFileAndInsertsModel() async throws {
         let documentsURL = URL(fileURLWithPath: "/Documents", isDirectory: true)
         let sourceDirectory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
         let sourceURL = sourceDirectory.appendingPathComponent("Lobby.usdz")
@@ -78,7 +78,7 @@ final class LibraryRepositoryTests: XCTestCase {
         fileManager.copyItemStub = { _, _ in }
         fileManager.attributesOfItemStub = { _ in [.size: 128.0] }
 
-        try repository.importFile(sourceURL, existingModels: [], context: context)
+        try await repository.importFile(sourceURL, existingModels: [], context: context)
 
         let models = try context.fetch(FetchDescriptor<Models>())
         XCTAssertEqual(models.count, 1)
@@ -87,7 +87,7 @@ final class LibraryRepositoryTests: XCTestCase {
         XCTAssertEqual(fileManager.lastCopyItemParameters?.srcURL, sourceURL)
     }
 
-    func testDeleteImportedModelsRemovesDirectoryAndRecord() throws {
+    func testDeleteImportedModelsRemovesDirectoryAndRecord() async throws {
         let model = Models(
             name: "Lobby.usdz",
             date: Date(),
@@ -104,7 +104,7 @@ final class LibraryRepositoryTests: XCTestCase {
         }
         fileManager.removeItemStub = { _ in }
 
-        try repository.deleteImportedModels(at: IndexSet(integer: 0), from: [model], context: context)
+        try await repository.deleteImportedModels(at: IndexSet(integer: 0), from: [model], context: context)
 
         XCTAssertEqual(fileManager.removeItemCallCount, 1)
         XCTAssertEqual(try context.fetch(FetchDescriptor<Models>()).count, 0)
@@ -150,7 +150,7 @@ final class LibraryRepositoryTests: XCTestCase {
         XCTAssertEqual(model.notes, "Retake ceiling")
     }
 
-    func testPruneMissingImportedModelsRemovesStaleRecords() throws {
+    func testPruneMissingImportedModelsRemovesStaleRecords() async throws {
         let existingURL = URL(fileURLWithPath: "/Documents/Imports/Sample-A/Existing.usdz")
         let missingURL = URL(fileURLWithPath: "/Documents/Imports/Sample-B/Missing.usdz")
 
@@ -179,7 +179,7 @@ final class LibraryRepositoryTests: XCTestCase {
             path == existingURL.path
         }
 
-        repository.pruneMissingImportedModelsIfNeeded(
+        await repository.pruneMissingImportedModelsIfNeeded(
             models: [existingModel, missingModel],
             context: context
         )

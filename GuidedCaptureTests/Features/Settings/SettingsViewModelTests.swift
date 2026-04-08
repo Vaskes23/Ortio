@@ -15,7 +15,6 @@ final class SettingsViewModelTests: XCTestCase {
     private var userDefaults: UserDefaults!
     private var repository: UserSettingsRepository!
     private var viewModel: SettingsViewModel!
-    private var themeController: ThemeController!
 
     override func setUpWithError() throws {
         suiteName = "SettingsViewModelTests-\(UUID().uuidString)"
@@ -23,7 +22,6 @@ final class SettingsViewModelTests: XCTestCase {
         userDefaults.removePersistentDomain(forName: suiteName)
         repository = UserSettingsRepository(userDefaults: userDefaults)
         viewModel = SettingsViewModel(repository: repository)
-        themeController = ThemeController()
     }
 
     override func tearDownWithError() throws {
@@ -32,7 +30,6 @@ final class SettingsViewModelTests: XCTestCase {
         userDefaults = nil
         repository = nil
         viewModel = nil
-        themeController = nil
     }
 
     func testInitReadsBooleanFlagsFromUserDefaults() throws {
@@ -57,37 +54,33 @@ final class SettingsViewModelTests: XCTestCase {
         XCTAssertFalse(userDefaults.bool(forKey: "receiveEmailsEnabled"))
     }
 
-    func testLoadUserUsesExistingUserAndAppliesTheme() throws {
+    func testLoadUserUsesExistingUser() throws {
         let (_, context) = try makeInMemoryContext()
         let existingUser = User(username: "alice", name: "Alice", theme: .dark, profileImage: nil)
 
-        viewModel.loadUser(from: [existingUser], context: context, themeController: themeController)
+        viewModel.loadUser(from: [existingUser], context: context)
 
         XCTAssertEqual(viewModel.user.username, "alice")
         XCTAssertEqual(viewModel.name, "Alice")
-        XCTAssertEqual(themeController.selectedTheme, .dark)
     }
 
     func testLoadUserCreatesDefaultUserWhenMissing() throws {
         let (_, context) = try makeInMemoryContext()
 
-        viewModel.loadUser(from: [], context: context, themeController: themeController)
+        viewModel.loadUser(from: [], context: context)
 
         let users = try context.fetch(FetchDescriptor<User>())
         XCTAssertEqual(users.count, 1)
         XCTAssertEqual(viewModel.name, "Placeholder User")
-        XCTAssertEqual(themeController.selectedTheme, .light)
     }
 
-    func testSaveThemePersistsControllerSelection() throws {
+    func testSaveThemePersistsSelection() throws {
         let (_, context) = try makeInMemoryContext()
         let user = User(username: "alice", name: "Alice", theme: .light, profileImage: nil)
         context.insert(user)
         try context.save()
         viewModel.user = user
-        themeController.apply(theme: .dark)
-
-        viewModel.saveTheme(using: themeController, context: context)
+        viewModel.saveTheme(.dark, context: context)
 
         let users = try context.fetch(FetchDescriptor<User>())
         XCTAssertEqual(users.first?.theme, .dark)

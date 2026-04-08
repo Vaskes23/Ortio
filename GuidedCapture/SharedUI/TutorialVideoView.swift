@@ -12,6 +12,8 @@ struct TutorialVideoView: View {
     let url: URL
     let isInReviewSheet: Bool
     @State var isShowing = false
+    @State private var revealTask: Task<Void, Never>?
+    @State private var captureAdvanceTask: Task<Void, Never>?
 
     private let textDelay: TimeInterval = 0.3
     private let animationDuration: TimeInterval = 4
@@ -41,16 +43,30 @@ struct TutorialVideoView: View {
         }
         .foregroundColor(.white)
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + textDelay) {
-                withAnimation {
-                    isShowing = true
-                }
-            }
-            if !isInReviewSheet {
-                DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration) {
-                    appModel.orbitState = .capturing
-                }
-            }
+            startTutorialTasks()
         }
+        .onDisappear { cancelTutorialTasks() }
+    }
+
+    private func startTutorialTasks() {
+        cancelTutorialTasks()
+        revealTask = Task {
+            try? await Task.sleep(for: .seconds(textDelay))
+            guard !Task.isCancelled else { return }
+            withAnimation { isShowing = true }
+        }
+        guard !isInReviewSheet else { return }
+        captureAdvanceTask = Task {
+            try? await Task.sleep(for: .seconds(animationDuration))
+            guard !Task.isCancelled else { return }
+            appModel.orbitState = .capturing
+        }
+    }
+
+    private func cancelTutorialTasks() {
+        revealTask?.cancel()
+        captureAdvanceTask?.cancel()
+        revealTask = nil
+        captureAdvanceTask = nil
     }
 }

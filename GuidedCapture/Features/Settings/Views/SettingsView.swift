@@ -65,12 +65,9 @@ struct SettingsView: View {
                                 get: { themeController.selectedTheme },
                                 set: { newTheme in
                                     themeController.apply(theme: newTheme)
-                                    viewModel.saveTheme(using: themeController, context: modelContext)
+                                    viewModel.saveTheme(newTheme, context: modelContext)
                                 }
                             ))
-                            .onAppear {
-                                themeController.apply(theme: viewModel.user.theme)
-                            }
                         }
                     }
                     .padding(.horizontal, 20)
@@ -81,7 +78,7 @@ struct SettingsView: View {
             .toolbar(.hidden, for: .navigationBar)
         }
         .onAppear {
-            viewModel.loadUser(from: users, context: modelContext, themeController: themeController)
+            viewModel.loadUser(from: users, context: modelContext)
         }
         .alert("Error", isPresented: Binding(
             get: { viewModel.errorMessage != nil },

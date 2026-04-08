@@ -57,9 +57,9 @@ final class GlobalSearchViewModel {
         }
     }
 
-    func refreshCapturedItems(metadataByURL: [URL: CapturedModelMetadataSnapshot] = [:]) {
+    func refreshCapturedItems(metadataByURL: [URL: CapturedModelMetadataSnapshot] = [:]) async {
         do {
-            let urls = try repository.capturedModelURLs()
+            let urls = try await repository.capturedModelURLs()
                 .filter { $0.pathExtension.lowercased() == "usdz" }
             replaceCapturedURLs(urls, metadataByURL: metadataByURL)
         } catch {
