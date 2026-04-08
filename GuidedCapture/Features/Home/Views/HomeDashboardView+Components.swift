@@ -13,156 +13,173 @@ import SwiftUI
 struct DashboardHeader: View {
     let user: User?
     @Binding var searchText: String
-    let searchPresentationState: HomeSearchPresentationState
-    let namespace: Namespace.ID
+    let transition: HomeSearchTransitionCoordinator
     let isSearchFieldFocused: FocusState<Bool>.Binding
     let onSearchTap: () -> Void
     let onCloseSearch: () -> Void
     let onSettings: () -> Void
-
-    private var isExpanded: Bool {
-        switch searchPresentationState {
-        case .expanding, .active:
-            return true
-        case .idle, .collapsing:
-            return false
-        }
-    }
 
     var body: some View {
         HStack(alignment: .center, spacing: 12) {
             Text("Ortio")
                 .font(.system(size: 30, weight: .bold, design: .rounded))
                 .foregroundStyle(.primary)
-                .frame(maxWidth: isExpanded ? 0 : .infinity, alignment: .leading)
-                .opacity(isExpanded ? 0 : 1)
-                .scaleEffect(isExpanded ? 0.92 : 1, anchor: .leading)
+                .frame(maxWidth: transition.showsTitle ? .infinity : 0, alignment: .leading)
+                .opacity(transition.showsTitle ? 1 : 0)
+                .scaleEffect(transition.showsTitle ? 1 : 0.92, anchor: .leading)
                 .clipped()
 
-            if isExpanded {
-                ExpandedSearchHeaderControls(
-                    searchText: $searchText,
-                    namespace: namespace,
-                    isSearchFieldFocused: isSearchFieldFocused,
-                    onCloseSearch: onCloseSearch
-                )
-            } else {
-                CompactSearchHeaderControls(
-                    user: user,
-                    namespace: namespace,
-                    onSearchTap: onSearchTap,
-                    onSettings: onSettings
-                )
-            }
+            SearchHeaderChrome(
+                user: user,
+                searchText: $searchText,
+                transition: transition,
+                isSearchFieldFocused: isSearchFieldFocused,
+                onSearchTap: onSearchTap,
+                onCloseSearch: onCloseSearch,
+                onSettings: onSettings
+            )
+            .frame(maxWidth: .infinity, alignment: .trailing)
         }
         .frame(height: 58)
-        .animation(.spring(response: 0.42, dampingFraction: 0.88), value: isExpanded)
+        .animation(.spring(response: 0.34, dampingFraction: 0.88), value: transition.phase)
     }
 }
 
-private struct CompactSearchHeaderControls: View {
+private struct SearchHeaderChrome: View {
     let user: User?
-    let namespace: Namespace.ID
+    @Binding var searchText: String
+    let transition: HomeSearchTransitionCoordinator
+    let isSearchFieldFocused: FocusState<Bool>.Binding
     let onSearchTap: () -> Void
+    let onCloseSearch: () -> Void
     let onSettings: () -> Void
 
+    private let compactShellWidth: CGFloat = 96
+    private let compactShellHeight: CGFloat = 46
+    private let expandedShellHeight: CGFloat = 48
+    private let closeBubbleSize: CGFloat = 48
+
     var body: some View {
-        HStack(spacing: 0) {
+        Group {
+            if #available(iOS 26, *) {
+                GlassEffectContainer(spacing: transition.showsCloseBubble ? 8 : 0) {
+                    chromeContent
+                }
+            } else {
+                chromeContent
+            }
+        }
+    }
+
+    private var chromeContent: some View {
+        HStack(spacing: transition.showsCloseBubble ? 8 : 0) {
+            searchShell
+            closeBubble
+        }
+        .frame(maxWidth: .infinity, alignment: .trailing)
+    }
+
+    private var searchShell: some View {
+        HStack(spacing: transition.shellIsExpanded ? 10 : 6) {
             Button(action: onSearchTap) {
-                HStack(spacing: 10) {
-                    Image(systemName: "magnifyingglass")
-                        .font(.headline.weight(.semibold))
-                        .foregroundStyle(.primary)
-                }
-                .frame(width: 58, height: 50)
-                .matchedGeometryEffect(id: "search-pill", in: namespace)
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Search")
-
-            Rectangle()
-                .fill(OrtioDesignSystem.subtleBorder)
-                .frame(width: 1, height: 24)
-
-            Button(action: onSettings) {
-                UserAccessoryContent(user: user)
-                    .frame(width: 52, height: 50)
-                    .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Open settings")
-            .matchedGeometryEffect(id: "search-accessory", in: namespace)
-        }
-        .ortioHeaderGlassCapsule()
-    }
-
-    private struct UserAccessoryContent: View {
-        let user: User?
-
-        var body: some View {
-            Group {
-                if let profileImage = user?.profileUIImage {
-                    Image(uiImage: profileImage)
-                        .resizable()
-                        .scaledToFill()
-                } else {
-                    Text(userInitials)
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(.white)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .background(Circle().fill(OrtioDesignSystem.accent))
-                }
-            }
-            .frame(width: 34, height: 34)
-            .clipShape(Circle())
-        }
-
-        private var userInitials: String {
-            let parts = (user?.name ?? "Ortio").split(separator: " ")
-            let initials = parts.prefix(2).compactMap(\.first).map(String.init).joined()
-            return initials.isEmpty ? "OR" : initials.uppercased()
-        }
-    }
-}
-
-private struct ExpandedSearchHeaderControls: View {
-    @Binding var searchText: String
-    let namespace: Namespace.ID
-    let isSearchFieldFocused: FocusState<Bool>.Binding
-    let onCloseSearch: () -> Void
-
-    var body: some View {
-        HStack(spacing: 12) {
-            HStack(spacing: 12) {
                 Image(systemName: "magnifyingglass")
                     .font(.headline.weight(.semibold))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(transition.showsSearchFieldContents ? .secondary : .primary)
+                    .frame(width: 20, height: 20)
+            }
+            .buttonStyle(.plain)
+            .disabled(!transition.allowsSearchActivation)
+            .accessibilityLabel("Search")
 
+            if transition.shellIsExpanded {
                 TextField("Search", text: $searchText)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
                     .focused(isSearchFieldFocused)
                     .font(.headline.weight(.medium))
+                    .lineLimit(1)
+                    .opacity(transition.showsSearchFieldContents ? 1 : 0)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .clipped()
+                    .allowsHitTesting(transition.allowsTextFieldInteraction)
+                    .accessibilityHidden(!transition.showsSearchFieldContents)
             }
-            .padding(.horizontal, 18)
-            .frame(height: 52)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .matchedGeometryEffect(id: "search-pill", in: namespace)
-            .ortioHeaderGlassCapsule()
 
-            Button(action: onCloseSearch) {
-                Image(systemName: "xmark")
-                    .font(.headline.weight(.semibold))
-                    .foregroundStyle(.primary)
-                    .frame(width: 52, height: 52)
-                    .contentTransition(.symbolEffect(.replace))
+            if transition.showsInlineAvatar {
+                Spacer(minLength: 0)
+
+                Button(action: onSettings) {
+                    UserAccessoryContent(user: user)
+                }
+                .buttonStyle(.plain)
+                .frame(width: 32, height: 32)
+                .opacity(1)
+                .scaleEffect(1)
+                .allowsHitTesting(true)
+                .accessibilityLabel("Open settings")
             }
-            .buttonStyle(.plain)
-            .matchedGeometryEffect(id: "search-accessory", in: namespace)
-            .ortioHeaderGlassCircle()
-            .accessibilityLabel("Close search")
         }
+        .padding(.leading, transition.shellIsExpanded ? 14 : 12)
+        .padding(.trailing, transition.showsInlineAvatar ? 6 : 14)
+        .frame(height: transition.shellIsExpanded ? expandedShellHeight : compactShellHeight)
+        .frame(maxWidth: transition.shellIsExpanded ? .infinity : compactShellWidth, alignment: .trailing)
+        .background {
+            Capsule(style: .continuous)
+                .fill(Color.black.opacity(transition.isTransitioning ? 0.035 : 0))
+        }
+        .ortioHeaderGlassCapsule()
+        .contentShape(Capsule(style: .continuous))
+    }
+
+    private var closeBubble: some View {
+        Button(action: onCloseSearch) {
+            Image(systemName: "xmark")
+                .font(.headline.weight(.semibold))
+                .foregroundStyle(.primary)
+                .opacity(transition.showsCloseGlyph ? 1 : 0)
+                .frame(width: closeBubbleSize, height: closeBubbleSize)
+        }
+        .buttonStyle(.plain)
+        .frame(width: transition.showsCloseBubble ? closeBubbleSize : 0, height: closeBubbleSize)
+        .background {
+            Circle()
+                .fill(Color.black.opacity(transition.isTransitioning ? 0.035 : 0))
+        }
+        .ortioHeaderGlassCircle()
+        .contentShape(Circle())
+        .opacity(transition.showsCloseBubble ? 1 : 0)
+        .scaleEffect(transition.showsCloseBubble ? 1 : 0.88, anchor: .trailing)
+        .allowsHitTesting(transition.canBeginClosing)
+        .accessibilityLabel("Close search")
+        .accessibilityHidden(!transition.showsCloseBubble)
+    }
+}
+
+private struct UserAccessoryContent: View {
+    let user: User?
+
+    var body: some View {
+        Group {
+            if let profileImage = user?.profileUIImage {
+                Image(uiImage: profileImage)
+                    .resizable()
+                    .scaledToFill()
+            } else {
+                Text(userInitials)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Circle().fill(OrtioDesignSystem.accent))
+            }
+        }
+        .frame(width: 32, height: 32)
+        .clipShape(Circle())
+    }
+
+    private var userInitials: String {
+        let parts = (user?.name ?? "Ortio").split(separator: " ")
+        let initials = parts.prefix(2).compactMap(\.first).map(String.init).joined()
+        return initials.isEmpty ? "OR" : initials.uppercased()
     }
 }
 
@@ -199,9 +216,25 @@ struct QuickActionsRow: View {
 
 // MARK: - DashboardSection
 
+struct HomeSearchEmptyState: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("No matching models")
+                .font(.title3.weight(.semibold))
+                .foregroundStyle(.primary)
+
+            Text("Try a different name or clear the query.")
+                .foregroundStyle(OrtioDesignSystem.mutedText)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.vertical, 18)
+    }
+}
+
 struct DashboardSection: View {
-    let title: String
+    let title: String?
     let items: [LibraryItem]
+    let showsSearchEmptyState: Bool
     let onSelect: (LibraryItem) -> Void
     let onTogglePin: (LibraryItem) -> Void
     @Binding var expandedNotesItemIDs: Set<String>
@@ -210,26 +243,39 @@ struct DashboardSection: View {
     let onToggleNotes: (LibraryItem) -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 18) {
-            Divider()
-                .overlay(OrtioDesignSystem.subtleBorder)
+        VStack(alignment: .leading, spacing: 0) {
+            if let title {
+                Spacer()
+                    .frame(height: 24)
 
-            Text(title)
-                .font(.title3.weight(.semibold))
-                .foregroundStyle(.primary)
+                Divider()
+                    .overlay(OrtioDesignSystem.subtleBorder.opacity(0.35))
 
-            VStack(spacing: 18) {
-                ForEach(items) { item in
-                    LibraryCard(
-                        item: item,
-                        onSelect: { onSelect(item) },
-                        onTogglePin: { onTogglePin(item) },
-                        isNotesExpanded: expandedNotesItemIDs.contains(item.id),
-                        onChangeName: { onChangeName(item) },
-                        onAddNotes: { onAddNotes(item) },
-                        onToggleNotes: { onToggleNotes(item) }
-                    )
+                Text(title)
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(.primary)
+                    .padding(.top, 18)
+                    .padding(.bottom, 18)
+            }
+
+            if items.isEmpty, showsSearchEmptyState {
+                HomeSearchEmptyState()
+                    .padding(.top, title == nil ? 10 : 0)
+            } else {
+                VStack(spacing: 18) {
+                    ForEach(items) { item in
+                        LibraryCard(
+                            item: item,
+                            onSelect: { onSelect(item) },
+                            onTogglePin: { onTogglePin(item) },
+                            isNotesExpanded: expandedNotesItemIDs.contains(item.id),
+                            onChangeName: { onChangeName(item) },
+                            onAddNotes: { onAddNotes(item) },
+                            onToggleNotes: { onToggleNotes(item) }
+                        )
+                    }
                 }
+                .padding(.top, title == nil ? 10 : 0)
             }
         }
     }
@@ -258,9 +304,11 @@ struct LibraryCard: View {
 
                         Spacer(minLength: 0)
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
                 HStack(spacing: 2) {
                     Button(action: onToggleNotes) {

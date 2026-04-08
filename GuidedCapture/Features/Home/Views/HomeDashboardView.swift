@@ -8,38 +8,36 @@
 import SwiftData
 import SwiftUI
 
-enum HomeSearchPresentationState: Equatable {
-    case idle
-    case expanding
-    case active
-    case collapsing
-}
-
 struct HomeDashboardView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.scenePhase) private var scenePhase
     @Query(sort: \Models.date, order: .reverse) private var storedModels: [Models]
     @Query private var capturedMetadata: [CapturedModelMetadata]
     @Query private var users: [User]
+    private let libraryRepository = LibraryRepository()
 
-    @Namespace private var searchTransitionNamespace
     @State private var searchViewModel = GlobalSearchViewModel()
     @State private var selectedFilter: LibraryHomeFilter = .all
     @State private var previewItem: LibraryPreviewItem?
     @State private var activeEditor: ModelEditorDestination?
     @State private var expandedNotesItemIDs: Set<String> = []
-    @State private var searchPresentationState: HomeSearchPresentationState = .idle
+    @State private var searchTransition = HomeSearchTransitionCoordinator()
     @State private var showingSettings = false
     @State private var showingTools = false
     @State private var showingCapture = false
     @State private var showingImportLibrary = false
     @State private var showingHelp = false
+    @State private var searchAnimationTask: Task<Void, Never>?
     @FocusState private var isSearchFieldFocused: Bool
 
     private var user: User? { users.first }
 
     private var filteredItems: [LibraryItem] {
         Array(searchViewModel.items(for: selectedFilter).prefix(12))
+    }
+
+    private var displayedItems: [LibraryItem] {
+        searchTransition.usesSearchResults ? searchViewModel.filteredItems : filteredItems
     }
 
     private var storedModelRefreshKey: String {
@@ -72,26 +70,12 @@ struct HomeDashboardView: View {
         })
     }
 
-    private var isSearchExpanded: Bool {
-        switch searchPresentationState {
-        case .expanding, .active:
-            return true
-        case .idle, .collapsing:
-            return false
-        }
+    private var shellAnimation: Animation {
+        .spring(response: 0.34, dampingFraction: 0.84)
     }
 
-    private var showsSearchResults: Bool {
-        switch searchPresentationState {
-        case .expanding, .active:
-            return true
-        case .idle, .collapsing:
-            return false
-        }
-    }
-
-    private var dashboardAnimation: Animation {
-        .spring(response: 0.42, dampingFraction: 0.88)
+    private var contentAnimation: Animation {
+        .easeOut(duration: 0.12)
     }
 
     var body: some View {
@@ -104,78 +88,65 @@ struct HomeDashboardView: View {
                     DashboardHeader(
                         user: user,
                         searchText: $searchViewModel.searchText,
-                        searchPresentationState: searchPresentationState,
-                        namespace: searchTransitionNamespace,
+                        transition: searchTransition,
                         isSearchFieldFocused: $isSearchFieldFocused,
                         onSearchTap: openSearch,
                         onCloseSearch: closeSearch,
                         onSettings: { showingSettings = true }
                     )
-                    .padding(.bottom, isSearchExpanded ? 20 : 28)
+                    .padding(.bottom, searchTransition.usesSearchResults ? 18 : 28)
+                    .animation(shellAnimation, value: searchTransition.phase)
 
                     QuickActionsRow(
                         selectedFilter: $selectedFilter,
                         onOpenTools: { showingTools = true }
                     )
-                    .frame(height: isSearchExpanded ? 0 : 110, alignment: .top)
-                    .opacity(isSearchExpanded ? 0 : 1)
-                    .offset(x: isSearchExpanded ? 180 : 0)
+                    .frame(height: searchTransition.showsQuickActions ? 110 : 0, alignment: .top)
+                    .opacity(searchTransition.showsQuickActions ? 1 : 0)
                     .clipped()
-                    .allowsHitTesting(!isSearchExpanded)
-                    .animation(dashboardAnimation, value: isSearchExpanded)
+                    .allowsHitTesting(searchTransition.showsQuickActions)
+                    .animation(contentAnimation, value: searchTransition.showsQuickActions)
 
-                    ZStack(alignment: .topLeading) {
-                        VStack(alignment: .leading, spacing: 28) {
-                            DashboardSection(
-                                title: selectedFilter.title,
-                                items: filteredItems,
-                                onSelect: selectItem,
-                                onTogglePin: togglePin,
-                                expandedNotesItemIDs: $expandedNotesItemIDs,
-                                onChangeName: presentRename,
-                                onAddNotes: presentNotes,
-                                onToggleNotes: toggleNotes
-                            )
-
-                            if filteredItems.isEmpty {
-                                EmptyLibraryCard(
-                                    onScan: { showingCapture = true },
-                                    onImport: { showingImportLibrary = true }
-                                )
-                            }
-                        }
-                        .opacity(showsSearchResults ? 0 : 1)
-                        .offset(y: showsSearchResults ? 28 : 0)
-                        .allowsHitTesting(!showsSearchResults)
-                        .animation(dashboardAnimation, value: showsSearchResults)
-
-                        GlobalSearchContent(
-                            viewModel: searchViewModel,
-                            onSelect: selectItem
+                    VStack(alignment: .leading, spacing: 28) {
+                        DashboardSection(
+                            title: searchTransition.showsBrowseSectionChrome ? selectedFilter.title : nil,
+                            items: displayedItems,
+                            showsSearchEmptyState: searchTransition.usesSearchResults,
+                            onSelect: selectItem,
+                            onTogglePin: togglePin,
+                            expandedNotesItemIDs: $expandedNotesItemIDs,
+                            onChangeName: presentRename,
+                            onAddNotes: presentNotes,
+                            onToggleNotes: toggleNotes
                         )
-                        .opacity(showsSearchResults ? 1 : 0)
-                        .offset(y: showsSearchResults ? 0 : 34)
-                        .allowsHitTesting(showsSearchResults)
-                        .animation(dashboardAnimation, value: showsSearchResults)
+
+                        if !searchTransition.usesSearchResults && filteredItems.isEmpty {
+                            EmptyLibraryCard(
+                                onScan: { showingCapture = true },
+                                onImport: { showingImportLibrary = true }
+                            )
+                        }
                     }
+                    .padding(.top, searchTransition.listTopPadding)
+                    .offset(y: searchTransition.contentLiftOffset)
+                    .animation(shellAnimation, value: searchTransition.phase)
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 24)
-                .padding(.bottom, isSearchExpanded ? 40 : 120)
+                .padding(.bottom, searchTransition.usesSearchResults ? 40 : 120)
             }
 
             ScanPillButton(action: { showingCapture = true })
                 .padding(.horizontal, 20)
                 .padding(.bottom, 28)
-                .opacity(isSearchExpanded ? 0 : 1)
-                .offset(y: isSearchExpanded ? 32 : 0)
-                .allowsHitTesting(!isSearchExpanded)
-                .animation(dashboardAnimation, value: isSearchExpanded)
+                .opacity(searchTransition.showsScanButton ? 1 : 0)
+                .allowsHitTesting(searchTransition.showsScanButton)
+                .animation(contentAnimation, value: searchTransition.showsScanButton)
         }
         .toolbar(.hidden, for: .navigationBar)
         .task {
-            ImportedModelMigration.normalizeDisplayNamesIfNeeded(models: storedModels, context: modelContext)
-            SampleModelSeeder.seedIfNeeded(existingModels: storedModels, context: modelContext)
+            libraryRepository.normalizeImportedModelDisplayNamesIfNeeded(models: storedModels, context: modelContext)
+            libraryRepository.seedSampleModelsIfNeeded(existingModels: storedModels, context: modelContext)
             refreshCapturedItems()
         }
         .task(id: storedModelRefreshKey) {
@@ -190,7 +161,7 @@ struct HomeDashboardView: View {
         .fullScreenCover(isPresented: $showingSettings) {
             SettingsView()
         }
-        .sheet(item: $previewItem) { item in
+        .fullScreenCover(item: $previewItem) { item in
             ModelView(modelFile: item.url) {
                 previewItem = nil
             }
@@ -217,7 +188,7 @@ struct HomeDashboardView: View {
             LoadGuidedCaptureView()
         }
         .sheet(isPresented: $showingImportLibrary) {
-            ImportView(viewModel: ImportViewModel())
+            ImportView(viewModel: ImportViewModel(repository: libraryRepository))
         }
         .sheet(isPresented: $showingHelp) {
             HelpPageView(showInfo: $showingHelp)
@@ -252,36 +223,68 @@ struct HomeDashboardView: View {
     }
 
     private func selectItem(_ item: LibraryItem) {
-        previewItem = LibraryPreviewItem(url: item.url)
+        switch LibraryPreviewItem.previewableResult(for: item.url) {
+        case .success(let previewItem):
+            self.previewItem = previewItem
+        case .failure(let error):
+            searchViewModel.errorMessage = error.localizedDescription
+        }
     }
 
     private func openSearch() {
-        guard searchPresentationState == .idle else { return }
+        guard searchTransition.phase == .idle else { return }
 
-        withAnimation(dashboardAnimation) {
-            searchPresentationState = .expanding
+        searchAnimationTask?.cancel()
+
+        withAnimation(shellAnimation) {
+            searchTransition.phase = .expandingShell
         }
 
-        Task {
-            try? await Task.sleep(for: .milliseconds(280))
-            guard searchPresentationState == .expanding else { return }
-            searchPresentationState = .active
-            isSearchFieldFocused = true
+        searchAnimationTask = Task {
+            try? await Task.sleep(for: HomeSearchTransitionCoordinator.shellStageDuration)
+            guard searchTransition.phase == .expandingShell else { return }
+            await MainActor.run {
+                withAnimation(contentAnimation) {
+                    searchTransition.phase = .revealingControls
+                }
+            }
+
+            try? await Task.sleep(for: HomeSearchTransitionCoordinator.controlsStageDuration)
+            guard searchTransition.phase == .revealingControls else { return }
+            await MainActor.run {
+                withAnimation(contentAnimation) {
+                    searchTransition.phase = .active
+                }
+                isSearchFieldFocused = true
+            }
         }
     }
 
     private func closeSearch() {
-        guard searchPresentationState == .active else { return }
+        guard searchTransition.canBeginClosing else { return }
 
+        searchAnimationTask?.cancel()
         isSearchFieldFocused = false
-        withAnimation(dashboardAnimation) {
-            searchPresentationState = .collapsing
+        withAnimation(contentAnimation) {
+            searchTransition.phase = .hidingControls
         }
 
-        Task {
-            try? await Task.sleep(for: .milliseconds(280))
-            guard searchPresentationState == .collapsing else { return }
-            searchPresentationState = .idle
+        searchAnimationTask = Task {
+            try? await Task.sleep(for: HomeSearchTransitionCoordinator.hideControlsDuration)
+            guard searchTransition.phase == .hidingControls else { return }
+            await MainActor.run {
+                withAnimation(shellAnimation) {
+                    searchTransition.phase = .collapsingShell
+                }
+            }
+
+            try? await Task.sleep(for: HomeSearchTransitionCoordinator.collapseStageDuration)
+            guard searchTransition.phase == .collapsingShell else { return }
+            await MainActor.run {
+                withAnimation(contentAnimation) {
+                    searchTransition.phase = .idle
+                }
+            }
         }
     }
 
@@ -306,99 +309,54 @@ struct HomeDashboardView: View {
     }
 
     private func togglePin(_ item: LibraryItem) {
-        switch item.source {
-        case .captured:
-            do {
-                try CapturedModelMetadataStore.update(
-                    url: item.url,
-                    in: capturedMetadata,
-                    context: modelContext
-                ) { metadata in
-                    metadata.favorite.toggle()
-                }
-            } catch {
-                searchViewModel.errorMessage = "Could not update favorite: \(error.localizedDescription)"
-            }
+        do {
+            try libraryRepository.toggleFavorite(
+                for: item,
+                storedModels: storedModels,
+                capturedMetadata: capturedMetadata,
+                context: modelContext
+            )
             refreshCapturedItems()
-        case .imported:
-            guard let model = storedModels.first(where: { $0.model == item.url }) else { return }
-            model.favorite.toggle()
-            try? modelContext.save()
             searchViewModel.updateImportedModels(storedModels)
+        } catch {
+            searchViewModel.errorMessage = "Could not update favorite: \(error.localizedDescription)"
         }
     }
 
     private func renameItem(_ item: LibraryItem, to proposedName: String) -> Bool {
-        let trimmedName = proposedName.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmedName.isEmpty else { return false }
-
-        switch item.source {
-        case .captured:
-            do {
-                try CapturedModelMetadataStore.update(
-                    url: item.url,
-                    in: capturedMetadata,
-                    context: modelContext
-                ) { metadata in
-                    metadata.displayName = trimmedName == item.defaultDisplayTitle ? nil : trimmedName
-                }
-                refreshCapturedItems()
-                return true
-            } catch {
-                searchViewModel.errorMessage = "Could not rename model: \(error.localizedDescription)"
-                return false
-            }
-        case .imported:
-            guard let model = storedModels.first(where: { $0.model == item.url }) else { return false }
-            let originalDisplayName = model.displayName
-            model.displayName = trimmedName == model.defaultDisplayTitle ? nil : trimmedName
-
-            do {
-                try modelContext.save()
-                searchViewModel.updateImportedModels(storedModels)
-                return true
-            } catch {
-                model.displayName = originalDisplayName
-                searchViewModel.errorMessage = "Could not rename model: \(error.localizedDescription)"
-                return false
-            }
+        do {
+            try libraryRepository.rename(
+                item,
+                to: proposedName,
+                storedModels: storedModels,
+                capturedMetadata: capturedMetadata,
+                context: modelContext
+            )
+            refreshCapturedItems()
+            searchViewModel.updateImportedModels(storedModels)
+            return true
+        } catch {
+            searchViewModel.errorMessage = "Could not rename model: \(error.localizedDescription)"
+            return false
         }
     }
 
     private func updateNotes(for item: LibraryItem, notes: String) -> Bool {
-        switch item.source {
-        case .captured:
-            do {
-                try CapturedModelMetadataStore.update(
-                    url: item.url,
-                    in: capturedMetadata,
-                    context: modelContext
-                ) { metadata in
-                    metadata.notes = notes
-                }
-                expandedNotesItemIDs.insert(item.id)
-                refreshCapturedItems()
-                return true
-            } catch {
-                searchViewModel.errorMessage = "Could not update notes: \(error.localizedDescription)"
-                return false
-            }
-        case .imported:
-            guard let model = storedModels.first(where: { $0.model == item.url }) else { return false }
-            let originalNotes = model.notes
-            let trimmedNotes = notes.trimmingCharacters(in: .whitespacesAndNewlines)
-            model.notes = trimmedNotes.isEmpty ? nil : trimmedNotes
-
-            do {
-                try modelContext.save()
-                expandedNotesItemIDs.insert(item.id)
-                searchViewModel.updateImportedModels(storedModels)
-                return true
-            } catch {
-                model.notes = originalNotes
-                searchViewModel.errorMessage = "Could not update notes: \(error.localizedDescription)"
-                return false
-            }
+        do {
+            try libraryRepository.updateNotes(
+                for: item,
+                notes: notes,
+                storedModels: storedModels,
+                capturedMetadata: capturedMetadata,
+                context: modelContext
+            )
+            expandedNotesItemIDs.insert(item.id)
+            refreshCapturedItems()
+            searchViewModel.updateImportedModels(storedModels)
+            return true
+        } catch {
+            searchViewModel.errorMessage = "Could not update notes: \(error.localizedDescription)"
+            return false
         }
     }
 }

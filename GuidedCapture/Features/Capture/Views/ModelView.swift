@@ -28,18 +28,22 @@ public struct ARQuickLookController: UIViewControllerRepresentable {
     let modelFile: URL
     let endCaptureCallback: () -> Void
 
-    public func makeUIViewController(context: Context) -> QLPreviewControllerWrapper {
-        let controller = QLPreviewControllerWrapper()
-        controller.qlvc.dataSource = context.coordinator
-        controller.qlvc.delegate = context.coordinator
+    public func makeUIViewController(context: Context) -> QLPreviewController {
+        let controller = QLPreviewController()
+        controller.dataSource = context.coordinator
+        controller.delegate = context.coordinator
         return controller
     }
 
     public func makeCoordinator() -> ARQuickLookController.Coordinator {
-        return Coordinator(parent: self)
+        Coordinator(parent: self)
     }
 
-    public func updateUIViewController(_ uiViewController: QLPreviewControllerWrapper, context: Context) {}
+    public func updateUIViewController(_ uiViewController: QLPreviewController, context: Context) {
+        uiViewController.dataSource = context.coordinator
+        uiViewController.delegate = context.coordinator
+        uiViewController.reloadData()
+    }
 
     public class Coordinator: NSObject, QLPreviewControllerDataSource, QLPreviewControllerDelegate {
         let parent: ARQuickLookController
@@ -49,29 +53,16 @@ public struct ARQuickLookController: UIViewControllerRepresentable {
         }
 
         public func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
-            return 1
+            1
         }
 
         public func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
-            return parent.modelFile as QLPreviewItem
+            parent.modelFile as QLPreviewItem
         }
 
         public func previewControllerWillDismiss(_ controller: QLPreviewController) {
             ARQuickLookController.logger.log("Exiting ARQL ...")
             parent.endCaptureCallback()
-        }
-    }
-}
-
-public class QLPreviewControllerWrapper: UIViewController {
-    let qlvc = QLPreviewController()
-    var qlPresented = false
-
-    public override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if !qlPresented {
-            present(qlvc, animated: false, completion: nil)
-            qlPresented = true
         }
     }
 }

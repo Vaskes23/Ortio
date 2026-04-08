@@ -8,6 +8,7 @@
 import Foundation
 import Observation
 
+@MainActor
 @Observable
 final class GlobalSearchViewModel {
     var searchText: String = ""
@@ -15,16 +16,20 @@ final class GlobalSearchViewModel {
     var errorMessage: String?
 
     @ObservationIgnored
-    private let capturedLoader: ModelsViewModel
-
-    @ObservationIgnored
     private var capturedItems: [LibraryItem] = []
 
     @ObservationIgnored
     private var importedItems: [LibraryItem] = []
 
-    init(fileManager: FileManagerProtocol = FileManager.default) {
-        self.capturedLoader = ModelsViewModel(fileManager: fileManager)
+    @ObservationIgnored
+    private let repository: LibraryRepositoryProtocol
+
+    init(repository: LibraryRepositoryProtocol = LibraryRepository()) {
+        self.repository = repository
+    }
+
+    convenience init(fileManager: FileManagerProtocol) {
+        self.init(repository: LibraryRepository(fileManager: fileManager))
     }
 
     var filteredItems: [LibraryItem] {
@@ -53,18 +58,12 @@ final class GlobalSearchViewModel {
     }
 
     func refreshCapturedItems(metadataByURL: [URL: CapturedModelMetadataSnapshot] = [:]) {
-        Task.detached(priority: .userInitiated) { [capturedLoader] in
-            do {
-                let urls = try capturedLoader.urlsInAllModelsFolders()
-                    .filter { $0.pathExtension.lowercased() == "usdz" }
-                await MainActor.run {
-                    self.replaceCapturedURLs(urls, metadataByURL: metadataByURL)
-                }
-            } catch {
-                await MainActor.run {
-                    self.errorMessage = "Failed to load models: \(error.localizedDescription)"
-                }
-            }
+        do {
+            let urls = try repository.capturedModelURLs()
+                .filter { $0.pathExtension.lowercased() == "usdz" }
+            replaceCapturedURLs(urls, metadataByURL: metadataByURL)
+        } catch {
+            errorMessage = "Failed to load models: \(error.localizedDescription)"
         }
     }
 

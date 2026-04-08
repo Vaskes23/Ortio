@@ -9,6 +9,7 @@
 import XCTest
 @testable import Ortio
 
+@MainActor
 final class ImportTests: XCTestCase {
     var mockFileManager: MockFileManager!
     var viewModel: ImportViewModel!

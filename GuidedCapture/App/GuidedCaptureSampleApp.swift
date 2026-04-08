@@ -12,17 +12,17 @@ import SwiftData
 struct GuidedCaptureSampleApp: App {
     static let subsystem: String = "com.example.apple-samplecode.GuidedCapture"
 
-    @StateObject private var appModel = AppDataModel()
+    @StateObject private var themeController = ThemeController()
     @Query private var users: [User]
-    @Environment(\.modelContext) private var modelContext
 
     var body: some Scene {
         WindowGroup {
             if #available(iOS 17.0, *) {
                 ContentView()
-                    .environmentObject(appModel)
+                    .environmentObject(themeController)
+                    .preferredColorScheme(themeController.selectedTheme.colorScheme)
                     .onAppear {
-                        appModel.loadTheme(from: users)
+                        themeController.applyStoredTheme(from: users)
                     }
             }
         }.modelContainer(for: [Models.self, CapturedModelMetadata.self, User.self])

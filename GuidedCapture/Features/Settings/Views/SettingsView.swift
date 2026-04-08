@@ -15,7 +15,7 @@ struct SettingsView: View {
     @State private var viewModel = SettingsViewModel()
     @Query var users: [User]
     @Environment(\.modelContext) private var modelContext
-    @EnvironmentObject var appModel: AppDataModel
+    @EnvironmentObject private var themeController: ThemeController
 
     var body: some View {
         NavigationStack {
@@ -29,7 +29,7 @@ struct SettingsView: View {
                             dismiss()
                         }
 
-                        NavigationLink(destination: EditProfileView(name: $viewModel.name)) {
+                        NavigationLink(destination: EditProfileView(viewModel: viewModel)) {
                             SettingsProfileCard(
                                 title: viewModel.name,
                                 subtitle: viewModel.user.username,
@@ -61,9 +61,16 @@ struct SettingsView: View {
                         }
 
                         SettingsCard(title: "Appearance") {
-                            ThemePicker(selectedTheme: $appModel.selectedTheme.onChange {
-                                appModel.saveTheme(user: viewModel.user, context: modelContext)
-                            })
+                            ThemePicker(selectedTheme: Binding(
+                                get: { themeController.selectedTheme },
+                                set: { newTheme in
+                                    themeController.apply(theme: newTheme)
+                                    viewModel.saveTheme(using: themeController, context: modelContext)
+                                }
+                            ))
+                            .onAppear {
+                                themeController.apply(theme: viewModel.user.theme)
+                            }
                         }
                     }
                     .padding(.horizontal, 20)
@@ -74,7 +81,7 @@ struct SettingsView: View {
             .toolbar(.hidden, for: .navigationBar)
         }
         .onAppear {
-            viewModel.loadUser(from: users, context: modelContext)
+            viewModel.loadUser(from: users, context: modelContext, themeController: themeController)
         }
         .alert("Error", isPresented: Binding(
             get: { viewModel.errorMessage != nil },
@@ -121,21 +128,6 @@ struct SettingsView: View {
                     .padding(.leading, 48)
             }
         }
-    }
-}
-
-// MARK: - Binding Extension
-
-extension Binding {
-    /// Returns a new binding that calls `handler` whenever the value is set.
-    func onChange(_ handler: @escaping () -> Void) -> Binding<Value> {
-        Binding(
-            get: { self.wrappedValue },
-            set: { newValue in
-                self.wrappedValue = newValue
-                handler()
-            }
-        )
     }
 }
 

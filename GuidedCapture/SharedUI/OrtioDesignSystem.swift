@@ -6,30 +6,83 @@
 //
 
 import SwiftUI
+import UIKit
 
 enum OrtioDesignSystem {
-    static let shellGradient = LinearGradient(
-        colors: [
-            Color(red: 0.99, green: 0.98, blue: 0.97),
-            Color.white,
-            Color(red: 0.96, green: 0.96, blue: 0.98)
-        ],
-        startPoint: .topLeading,
-        endPoint: .bottomTrailing
-    )
+    static var shellGradient: LinearGradient {
+        LinearGradient(
+            colors: [
+                dynamicColor(
+                    light: UIColor(red: 0.99, green: 0.98, blue: 0.97, alpha: 1),
+                    dark: UIColor(red: 0.08, green: 0.09, blue: 0.12, alpha: 1)
+                ),
+                dynamicColor(
+                    light: .white,
+                    dark: UIColor(red: 0.06, green: 0.07, blue: 0.10, alpha: 1)
+                ),
+                dynamicColor(
+                    light: UIColor(red: 0.96, green: 0.96, blue: 0.98, alpha: 1),
+                    dark: UIColor(red: 0.11, green: 0.12, blue: 0.16, alpha: 1)
+                )
+            ],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+    }
 
-    static let surface = Color.white.opacity(0.82)
-    static let elevatedSurface = Color.white.opacity(0.94)
-    static let subtleBorder = Color.black.opacity(0.05)
+    static var surface: Color {
+        dynamicColor(
+            light: UIColor(white: 1, alpha: 0.82),
+            dark: UIColor(red: 0.15, green: 0.16, blue: 0.20, alpha: 0.84)
+        )
+    }
+
+    static var elevatedSurface: Color {
+        dynamicColor(
+            light: UIColor(white: 1, alpha: 0.94),
+            dark: UIColor(red: 0.18, green: 0.19, blue: 0.24, alpha: 0.94)
+        )
+    }
+
+    static var subtleBorder: Color {
+        dynamicColor(
+            light: UIColor.black.withAlphaComponent(0.05),
+            dark: UIColor.white.withAlphaComponent(0.10)
+        )
+    }
+
     static let accent = Color(red: 0.94, green: 0.63, blue: 0.55)
-    static let accentSoft = Color(red: 0.99, green: 0.92, blue: 0.89)
-    static let shadow = Color.black.opacity(0.08)
-    static let mutedText = Color.secondary
+
+    static var accentSoft: Color {
+        dynamicColor(
+            light: UIColor(red: 0.99, green: 0.92, blue: 0.89, alpha: 1),
+            dark: UIColor(red: 0.30, green: 0.20, blue: 0.18, alpha: 0.86)
+        )
+    }
+
+    static var shadow: Color {
+        dynamicColor(
+            light: UIColor.black.withAlphaComponent(0.08),
+            dark: UIColor.black.withAlphaComponent(0.36)
+        )
+    }
+
+    static var mutedText: Color {
+        Color(uiColor: .secondaryLabel)
+    }
 
     enum Radius {
         static let large: CGFloat = 30
         static let medium: CGFloat = 24
         static let small: CGFloat = 18
+    }
+
+    private static func dynamicColor(light: UIColor, dark: UIColor) -> Color {
+        Color(
+            uiColor: UIColor { traitCollection in
+                traitCollection.userInterfaceStyle == .dark ? dark : light
+            }
+        )
     }
 }
 

@@ -13,6 +13,23 @@ struct CapturedModelMetadataSnapshot: Sendable {
     let isFavorite: Bool
 }
 
+enum LibraryPreviewValidationError: LocalizedError {
+    case nonLocalFile
+    case unsupportedFormat
+    case missingFile
+
+    var errorDescription: String? {
+        switch self {
+        case .nonLocalFile:
+            "This model is not stored as a local file."
+        case .unsupportedFormat:
+            "This file format is not supported for preview."
+        case .missingFile:
+            "The model file could not be found."
+        }
+    }
+}
+
 struct LibraryItem: Identifiable, Equatable {
     enum Source: String, CaseIterable, Identifiable {
         case captured
@@ -146,7 +163,36 @@ enum LibraryHomeFilter: String, CaseIterable, Identifiable {
     }
 }
 
-struct LibraryPreviewItem: Identifiable {
-    let id = UUID()
+struct LibraryPreviewItem: Identifiable, Equatable {
     let url: URL
+
+    var id: String {
+        url.standardizedFileURL.path
+    }
+
+    init(url: URL) {
+        self.url = url.standardizedFileURL
+    }
+
+    static func previewableResult(
+        for url: URL,
+        fileManager: FileManager = .default
+    ) -> Result<LibraryPreviewItem, LibraryPreviewValidationError> {
+        let normalizedURL = url.standardizedFileURL
+        let supportedExtensions = ["usd", "usdz", "reality"]
+
+        guard normalizedURL.isFileURL else {
+            return .failure(.nonLocalFile)
+        }
+
+        guard supportedExtensions.contains(normalizedURL.pathExtension.lowercased()) else {
+            return .failure(.unsupportedFormat)
+        }
+
+        guard fileManager.fileExists(atPath: normalizedURL.path) else {
+            return .failure(.missingFile)
+        }
+
+        return .success(LibraryPreviewItem(url: normalizedURL))
+    }
 }

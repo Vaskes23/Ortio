@@ -1,3 +1,5 @@
+> Historical note: this summary describes the earlier shared-framework and visionOS prototype direction. The supported build is currently iOS-only, and prototype code now lives under `/DeferredPrototypes/`.
+
 # Ortio XR System - Implementation Summary
 
 **Status:** ✅ Foundation Phase Complete (45% of full system)

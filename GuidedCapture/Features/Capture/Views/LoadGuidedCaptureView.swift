@@ -8,7 +8,7 @@ struct LoadGuidedCaptureView: View {
     static let logger = Logger(subsystem: GuidedCaptureSampleApp.subsystem,
                                 category: "ContentView")
 
-    @EnvironmentObject var appModel: AppDataModel
+    @StateObject private var appModel = AppDataModel()
 
     @State private var showReconstructionView: Bool = false
     @State private var showErrorAlert: Bool = false

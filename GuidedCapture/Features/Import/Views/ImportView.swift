@@ -15,7 +15,7 @@ import UniformTypeIdentifiers
 struct ImportView: View {
     @State var viewModel: ImportViewModel
     @State private var presentImporter = false
-    @State private var selectedModelForPreview: ImportModel.IdentifiableURL?
+    @State private var selectedModelForPreview: LibraryPreviewItem?
     @State private var searchQuery = ""
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Models.date, order: .reverse) var storedModels: [Models] = []
@@ -71,7 +71,7 @@ struct ImportView: View {
             } message: {
                 Text(viewModel.errorMessage ?? "")
             }
-            .sheet(item: $selectedModelForPreview, onDismiss: {
+            .fullScreenCover(item: $selectedModelForPreview, onDismiss: {
                 selectedModelForPreview = nil
             }, content: { item in
                 ModelView(modelFile: item.url, endCaptureCallback: {
@@ -98,12 +98,21 @@ struct ImportView: View {
         Section("Imported objects") {
             ForEach(filteredModels) { model in
                 FileRow(model: model) {
-                    selectedModelForPreview = ImportModel.IdentifiableURL(url: model.model)
+                    presentPreview(for: model.model)
                 }
             }
             .onDelete { offsets in
                 viewModel.deleteModel(at: offsets, from: storedModels, context: modelContext)
             }
+        }
+    }
+
+    private func presentPreview(for url: URL) {
+        switch LibraryPreviewItem.previewableResult(for: url) {
+        case .success(let item):
+            selectedModelForPreview = item
+        case .failure(let error):
+            viewModel.errorMessage = error.localizedDescription
         }
     }
 }

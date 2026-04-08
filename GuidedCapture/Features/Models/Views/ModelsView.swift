@@ -17,6 +17,7 @@ struct ModelsView: View {
     @State var viewModel: ModelsViewModel
     @Query private var capturedMetadata: [CapturedModelMetadata]
     @Query var users: [User]
+    private let libraryRepository = LibraryRepository()
 
     @State private var scaleEffect: CGFloat = 1.0
     @State private var navigateToSettings = false
@@ -59,7 +60,7 @@ struct ModelsView: View {
                                 toggleFavorite(for: model)
                             },
                             action: {
-                                viewModel.selectedModelForPreview = model
+                                presentPreview(for: model.url)
                             }
                         )
                     }
@@ -105,7 +106,7 @@ struct ModelsView: View {
                 }
             }
             .onAppear(perform: viewModel.loadModelsFromDirectories)
-            .sheet(item: $viewModel.selectedModelForPreview, onDismiss: {
+            .fullScreenCover(item: $viewModel.selectedModelForPreview, onDismiss: {
                 viewModel.selectedModelForPreview = nil
             }, content: { item in
                 ModelView(modelFile: item.url, endCaptureCallback: {
@@ -135,15 +136,34 @@ struct ModelsView: View {
 
     private func toggleFavorite(for model: ModelsModel.IdentifiableCaptureURL) {
         do {
-            try CapturedModelMetadataStore.update(
-                url: model.url,
-                in: capturedMetadata,
+            let metadata = metadataByURL[model.url.standardizedFileURL]
+            let item = LibraryItem(
+                capturedURL: model.url,
+                metadata: metadata.map {
+                    CapturedModelMetadataSnapshot(
+                        displayName: $0.normalizedDisplayName,
+                        notes: $0.normalizedNotes ?? "",
+                        isFavorite: $0.favorite
+                    )
+                }
+            )
+            try libraryRepository.toggleFavorite(
+                for: item,
+                storedModels: [],
+                capturedMetadata: capturedMetadata,
                 context: modelContext
-            ) { metadata in
-                metadata.favorite.toggle()
-            }
+            )
         } catch {
             viewModel.errorMessage = "Could not update favorite: \(error.localizedDescription)"
+        }
+    }
+
+    private func presentPreview(for url: URL) {
+        switch LibraryPreviewItem.previewableResult(for: url) {
+        case .success(let item):
+            viewModel.selectedModelForPreview = item
+        case .failure(let error):
+            viewModel.errorMessage = error.localizedDescription
         }
     }
 }

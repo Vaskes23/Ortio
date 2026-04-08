@@ -9,6 +9,7 @@
 import XCTest
 @testable import Ortio
 
+@MainActor
 final class ModelsViewModelTests: XCTestCase {
     var mockFileManager: MockFileManager!
     var viewModel: ModelsViewModel!
@@ -30,20 +31,20 @@ final class ModelsViewModelTests: XCTestCase {
         let documentsURL = URL(fileURLWithPath: "/path/to/Documents")
         let scansFolderURL = documentsURL.appendingPathComponent("Scans")
         
-        mockFileManager.urlStub = { directory, domain, url, shouldCreate in
-            return documentsURL
+        mockFileManager.urlStub = { _, _, _, _ in
+            documentsURL
         }
-        
-        mockFileManager.contentsOfDirectoryStub = { url, keys, mask in
+
+        mockFileManager.contentsOfDirectoryStub = { url, _, _ in
             if url == scansFolderURL {
                 return [] // No sessions
             } else {
                 return []
             }
         }
-        
-        mockFileManager.fileExistsStub = { path, isDirectory in
-            return false
+
+        mockFileManager.fileExistsStub = { _, _ in
+            false
         }
 
         // Act
@@ -60,20 +61,20 @@ final class ModelsViewModelTests: XCTestCase {
         let session1URL = scansFolderURL.appendingPathComponent("Session1")
         let models1URL = session1URL.appendingPathComponent("Models")
         
-        mockFileManager.urlStub = { directory, domain, url, shouldCreate in
-            return documentsURL
+        mockFileManager.urlStub = { _, _, _, _ in
+            documentsURL
         }
-        
-        mockFileManager.contentsOfDirectoryStub = { url, keys, mask in
+
+        mockFileManager.contentsOfDirectoryStub = { url, _, _ in
             if url == scansFolderURL {
                 return [session1URL]
             } else {
                 return []
             }
         }
-        
-        mockFileManager.fileExistsStub = { path, isDirectory in
-            return false // Models folder doesn't exist
+
+        mockFileManager.fileExistsStub = { _, _ in
+            false // Models folder doesn't exist
         }
 
         // Act
@@ -90,11 +91,11 @@ final class ModelsViewModelTests: XCTestCase {
         let session1URL = scansFolderURL.appendingPathComponent("Session1")
         let models1URL = session1URL.appendingPathComponent("Models")
         
-        mockFileManager.urlStub = { directory, domain, url, shouldCreate in
-            return documentsURL
+        mockFileManager.urlStub = { _, _, _, _ in
+            documentsURL
         }
-        
-        mockFileManager.contentsOfDirectoryStub = { url, keys, mask in
+
+        mockFileManager.contentsOfDirectoryStub = { url, _, _ in
             if url == scansFolderURL {
                 return [session1URL]
             } else if url == models1URL {
@@ -103,9 +104,9 @@ final class ModelsViewModelTests: XCTestCase {
                 return []
             }
         }
-        
-        mockFileManager.fileExistsStub = { path, isDirectory in
-            return path == models1URL.path
+
+        mockFileManager.fileExistsStub = { path, _ in
+            path == models1URL.path
         }
 
         // Act
@@ -117,10 +118,10 @@ final class ModelsViewModelTests: XCTestCase {
     
     func testUrlsInAllModelsFoldersWhenDocumentsDirectoryNotFound() throws {
         // Arrange
-        mockFileManager.urlStub = { directory, domain, url, shouldCreate in
+        mockFileManager.urlStub = { _, _, _, _ in
             throw NSError(domain: "Test", code: 1, userInfo: [NSLocalizedDescriptionKey: "Documents directory not found"])
         }
-        
+
         // Act & Assert
         XCTAssertThrowsError(try viewModel.urlsInAllModelsFolders()) { error in
             XCTAssertEqual((error as NSError).domain, "Test")
@@ -132,11 +133,11 @@ final class ModelsViewModelTests: XCTestCase {
         // Arrange
         let documentsURL = URL(fileURLWithPath: "/path/to/Documents")
         
-        mockFileManager.urlStub = { directory, domain, url, shouldCreate in
-            return documentsURL
+        mockFileManager.urlStub = { _, _, _, _ in
+            documentsURL
         }
-        
-        mockFileManager.contentsOfDirectoryStub = { url, keys, mask in
+
+        mockFileManager.contentsOfDirectoryStub = { _, _, _ in
             throw NSError(domain: "Test", code: 2, userInfo: [NSLocalizedDescriptionKey: "Scans directory not found"])
         }
         
@@ -151,10 +152,10 @@ final class ModelsViewModelTests: XCTestCase {
     
     func testLoadModelsFromDirectoriesWithError() throws {
         // Arrange
-        mockFileManager.urlStub = { directory, domain, url, shouldCreate in
+        mockFileManager.urlStub = { _, _, _, _ in
             throw NSError(domain: "Test", code: 1, userInfo: [NSLocalizedDescriptionKey: "Documents directory not found"])
         }
-        
+
         let expectation = self.expectation(description: "Load models from directories with error")
         
         // Act
@@ -193,4 +194,4 @@ final class ModelsViewModelTests: XCTestCase {
         XCTAssertEqual(viewModelWithCustom.models.count, 0)
         XCTAssertNil(viewModelWithCustom.selectedModelForPreview)
     }
-} 
+}

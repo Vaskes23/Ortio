@@ -2,6 +2,8 @@
 
 **🎯 Goal:** Transform your iOS photogrammetry app into a full XR collaboration platform
 
+> Historical note: this document describes deferred shared-framework and visionOS prototype work. The currently supported product is the iOS app only. Prototype code now lives under `/DeferredPrototypes/`.
+
 **⏱️ Estimated Time to First Working visionOS Build:** 2-3 hours
 
 ---

@@ -8,6 +8,7 @@
 import XCTest
 @testable import Ortio
 
+@MainActor
 final class GlobalSearchViewModelTests: XCTestCase {
     var mockFileManager: MockFileManager!
     var viewModel: GlobalSearchViewModel!
@@ -219,5 +220,35 @@ final class GlobalSearchViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.items.first?.displayTitle, "Kitchen Pass")
         XCTAssertEqual(viewModel.items.first?.notes, "Retake ceiling")
         XCTAssertEqual(viewModel.items.first?.isFavorite, true)
+    }
+
+    func testLibraryPreviewItemUsesStandardizedURLPathAsIdentity() throws {
+        let temporaryDirectory = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        let fileURL = temporaryDirectory.appendingPathComponent("Preview.usdz")
+
+        try FileManager.default.createDirectory(at: temporaryDirectory, withIntermediateDirectories: true)
+        FileManager.default.createFile(atPath: fileURL.path, contents: Data())
+        defer {
+            try? FileManager.default.removeItem(at: temporaryDirectory)
+        }
+
+        let aliasedURL = temporaryDirectory
+            .appendingPathComponent("folder", isDirectory: true)
+            .deletingLastPathComponent()
+            .appendingPathComponent("Preview.usdz")
+
+        let firstResult = LibraryPreviewItem.previewableResult(for: fileURL)
+        let secondResult = LibraryPreviewItem.previewableResult(for: aliasedURL)
+
+        guard case .success(let firstItem) = firstResult else {
+            return XCTFail("Expected first preview item to validate")
+        }
+        guard case .success(let secondItem) = secondResult else {
+            return XCTFail("Expected second preview item to validate")
+        }
+
+        XCTAssertEqual(firstItem.id, secondItem.id)
+        XCTAssertEqual(firstItem.url, secondItem.url)
     }
 }
