@@ -52,6 +52,12 @@ enum SampleModelSeeder {
                         context.delete(duplicate)
                     }
 
+                    // Always repair sample files and URLs against the current container path.
+                    try copySampleIfNeeded(sourceURL: sourceURL, destinationURL: destinationURL, fileManager: fileManager)
+                    if preferredModel.model.standardizedFileURL != destinationURL.standardizedFileURL {
+                        preferredModel.model = destinationURL
+                    }
+
                     continue
                 }
 

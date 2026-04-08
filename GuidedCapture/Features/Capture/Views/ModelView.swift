@@ -2,67 +2,33 @@
 See the LICENSE.txt file for this sample’s licensing information.
 
 Abstract:
-A wrapper for AR QuickLook viewer that shows the reconstructed USDZ model
- file directly.
+A wrapper for QuickLook that shows the reconstructed USDZ model file
+ using SwiftUI’s native .quickLookPreview() modifier.
 */
 
-import ARKit
 import QuickLook
 import SwiftUI
-import UIKit
-import os
 
 public struct ModelView: View {
     let modelFile: URL
     let endCaptureCallback: () -> Void
 
+    @State private var previewURL: URL?
+
+    public init(modelFile: URL, endCaptureCallback: @escaping () -> Void) {
+        self.modelFile = modelFile
+        self.endCaptureCallback = endCaptureCallback
+        self._previewURL = State(initialValue: modelFile)
+    }
+
     public var body: some View {
-        ARQuickLookController(modelFile: modelFile, endCaptureCallback: endCaptureCallback)
-    }
-}
-
-public struct ARQuickLookController: UIViewControllerRepresentable {
-    static let logger = Logger(subsystem: GuidedCaptureSampleApp.subsystem,
-                                category: "ARQuickLookController")
-
-    let modelFile: URL
-    let endCaptureCallback: () -> Void
-
-    public func makeUIViewController(context: Context) -> QLPreviewController {
-        let controller = QLPreviewController()
-        controller.dataSource = context.coordinator
-        controller.delegate = context.coordinator
-        return controller
-    }
-
-    public func makeCoordinator() -> ARQuickLookController.Coordinator {
-        Coordinator(parent: self)
-    }
-
-    public func updateUIViewController(_ uiViewController: QLPreviewController, context: Context) {
-        uiViewController.dataSource = context.coordinator
-        uiViewController.delegate = context.coordinator
-        uiViewController.reloadData()
-    }
-
-    public class Coordinator: NSObject, QLPreviewControllerDataSource, QLPreviewControllerDelegate {
-        let parent: ARQuickLookController
-
-        init(parent: ARQuickLookController) {
-            self.parent = parent
-        }
-
-        public func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
-            1
-        }
-
-        public func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
-            parent.modelFile as QLPreviewItem
-        }
-
-        public func previewControllerWillDismiss(_ controller: QLPreviewController) {
-            ARQuickLookController.logger.log("Exiting ARQL ...")
-            parent.endCaptureCallback()
-        }
+        Color.black
+            .ignoresSafeArea()
+            .quickLookPreview($previewURL)
+            .onChange(of: previewURL) { _, newValue in
+                if newValue == nil {
+                    endCaptureCallback()
+                }
+            }
     }
 }

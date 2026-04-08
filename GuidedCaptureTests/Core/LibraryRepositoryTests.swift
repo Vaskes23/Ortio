@@ -149,4 +149,43 @@ final class LibraryRepositoryTests: XCTestCase {
 
         XCTAssertEqual(model.notes, "Retake ceiling")
     }
+
+    func testPruneMissingImportedModelsRemovesStaleRecords() throws {
+        let existingURL = URL(fileURLWithPath: "/Documents/Imports/Sample-A/Existing.usdz")
+        let missingURL = URL(fileURLWithPath: "/Documents/Imports/Sample-B/Missing.usdz")
+
+        let existingModel = Models(
+            name: "Existing.usdz",
+            date: Date(),
+            favorite: false,
+            imported: true,
+            size: 128,
+            model: existingURL
+        )
+        let missingModel = Models(
+            name: "Missing.usdz",
+            date: Date(),
+            favorite: false,
+            imported: true,
+            size: 128,
+            model: missingURL
+        )
+
+        context.insert(existingModel)
+        context.insert(missingModel)
+        try context.save()
+
+        fileManager.fileExistsStub = { path, _ in
+            path == existingURL.path
+        }
+
+        repository.pruneMissingImportedModelsIfNeeded(
+            models: [existingModel, missingModel],
+            context: context
+        )
+
+        let remainingModels = try context.fetch(FetchDescriptor<Models>())
+        XCTAssertEqual(remainingModels.count, 1)
+        XCTAssertEqual(remainingModels.first?.model, existingURL)
+    }
 }

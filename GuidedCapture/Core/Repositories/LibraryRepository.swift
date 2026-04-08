@@ -31,6 +31,7 @@ protocol LibraryRepositoryProtocol {
     func createNewScanDirectory() -> URL?
     func normalizeImportedModelDisplayNamesIfNeeded(models: [Models], context: ModelContext)
     func seedSampleModelsIfNeeded(existingModels: [Models], context: ModelContext)
+    func pruneMissingImportedModelsIfNeeded(models: [Models], context: ModelContext)
     func importFile(_ url: URL, existingModels: [Models], context: ModelContext) throws
     func deleteImportedModels(at offsets: IndexSet, from storedModels: [Models], context: ModelContext) throws
     func toggleFavorite(
@@ -146,6 +147,20 @@ final class LibraryRepository: LibraryRepositoryProtocol {
 
     func seedSampleModelsIfNeeded(existingModels: [Models], context: ModelContext) {
         SampleModelSeeder.seedIfNeeded(existingModels: existingModels, context: context)
+    }
+
+    func pruneMissingImportedModelsIfNeeded(models: [Models], context: ModelContext) {
+        let missingModels = models.filter { model in
+            model.imported && !fileManager.fileExists(atPath: model.model.standardizedFileURL.path, isDirectory: nil)
+        }
+
+        guard !missingModels.isEmpty else { return }
+
+        for model in missingModels {
+            context.delete(model)
+        }
+
+        try? context.save()
     }
 
     func importFile(_ url: URL, existingModels: [Models], context: ModelContext) throws {

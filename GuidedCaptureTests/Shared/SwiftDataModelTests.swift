@@ -168,6 +168,55 @@ final class SwiftDataModelTests: XCTestCase {
         XCTAssertEqual(legacyModel.name, "model.usdz")
         XCTAssertEqual(legacyModel.displayName, "Kitchen Hero")
     }
+
+    @MainActor
+    func testSampleSeederRepairsStaleSampleURLAndPreservesMetadata() throws {
+        let sampleDirectory = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        let sampleURL = sampleDirectory.appendingPathComponent("CitcularHome.usdz")
+        try FileManager.default.createDirectory(
+            at: sampleDirectory,
+            withIntermediateDirectories: true
+        )
+        try Data("sample".utf8).write(to: sampleURL)
+        defer {
+            try? FileManager.default.removeItem(at: sampleDirectory)
+        }
+
+        let destinationURL = try SampleModelSeeder.sampleDestinationURL(sourceURL: sampleURL, fileManager: .default)
+        let staleURL = URL(fileURLWithPath: "/tmp/\(UUID().uuidString)/CitcularHome.usdz")
+        let staleModel = Models(
+            name: sampleURL.lastPathComponent,
+            date: Date(),
+            favorite: true,
+            imported: true,
+            displayName: "My renamed model",
+            notes: "Keep this note",
+            sampleSeedID: sampleURL.lastPathComponent,
+            size: 128,
+            model: staleURL
+        )
+
+        modelContext.insert(staleModel)
+        try modelContext.save()
+
+        SampleModelSeeder.seedIfNeeded(
+            existingModels: [staleModel],
+            context: modelContext,
+            fileManager: .default,
+            sampleURLs: [sampleURL]
+        )
+
+        let savedModels = try modelContext.fetch(FetchDescriptor<Models>())
+        XCTAssertEqual(savedModels.count, 1)
+        let repairedModel = try XCTUnwrap(savedModels.first)
+
+        XCTAssertEqual(repairedModel.model.standardizedFileURL, destinationURL.standardizedFileURL)
+        XCTAssertEqual(repairedModel.displayName, "My renamed model")
+        XCTAssertEqual(repairedModel.normalizedNotes, "Keep this note")
+        XCTAssertTrue(repairedModel.favorite)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: destinationURL.path))
+    }
     
     func testModelsIdentifiable() {
         // Arrange

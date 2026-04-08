@@ -147,6 +147,7 @@ struct HomeDashboardView: View {
         .task {
             libraryRepository.normalizeImportedModelDisplayNamesIfNeeded(models: storedModels, context: modelContext)
             libraryRepository.seedSampleModelsIfNeeded(existingModels: storedModels, context: modelContext)
+            libraryRepository.pruneMissingImportedModelsIfNeeded(models: storedModels, context: modelContext)
             refreshCapturedItems()
         }
         .task(id: storedModelRefreshKey) {
