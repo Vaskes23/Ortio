@@ -37,6 +37,32 @@ xcodebuild test \
   -destination 'platform=iOS Simulator,name=iPhone 16'
 ```
 
+## Whisper Dictation Server
+
+Ortio's notes dictation now expects a local Whisper server backed by the official [`openai/whisper`](https://github.com/openai/whisper) Python package.
+
+1. Install Whisper from the official repo:
+
+```bash
+python3 -m pip install -r requirements-whisper.txt
+```
+
+2. Install `ffmpeg` if it is not already available:
+
+```bash
+brew install ffmpeg
+```
+
+3. Start the local server from the repo root:
+
+```bash
+python3 server.py
+```
+
+The app sends audio to `POST /v1/audio/transcriptions`. The server calls Whisper with `task="transcribe"` and leaves `language` unset, so Whisper auto-detects the spoken language.
+
+For Simulator runs, the default `http://127.0.0.1:8080` endpoint works if `server.py` is running on your Mac. For a physical iPhone, set `WHISPER_BASE_URL` in the Xcode run scheme to your Mac's LAN address, for example `http://192.168.1.10:8080`.
+
 ## Architecture Notes
 
 - `AppDataModel` is capture-flow state only.

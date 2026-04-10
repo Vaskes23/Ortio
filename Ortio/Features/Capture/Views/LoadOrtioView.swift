@@ -22,6 +22,19 @@ struct LoadOrtioView: View {
                 if let session = appModel.objectCaptureSession {
                     CapturePrimaryView(session: session)
                 }
+            } else if appModel.state == .unsupported {
+                VStack(spacing: 16) {
+                    Image(systemName: "exclamationmark.triangle")
+                        .font(.largeTitle)
+                        .foregroundStyle(.secondary)
+                    Text("Object capture is not supported on this device.")
+                        .font(.headline)
+                        .multilineTextAlignment(.center)
+                    Text("A device with LiDAR Scanner is required.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                .padding()
             } else if showProgressView {
                 CircularProgressView()
             }
@@ -41,7 +54,7 @@ struct LoadOrtioView: View {
             }
         }
         .alert(
-            "Failed:  " + (appModel.error != nil  ? "\(String(describing: appModel.error!))" : ""), // swiftlint:disable:this force_unwrapping
+            "Failed:  " + (appModel.error.map { String(describing: $0) } ?? "Unknown error"),
             isPresented: $showErrorAlert,
             actions: {
                 Button("OK") {

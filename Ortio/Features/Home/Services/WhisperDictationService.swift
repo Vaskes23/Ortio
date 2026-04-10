@@ -7,12 +7,28 @@
 
 import AVFoundation
 import Foundation
+import os
 
-protocol WhisperDictationServicing {
+protocol NoteDictationServicing {
     func transcribe(audioFileURL: URL) async throws -> String
 }
 
-struct WhisperDictationService: WhisperDictationServicing {
+struct DefaultNoteDictationService: NoteDictationServicing {
+    private let whisperService: WhisperDictationService
+
+    init(
+        configuration: WhisperServiceConfiguration = .fromEnvironment(),
+        session: URLSession = .shared
+    ) {
+        self.whisperService = WhisperDictationService(configuration: configuration, session: session)
+    }
+
+    func transcribe(audioFileURL: URL) async throws -> String {
+        try await whisperService.transcribe(audioFileURL: audioFileURL)
+    }
+}
+
+struct WhisperDictationService: NoteDictationServicing {
     private let configuration: WhisperServiceConfiguration
     private let session: URLSession
 
@@ -43,7 +59,15 @@ struct WhisperDictationService: WhisperDictationServicing {
             fileName: audioFileURL.lastPathComponent
         )
 
-        let (data, response) = try await session.data(for: request)
+        let (data, response): (Data, URLResponse)
+        do {
+            (data, response) = try await session.data(for: request)
+        } catch let error as URLError {
+            throw WhisperDictationError.unreachableServer(
+                endpoint: configuration.transcriptionURL,
+                detail: error.localizedDescription
+            )
+        }
         guard let httpResponse = response as? HTTPURLResponse else {
             throw WhisperDictationError.invalidResponse
         }
@@ -71,6 +95,14 @@ struct WhisperDictationService: WhisperDictationServicing {
         body.append("\(model)\r\n")
 
         body.append("--\(boundary)\r\n")
+        body.append("Content-Disposition: form-data; name=\"task\"\r\n\r\n")
+        body.append("transcribe\r\n")
+
+        body.append("--\(boundary)\r\n")
+        body.append("Content-Disposition: form-data; name=\"response_format\"\r\n\r\n")
+        body.append("json\r\n")
+
+        body.append("--\(boundary)\r\n")
         body.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(fileName)\"\r\n")
         body.append("Content-Type: audio/m4a\r\n\r\n")
         body.append(audioData)
@@ -82,33 +114,58 @@ struct WhisperDictationService: WhisperDictationServicing {
 }
 
 struct WhisperServiceConfiguration {
+    enum Source: Equatable {
+        case explicitBaseURL
+        case defaultLoopback
+    }
+
     let transcriptionURL: URL
     let model: String
     let apiKey: String?
+    let source: Source
 
-    static func fromEnvironment() -> WhisperServiceConfiguration {
-        let environment = ProcessInfo.processInfo.environment
-        let baseURLString = environment["WHISPER_BASE_URL"] ?? "http://127.0.0.1:8080"
-        let defaultBaseURL = URL(string: "http://127.0.0.1:8080") ?? URL(fileURLWithPath: "/")
-        let baseURL = URL(string: baseURLString) ?? defaultBaseURL
-        let endpoint = baseURL.appending(path: "v1/audio/transcriptions")
-        let model = environment["WHISPER_MODEL"] ?? "whisper-1"
+    static func fromEnvironment(_ environment: [String: String] = ProcessInfo.processInfo.environment) -> WhisperServiceConfiguration {
+        let baseURLString = environment["WHISPER_BASE_URL"]
         let apiKey = environment["WHISPER_API_KEY"]
+        let model = environment["WHISPER_MODEL"] ?? "turbo"
+        let defaultBaseURL = URL(string: "http://127.0.0.1:8080") ?? URL(fileURLWithPath: "/")
+
+        let baseURL: URL
+        let source: Source
+
+        if let baseURLString,
+           let configuredBaseURL = URL(string: baseURLString) {
+            baseURL = configuredBaseURL
+            source = .explicitBaseURL
+        } else {
+            baseURL = defaultBaseURL
+            source = .defaultLoopback
+        }
+
+        let endpoint = baseURL.appending(path: "v1/audio/transcriptions")
 
         return WhisperServiceConfiguration(
             transcriptionURL: endpoint,
             model: model,
-            apiKey: apiKey
+            apiKey: apiKey,
+            source: source
         )
     }
 }
 
 @MainActor
 final class VoiceNoteRecorder: NSObject, ObservableObject {
+    private static let logger = Logger(subsystem: "com.ortio", category: "VoiceNoteRecorder")
+    static let meterSampleCount = 56
+
     @Published private(set) var isRecording = false
+    @Published private(set) var meterLevels: [CGFloat] = Array(repeating: 0.12, count: meterSampleCount)
+    @Published private(set) var recordingDuration: TimeInterval = 0
 
     private var recorder: AVAudioRecorder?
     private var recordingURL: URL?
+    private var recordingStartDate: Date?
+    private var meterTask: Task<Void, Never>?
 
     func startRecording() async throws {
         guard !isRecording else { return }
@@ -135,10 +192,15 @@ final class VoiceNoteRecorder: NSObject, ObservableObject {
         ]
 
         recorder = try AVAudioRecorder(url: tempURL, settings: settings)
+        recorder?.isMeteringEnabled = true
         recorder?.record()
 
         recordingURL = tempURL
+        recordingStartDate = Date()
+        recordingDuration = 0
+        meterLevels = Self.idleMeterLevels
         isRecording = true
+        startMetering()
     }
 
     func stopRecording() throws -> URL {
@@ -146,23 +208,112 @@ final class VoiceNoteRecorder: NSObject, ObservableObject {
             throw WhisperDictationError.noRecordingInProgress
         }
 
+        stopMetering()
         recorder?.stop()
         recorder = nil
         isRecording = false
 
-        guard let recordingURL else {
+        guard let finishedRecordingURL = recordingURL else {
             throw WhisperDictationError.recordingFileMissing
         }
 
+        recordingURL = nil
+        recordingStartDate = nil
+        recordingDuration = 0
+        meterLevels = Self.idleMeterLevels
         try AVAudioSession.sharedInstance().setActive(false)
-        return recordingURL
+        return finishedRecordingURL
+    }
+
+    func cancelRecording() {
+        stopMetering()
+        recorder?.stop()
+        recorder = nil
+        isRecording = false
+
+        if let recordingURL {
+            do {
+                try FileManager.default.removeItem(at: recordingURL)
+            } catch {
+                Self.logger.debug("Failed to remove temp recording: \(error.localizedDescription)")
+            }
+        }
+
+        self.recordingURL = nil
+        recordingStartDate = nil
+        recordingDuration = 0
+        meterLevels = Self.idleMeterLevels
+        do {
+            try AVAudioSession.sharedInstance().setActive(false)
+        } catch {
+            Self.logger.debug("Failed to deactivate audio session: \(error.localizedDescription)")
+        }
+    }
+
+    private func startMetering() {
+        meterTask?.cancel()
+        meterTask = Task { @MainActor [weak self] in
+            guard let self else { return }
+
+            while !Task.isCancelled, self.isRecording {
+                self.recorder?.updateMeters()
+                let averagePower = self.recorder?.averagePower(forChannel: 0) ?? -160
+                let normalizedLevel = Self.normalizedLevel(from: averagePower)
+                self.pushMeterLevel(normalizedLevel)
+                self.recordingDuration = Date().timeIntervalSince(self.recordingStartDate ?? Date())
+
+                try? await Task.sleep(nanoseconds: 55_000_000)
+            }
+        }
+    }
+
+    private func stopMetering() {
+        meterTask?.cancel()
+        meterTask = nil
+    }
+
+    private func pushMeterLevel(_ level: CGFloat) {
+        if meterLevels.isEmpty {
+            meterLevels = Self.idleMeterLevels
+        }
+
+        meterLevels.removeFirst()
+        meterLevels.append(level)
+    }
+
+    private static func normalizedLevel(from averagePower: Float) -> CGFloat {
+        let clampedPower = max(-50, averagePower)
+        let normalized = (clampedPower + 50) / 50
+        return CGFloat(max(0.22, min(1, normalized)))
+    }
+
+    private static var idleMeterLevels: [CGFloat] {
+        (0 ..< meterSampleCount).map { index in
+            if index.isMultiple(of: 9) {
+                return 0.34
+            }
+
+            return index.isMultiple(of: 3) ? 0.2 : 0.14
+        }
     }
 
     private func requestPermission() async -> Bool {
         await withCheckedContinuation { continuation in
+#if os(iOS)
+            if #available(iOS 17.0, *) {
+                AVAudioApplication.requestRecordPermission { granted in
+                    continuation.resume(returning: granted)
+                }
+            } else {
+                AVAudioSession.sharedInstance().requestRecordPermission { granted in
+                    continuation.resume(returning: granted)
+                }
+            }
+#else
             AVAudioSession.sharedInstance().requestRecordPermission { granted in
                 continuation.resume(returning: granted)
             }
+#endif
         }
     }
 }
@@ -171,6 +322,7 @@ enum WhisperDictationError: LocalizedError {
     case invalidResponse
     case serverError(statusCode: Int, message: String)
     case emptyTranscript
+    case unreachableServer(endpoint: URL, detail: String)
     case microphonePermissionDenied
     case noRecordingInProgress
     case recordingFileMissing
@@ -183,6 +335,8 @@ enum WhisperDictationError: LocalizedError {
             return "Whisper server error (\(statusCode)): \(message)"
         case .emptyTranscript:
             return "No speech was detected in the recording."
+        case .unreachableServer(let endpoint, let detail):
+            return "Could not reach the Whisper server at \(endpoint.host ?? endpoint.absoluteString). \(detail)"
         case .microphonePermissionDenied:
             return "Microphone permission is required to dictate notes."
         case .noRecordingInProgress:
@@ -195,6 +349,7 @@ enum WhisperDictationError: LocalizedError {
 
 private struct WhisperTranscriptionResponse: Decodable {
     let text: String
+    let language: String?
 }
 
 private extension Data {

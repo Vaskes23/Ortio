@@ -160,7 +160,8 @@ class AppDataModel: ObservableObject, Identifiable {
     private func attachListeners() {
         logger.debug("Attaching listeners...")
         guard let model = objectCaptureSession else {
-            fatalError("Logic error")
+            logger.error("attachListeners called but objectCaptureSession is nil — skipping")
+            return
         }
         
         tasks.append(Task<Void, Never> { [weak self] in
@@ -208,7 +209,8 @@ class AppDataModel: ObservableObject, Identifiable {
         objectCaptureSession = ObjectCaptureSession()
 
         guard let session = objectCaptureSession else {
-            preconditionFailure("startNewCapture() got unexpectedly nil session!")
+            logger.error("startNewCapture: session is unexpectedly nil after creation")
+            return false
         }
 
         var configuration = ObjectCaptureSession.Configuration()
@@ -320,6 +322,7 @@ class AppDataModel: ObservableObject, Identifiable {
                     guard let self else { return }
                     guard await self.startNewCapture() else {
                         self.logger.error("Starting new capture failed!")
+                        self.state = .unsupported
                         return
                     }
                 }

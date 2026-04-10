@@ -38,7 +38,7 @@ final class UserSettingsRepository: UserSettingsRepositoryProtocol {
         static let receiveEmailsEnabled = "receiveEmailsEnabled"
     }
 
-    private let userDefaults: UserDefaults
+    nonisolated(unsafe) private let userDefaults: UserDefaults
 
     nonisolated init(userDefaults: UserDefaults = .standard) {
         self.userDefaults = userDefaults

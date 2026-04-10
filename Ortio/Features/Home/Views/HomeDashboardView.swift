@@ -141,8 +141,8 @@ struct HomeDashboardView: View {
                 requestLibraryRefresh()
             }
         }
-        .onChange(of: storedModels.count) { _, _ in requestLibraryRefresh() }
-        .onChange(of: capturedMetadata.count) { _, _ in requestLibraryRefresh() }
+        .onChange(of: storedModels) { _, _ in requestLibraryRefresh() }
+        .onChange(of: capturedMetadata) { _, _ in requestLibraryRefresh() }
         .fullScreenCover(isPresented: $showingSettings) {
             SettingsView()
         }

@@ -20,5 +20,6 @@ extension AppDataModel {
         case completed
         case restart
         case failed
+        case unsupported
     }
 }

@@ -132,7 +132,7 @@ final class ModelsViewModelTests: XCTestCase {
         )
     }
     
-    func testUrlsInAllModelsFoldersWhenScansDirectoryNotFound() async throws {
+    func testUrlsInAllModelsFoldersWhenScansDirectoryNotFoundReturnsEmptyList() async throws {
         // Arrange
         let documentsURL = URL(fileURLWithPath: "/path/to/Documents")
         
@@ -140,18 +140,16 @@ final class ModelsViewModelTests: XCTestCase {
             documentsURL
         }
 
-        mockFileManager.contentsOfDirectoryStub = { _, _, _ in
-            throw NSError(domain: "Test", code: 2, userInfo: [NSLocalizedDescriptionKey: "Scans directory not found"])
+        mockFileManager.fileExistsStub = { _, isDirectory in
+            isDirectory?.pointee = false
+            return false
         }
-        
-        // Act & Assert
-        await XCTAssertThrowsErrorAsync(
-            { try await self.viewModel.urlsInAllModelsFolders() },
-            errorHandler: { error in
-                XCTAssertEqual((error as NSError).domain, "Test")
-                XCTAssertEqual((error as NSError).code, 2)
-            }
-        )
+
+        // Act
+        let modelURLs = try await viewModel.urlsInAllModelsFolders()
+
+        // Assert
+        XCTAssertTrue(modelURLs.isEmpty)
     }
     
     // MARK: - loadModelsFromDirectories Tests

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os
 
 struct CaptureDirectoryLayout: Sendable, Equatable {
     let rootScanFolder: URL
@@ -31,6 +32,7 @@ protocol LibraryFileStoreProtocol: Actor {
 }
 
 actor LibraryFileStore: LibraryFileStoreProtocol {
+    private static let logger = Logger(subsystem: "com.ortio", category: "LibraryFileStore")
     private let fileManager: FileManagerProtocol
     private let now: () -> Date
 
@@ -42,6 +44,10 @@ actor LibraryFileStore: LibraryFileStoreProtocol {
     func capturedModelURLs() throws -> [URL] {
         let documentsDirectory = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
         let scansFolder = documentsDirectory.appendingPathComponent(PathConstants.scans, isDirectory: true)
+        var scansFolderIsDirectory = ObjCBool(false)
+        guard fileManager.fileExists(atPath: scansFolder.path, isDirectory: &scansFolderIsDirectory) else {
+            return []
+        }
         var allModelURLs: [URL] = []
         let sessionDirectories = try fileManager.contentsOfDirectory(at: scansFolder, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
         for sessionDirectory in sessionDirectories {
@@ -64,7 +70,11 @@ actor LibraryFileStore: LibraryFileStoreProtocol {
             var values = URLResourceValues()
             values.isExcludedFromBackup = true
             var mutableURL = newCaptureDir
-            try? mutableURL.setResourceValues(values)
+            do {
+                try mutableURL.setResourceValues(values)
+            } catch {
+                Self.logger.warning("Failed to exclude scan directory from backup: \(error.localizedDescription)")
+            }
         } catch {
             return nil
         }
@@ -120,8 +130,10 @@ actor LibraryFileStore: LibraryFileStoreProtocol {
     }
 
     private func rootScansFolder() -> URL? {
-        guard let documentsFolder = try? fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) else { return nil }
-        return documentsFolder.appendingPathComponent(PathConstants.scans, isDirectory: true)
+        guard let documentsFolder = try? fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true) else { return nil }
+        let scansFolder = documentsFolder.appendingPathComponent(PathConstants.scans, isDirectory: true)
+        guard createDirectoryIfNeeded(at: scansFolder) else { return nil }
+        return scansFolder
     }
 
     private func createDirectoryIfNeeded(at url: URL) -> Bool {
@@ -137,6 +149,10 @@ actor LibraryFileStore: LibraryFileStoreProtocol {
 
     private func removeItemIfExists(at url: URL) {
         guard fileManager.fileExists(atPath: url.path, isDirectory: nil) else { return }
-        try? fileManager.removeItem(at: url)
+        do {
+            try fileManager.removeItem(at: url)
+        } catch {
+            Self.logger.warning("Failed to remove item at \(url.lastPathComponent): \(error.localizedDescription)")
+        }
     }
 }
