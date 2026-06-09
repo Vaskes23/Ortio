@@ -43,12 +43,6 @@ struct HomeQuickActionButton: View {
     var body: some View {
         Button(action: action) {
             VStack(spacing: 8) {
-                Text(title)
-                    .font(.custom("Helvetica-Bold", size: 12))
-                    .foregroundStyle(.primary)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.82)
-
                 ZStack {
                     Circle()
                         .fill(isSelected ? OrtioDesignSystem.accentSoft : OrtioDesignSystem.elevatedSurface)
@@ -60,6 +54,12 @@ struct HomeQuickActionButton: View {
                         .font(.title3.weight(.medium))
                         .foregroundStyle(.primary)
                 }
+
+                Text(title)
+                    .font(.custom("Helvetica-Bold", size: 11))
+                    .foregroundStyle(OrtioDesignSystem.mutedText.opacity(0.58))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.82)
             }
             .frame(width: 74)
             .contentShape(Rectangle())
