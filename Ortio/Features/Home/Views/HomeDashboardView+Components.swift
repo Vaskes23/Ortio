@@ -192,7 +192,6 @@ struct QuickActionsRow: View {
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             quickActionsContent
-                .padding(.vertical, 6)
         }
     }
 

@@ -86,7 +86,7 @@ struct HomeDashboardView: View {
                         selectedFilter: $selectedFilter,
                         onOpenTools: { showingTools = true }
                     )
-                    .frame(height: searchTransition.showsQuickActions ? 110 : 0, alignment: .top)
+                    .frame(height: searchTransition.showsQuickActions ? 86 : 0, alignment: .top)
                     .opacity(searchTransition.showsQuickActions ? 1 : 0)
                     .clipped()
                     .allowsHitTesting(searchTransition.showsQuickActions)

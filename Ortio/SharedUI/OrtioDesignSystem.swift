@@ -9,24 +9,14 @@ import SwiftUI
 import UIKit
 
 enum OrtioDesignSystem {
-    static var shellGradient: LinearGradient {
-        LinearGradient(
-            colors: [
-                dynamicColor(
-                    light: UIColor(red: 0.99, green: 0.98, blue: 0.97, alpha: 1),
-                    dark: UIColor(red: 0.08, green: 0.09, blue: 0.12, alpha: 1)
-                ),
-                dynamicColor(
-                    light: .white,
-                    dark: UIColor(red: 0.06, green: 0.07, blue: 0.10, alpha: 1)
-                ),
-                dynamicColor(
-                    light: UIColor(red: 0.96, green: 0.96, blue: 0.98, alpha: 1),
-                    dark: UIColor(red: 0.11, green: 0.12, blue: 0.16, alpha: 1)
-                )
-            ],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
+    static var shellGradient: Color {
+        appBackground
+    }
+
+    static var appBackground: Color {
+        dynamicColor(
+            light: UIColor(red: 227.0 / 255.0, green: 228.0 / 255.0, blue: 228.0 / 255.0, alpha: 1),
+            dark: UIColor(red: 227.0 / 255.0, green: 228.0 / 255.0, blue: 228.0 / 255.0, alpha: 1)
         )
     }
 
