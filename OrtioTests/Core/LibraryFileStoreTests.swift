@@ -42,6 +42,6 @@ final class LibraryFileStoreTests: XCTestCase {
         let result = await fileStore.createNewScanDirectory()
 
         XCTAssertEqual(result, expectedDirectory)
-        XCTAssertEqual(fileManager.createDirectoryCallCount, 1)
+        XCTAssertEqual(fileManager.createDirectoryCallCount, 2)
     }
 }

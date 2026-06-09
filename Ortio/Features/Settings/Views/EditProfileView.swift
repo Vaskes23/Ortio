@@ -98,16 +98,18 @@ struct EditProfileView: View {
             username = viewModel.user.username
             selectedImage = viewModel.user.profileUIImage
         }
-        .onChange(of: selectedPhotosPickerItem) { newItem in
-            Task {
+        .onChange(of: selectedPhotosPickerItem) { _, newItem in
+            Task { @MainActor in
                 if let newItem = newItem,
                    let data = try? await newItem.loadTransferable(type: Data.self),
                    let uiImage = UIImage(data: data) {
+                    guard !Task.isCancelled else { return }
                     withAnimation(.easeInOut(duration: 0.6)) {
                         rotationAngle += 180
                         isFlipped.toggle()
                     }
                     try? await Task.sleep(for: .milliseconds(300))
+                    guard !Task.isCancelled else { return }
                     selectedImage = uiImage
                 }
             }

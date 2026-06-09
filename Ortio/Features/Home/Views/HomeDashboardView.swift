@@ -141,8 +141,8 @@ struct HomeDashboardView: View {
                 requestLibraryRefresh()
             }
         }
-        .onChange(of: storedModels.count) { _, _ in requestLibraryRefresh() }
-        .onChange(of: capturedMetadata.count) { _, _ in requestLibraryRefresh() }
+        .onChange(of: storedModels) { _, _ in requestLibraryRefresh() }
+        .onChange(of: capturedMetadata) { _, _ in requestLibraryRefresh() }
         .fullScreenCover(isPresented: $showingSettings) {
             SettingsView()
         }
@@ -170,7 +170,7 @@ struct HomeDashboardView: View {
             }
         }
         .sheet(isPresented: $showingCapture) {
-            LoadGuidedCaptureView()
+            LoadOrtioView()
         }
         .sheet(isPresented: $showingImportLibrary) {
             ImportView(viewModel: ImportViewModel(repository: libraryRepository))

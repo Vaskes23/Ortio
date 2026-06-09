@@ -60,7 +60,7 @@ struct ImportView: View {
                 allowedContentTypes: [.usd, .usdz, .realityFile],
                 allowsMultipleSelection: true,
                 onCompletion: { result in
-                    Task {
+                    Task { @MainActor in
                         await viewModel.handleImport(result: result, existingModels: storedModels, context: modelContext)
                     }
                 }
@@ -104,8 +104,9 @@ struct ImportView: View {
                 }
             }
             .onDelete { offsets in
-                Task {
-                    await viewModel.deleteModel(at: offsets, from: storedModels, context: modelContext)
+                let modelsToDelete = offsets.map { filteredModels[$0] }
+                Task { @MainActor in
+                    await viewModel.deleteModels(modelsToDelete, context: modelContext)
                 }
             }
         }

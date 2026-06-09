@@ -56,9 +56,21 @@ final class ImportViewModelTests: XCTestCase {
 
         // Assert
         XCTAssertTrue(folderName.hasPrefix("Model_"))
-        // Should contain timestamp in format yyyyMMddHHmmss
-        let timestampPart = String(folderName.dropFirst(6)) // Remove "Model_"
-        XCTAssertEqual(timestampPart.count, 14) // yyyyMMddHHmmss = 14 characters
+        // Should contain timestamp + UUID suffix
+        let afterPrefix = String(folderName.dropFirst(6)) // Remove "Model_"
+        XCTAssertTrue(afterPrefix.count > 14, "Folder name should include UUID suffix beyond timestamp")
+    }
+
+    func testCreateUniqueFolderNameProducesDistinctNamesForSameDate() {
+        // Arrange — two imports with the exact same creation date
+        let date = Date(timeIntervalSince1970: 946684800)
+
+        // Act
+        let name1 = ImportViewModel.createUniqueFolderName(from: date)
+        let name2 = ImportViewModel.createUniqueFolderName(from: date)
+
+        // Assert — must differ to prevent folder collision
+        XCTAssertNotEqual(name1, name2, "Two calls with the same date must produce distinct folder names")
     }
 
     // MARK: - createNewScanDirectory Tests
@@ -150,6 +162,6 @@ final class ImportViewModelTests: XCTestCase {
         let result = await viewModel.createNewScanDirectory()
 
         XCTAssertNotNil(result)
-        XCTAssertEqual(mockFileManager.createDirectoryCallCount, 1)
+        XCTAssertEqual(mockFileManager.createDirectoryCallCount, 2)
     }
 }

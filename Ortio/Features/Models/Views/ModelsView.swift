@@ -77,8 +77,9 @@ struct ModelsView: View {
                         withAnimation(.spring()) {
                             scaleEffect = 1.5
                         }
-                        Task {
+                        Task { @MainActor in
                             try? await Task.sleep(for: .milliseconds(200))
+                            guard !Task.isCancelled else { return }
                             withAnimation(.spring()) {
                                 scaleEffect = 1.0
                                 navigateToSettings = true
