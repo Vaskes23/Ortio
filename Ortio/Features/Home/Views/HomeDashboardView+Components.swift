@@ -22,7 +22,7 @@ struct DashboardHeader: View {
     var body: some View {
         HStack(alignment: .center, spacing: 12) {
             Text("Ortio")
-                .font(.system(size: 30, weight: .bold, design: .rounded))
+                .font(.custom("Helvetica-Bold", size: 38))
                 .foregroundStyle(.primary)
                 .frame(maxWidth: transition.showsTitle ? .infinity : 0, alignment: .leading)
                 .opacity(transition.showsTitle ? 1 : 0)
@@ -40,7 +40,7 @@ struct DashboardHeader: View {
             )
             .frame(maxWidth: .infinity, alignment: .trailing)
         }
-        .frame(height: 58)
+        .frame(height: 64)
         .animation(.spring(response: 0.34, dampingFraction: 0.88), value: transition.phase)
     }
 }
