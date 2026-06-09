@@ -192,14 +192,14 @@ struct QuickActionsRow: View {
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             quickActionsContent
-                .padding(.vertical, 4)
+                .padding(.vertical, 6)
         }
     }
 
     @ViewBuilder
     private var quickActionsContent: some View {
         if #available(iOS 26, *) {
-            GlassEffectContainer(spacing: 12) {
+            GlassEffectContainer(spacing: 24) {
                 quickActionsRow
             }
         } else {
@@ -208,7 +208,7 @@ struct QuickActionsRow: View {
     }
 
     private var quickActionsRow: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: 24) {
             ForEach([LibraryHomeFilter.captured, .imported, .favorites], id: \.id) { filter in
                 HomeQuickActionButton(
                     title: filter.title,

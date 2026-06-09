@@ -52,7 +52,6 @@ enum OrtioDesignSystem {
     }
 
     static let accent = Color(red: 0.94, green: 0.63, blue: 0.55)
-    static let secondary = Color(red: 0, green: 47.0 / 255.0, blue: 167.0 / 255.0)
 
     static var accentSoft: Color {
         dynamicColor(
