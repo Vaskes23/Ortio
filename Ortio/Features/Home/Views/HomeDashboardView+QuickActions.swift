@@ -44,11 +44,7 @@ struct HomeQuickActionButton: View {
         Button(action: action) {
             VStack(spacing: 8) {
                 ZStack {
-                    Circle()
-                        .fill(isSelected ? OrtioDesignSystem.accentSoft : OrtioDesignSystem.elevatedSurface)
-                        .frame(width: 64, height: 64)
-                        .overlay(Circle().stroke(OrtioDesignSystem.subtleBorder, lineWidth: 1))
-                        .ortioQuickActionGlassCircle(isSelected: isSelected)
+                    QuickActionIconGlassSurface(isSelected: isSelected)
 
                     Image(systemName: systemName)
                         .font(.title3.weight(.medium))
@@ -68,18 +64,32 @@ struct HomeQuickActionButton: View {
     }
 }
 
-private extension View {
+private struct QuickActionIconGlassSurface: View {
+    let isSelected: Bool
+
     @ViewBuilder
-    func ortioQuickActionGlassCircle(isSelected: Bool) -> some View {
+    var body: some View {
         if #available(iOS 26, *) {
-            self.glassEffect(
-                .regular
-                    .tint(isSelected ? OrtioDesignSystem.accentSoft : OrtioDesignSystem.elevatedSurface.opacity(0.72))
-                    .interactive(),
-                in: Circle()
-            )
+            Circle()
+                .fill(isSelected ? OrtioDesignSystem.accentSoft.opacity(0.28) : Color.white.opacity(0.08))
+                .frame(width: 64, height: 64)
+                .overlay(Circle().stroke(OrtioDesignSystem.subtleBorder, lineWidth: 1))
+                .glassEffect(
+                    .regular
+                        .tint(isSelected ? OrtioDesignSystem.accentSoft.opacity(0.55) : Color.white.opacity(0.18))
+                        .interactive(),
+                    in: Circle()
+                )
         } else {
-            self
+            Circle()
+                .fill(.ultraThinMaterial)
+                .frame(width: 64, height: 64)
+                .background(
+                    Circle()
+                        .fill(isSelected ? OrtioDesignSystem.accentSoft.opacity(0.38) : OrtioDesignSystem.elevatedSurface.opacity(0.32))
+                )
+                .overlay(Circle().stroke(OrtioDesignSystem.subtleBorder, lineWidth: 1))
+                .shadow(color: OrtioDesignSystem.shadow.opacity(0.55), radius: 12, x: 0, y: 7)
         }
     }
 }
