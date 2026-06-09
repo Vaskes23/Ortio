@@ -42,24 +42,46 @@ struct HomeQuickActionButton: View {
 
     var body: some View {
         Button(action: action) {
-            VStack(spacing: 10) {
-                ZStack {
-                    Circle()
-                        .fill(isSelected ? OrtioDesignSystem.accentSoft : OrtioDesignSystem.elevatedSurface)
-                        .frame(width: 74, height: 74)
-                        .overlay(Circle().stroke(OrtioDesignSystem.subtleBorder, lineWidth: 1))
-
-                    Image(systemName: systemName)
-                        .font(.title3.weight(.medium))
-                        .foregroundStyle(.primary)
-                }
-
+            VStack(spacing: 7) {
                 Text(title)
-                    .font(.subheadline.weight(.medium))
-                    .foregroundStyle(.primary)
+                    .font(.custom("Helvetica-Bold", size: 12))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.82)
+
+                Image(systemName: systemName)
+                    .font(.system(size: 18, weight: .semibold))
             }
+            .foregroundStyle(isSelected ? .white : OrtioDesignSystem.secondary)
+            .frame(width: 62, height: 68)
+            .contentShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+            .ortioQuickActionGlassSurface(isSelected: isSelected)
         }
         .buttonStyle(.plain)
+    }
+}
+
+private extension View {
+    @ViewBuilder
+    func ortioQuickActionGlassSurface(isSelected: Bool) -> some View {
+        if #available(iOS 26, *) {
+            self.glassEffect(
+                .regular
+                    .tint(isSelected ? OrtioDesignSystem.secondary : OrtioDesignSystem.secondary.opacity(0.12))
+                    .interactive(),
+                in: RoundedRectangle(cornerRadius: 18, style: .continuous)
+            )
+        } else {
+            self
+                .background(
+                    RoundedRectangle(cornerRadius: 18, style: .continuous)
+                        .fill(isSelected ? OrtioDesignSystem.secondary : OrtioDesignSystem.elevatedSurface)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 18, style: .continuous)
+                        .stroke(OrtioDesignSystem.secondary.opacity(isSelected ? 0.34 : 0.14), lineWidth: 1)
+                )
+                .shadow(color: OrtioDesignSystem.shadow, radius: 14, x: 0, y: 8)
+        }
     }
 }
 

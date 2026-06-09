@@ -191,25 +191,40 @@ struct QuickActionsRow: View {
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 18) {
-                ForEach([LibraryHomeFilter.captured, .imported, .favorites], id: \.id) { filter in
-                    HomeQuickActionButton(
-                        title: filter.title,
-                        systemName: filter.symbolName,
-                        isSelected: selectedFilter == filter
-                    ) {
-                        selectedFilter = filter
-                    }
-                }
+            quickActionsContent
+                .padding(.vertical, 4)
+        }
+    }
 
-                HomeQuickActionButton(
-                    title: "Tools",
-                    systemName: "square.grid.2x2",
-                    isSelected: false,
-                    action: onOpenTools
-                )
+    @ViewBuilder
+    private var quickActionsContent: some View {
+        if #available(iOS 26, *) {
+            GlassEffectContainer(spacing: 12) {
+                quickActionsRow
             }
-            .padding(.vertical, 4)
+        } else {
+            quickActionsRow
+        }
+    }
+
+    private var quickActionsRow: some View {
+        HStack(spacing: 12) {
+            ForEach([LibraryHomeFilter.captured, .imported, .favorites], id: \.id) { filter in
+                HomeQuickActionButton(
+                    title: filter.title,
+                    systemName: filter.symbolName,
+                    isSelected: selectedFilter == filter
+                ) {
+                    selectedFilter = filter
+                }
+            }
+
+            HomeQuickActionButton(
+                title: "Tools",
+                systemName: "square.grid.2x2",
+                isSelected: false,
+                action: onOpenTools
+            )
         }
     }
 }

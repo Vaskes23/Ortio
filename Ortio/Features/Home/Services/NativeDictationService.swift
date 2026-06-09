@@ -1,5 +1,5 @@
 //
-//  WhisperDictationService.swift
+//  NativeDictationService.swift
 //  Ortio
 //
 //  Created by OpenAI on 08.04.2026.
@@ -8,152 +8,127 @@
 import AVFoundation
 import Foundation
 import os
+import Speech
 
 protocol NoteDictationServicing {
     func transcribe(audioFileURL: URL) async throws -> String
 }
 
 struct DefaultNoteDictationService: NoteDictationServicing {
-    private let whisperService: WhisperDictationService
+    private let nativeService: NativeDictationService
 
-    init(
-        configuration: WhisperServiceConfiguration = .fromEnvironment(),
-        session: URLSession = .shared
-    ) {
-        self.whisperService = WhisperDictationService(configuration: configuration, session: session)
+    init(locale: Locale = .current) {
+        self.nativeService = NativeDictationService(locale: locale)
     }
 
     func transcribe(audioFileURL: URL) async throws -> String {
-        try await whisperService.transcribe(audioFileURL: audioFileURL)
+        try await nativeService.transcribe(audioFileURL: audioFileURL)
     }
 }
 
-struct WhisperDictationService: NoteDictationServicing {
-    private let configuration: WhisperServiceConfiguration
-    private let session: URLSession
+struct NativeDictationService: NoteDictationServicing {
+    private let locale: Locale
+    private let recognizerFactory: (Locale) -> SFSpeechRecognizer?
 
     init(
-        configuration: WhisperServiceConfiguration = .fromEnvironment(),
-        session: URLSession = .shared
+        locale: Locale = .current,
+        recognizerFactory: @escaping (Locale) -> SFSpeechRecognizer? = { SFSpeechRecognizer(locale: $0) }
     ) {
-        self.configuration = configuration
-        self.session = session
+        self.locale = locale
+        self.recognizerFactory = recognizerFactory
     }
 
     func transcribe(audioFileURL: URL) async throws -> String {
-        var request = URLRequest(url: configuration.transcriptionURL)
-        request.httpMethod = "POST"
-
-        if let apiKey = configuration.apiKey, !apiKey.isEmpty {
-            request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
+        let authorizationStatus = await Self.requestSpeechAuthorization()
+        guard authorizationStatus == .authorized else {
+            throw NativeDictationError.speechRecognitionPermissionDenied
         }
 
-        let boundary = "Boundary-\(UUID().uuidString)"
-        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-
-        let model = configuration.model
-        let fileName = audioFileURL.lastPathComponent
-        request.httpBody = try await Task.detached(priority: .userInitiated) {
-            let audioData = try Data(contentsOf: audioFileURL)
-            return Self.createMultipartBody(
-                boundary: boundary,
-                model: model,
-                audioData: audioData,
-                fileName: fileName
-            )
-        }.value
-
-        let (data, response): (Data, URLResponse)
-        do {
-            (data, response) = try await session.data(for: request)
-        } catch let error as URLError {
-            throw WhisperDictationError.unreachableServer(
-                endpoint: configuration.transcriptionURL,
-                detail: error.localizedDescription
-            )
-        }
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw WhisperDictationError.invalidResponse
+        guard FileManager.default.fileExists(atPath: audioFileURL.path) else {
+            throw NativeDictationError.recordingFileMissing
         }
 
-        guard 200 ..< 300 ~= httpResponse.statusCode else {
-            let message = String(data: data, encoding: .utf8) ?? "Unknown transcription error"
-            throw WhisperDictationError.serverError(statusCode: httpResponse.statusCode, message: message)
+        guard let recognizer = recognizerFactory(locale) else {
+            throw NativeDictationError.recognizerUnavailable
         }
 
-        let transcription = try JSONDecoder().decode(WhisperTranscriptionResponse.self, from: data)
-        let text = transcription.text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard recognizer.supportsOnDeviceRecognition else {
+            throw NativeDictationError.onDeviceRecognitionUnavailable
+        }
+
+        let request = SFSpeechURLRecognitionRequest(url: audioFileURL)
+        request.shouldReportPartialResults = false
+        request.requiresOnDeviceRecognition = true
+
+        let text = try await Self.recognize(request: request, recognizer: recognizer)
+            .trimmingCharacters(in: .whitespacesAndNewlines)
 
         guard !text.isEmpty else {
-            throw WhisperDictationError.emptyTranscript
+            throw NativeDictationError.emptyTranscript
         }
 
         return text
     }
 
-    private static func createMultipartBody(boundary: String, model: String, audioData: Data, fileName: String) -> Data {
-        var body = Data()
+    private static func requestSpeechAuthorization() async -> SFSpeechRecognizerAuthorizationStatus {
+        await withCheckedContinuation { continuation in
+            SFSpeechRecognizer.requestAuthorization { status in
+                continuation.resume(returning: status)
+            }
+        }
+    }
 
-        body.append("--\(boundary)\r\n")
-        body.append("Content-Disposition: form-data; name=\"model\"\r\n\r\n")
-        body.append("\(model)\r\n")
+    private static func recognize(
+        request: SFSpeechURLRecognitionRequest,
+        recognizer: SFSpeechRecognizer
+    ) async throws -> String {
+        try await withCheckedThrowingContinuation { continuation in
+            let continuationBox = SpeechRecognitionContinuationBox(continuation: continuation)
+            let recognitionTask = recognizer.recognitionTask(with: request) { result, error in
+                if let error {
+                    continuationBox.resume(throwing: NativeDictationError.recognitionFailed(error.localizedDescription))
+                    return
+                }
 
-        body.append("--\(boundary)\r\n")
-        body.append("Content-Disposition: form-data; name=\"task\"\r\n\r\n")
-        body.append("transcribe\r\n")
+                guard let result, result.isFinal else { return }
 
-        body.append("--\(boundary)\r\n")
-        body.append("Content-Disposition: form-data; name=\"response_format\"\r\n\r\n")
-        body.append("json\r\n")
-
-        body.append("--\(boundary)\r\n")
-        body.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(fileName)\"\r\n")
-        body.append("Content-Type: audio/m4a\r\n\r\n")
-        body.append(audioData)
-        body.append("\r\n")
-
-        body.append("--\(boundary)--\r\n")
-        return body
+                continuationBox.resume(returning: result.bestTranscription.formattedString)
+            }
+            continuationBox.recognitionTask = recognitionTask
+        }
     }
 }
 
-struct WhisperServiceConfiguration {
-    enum Source: Equatable {
-        case explicitBaseURL
-        case defaultLoopback
+private final class SpeechRecognitionContinuationBox: @unchecked Sendable {
+    private let lock = NSLock()
+    private var didResume = false
+    private let continuation: CheckedContinuation<String, Error>
+
+    var recognitionTask: SFSpeechRecognitionTask?
+
+    init(continuation: CheckedContinuation<String, Error>) {
+        self.continuation = continuation
     }
 
-    let transcriptionURL: URL
-    let model: String
-    let apiKey: String?
-    let source: Source
+    func resume(returning text: String) {
+        guard prepareToResume() else { return }
+        continuation.resume(returning: text)
+    }
 
-    static func fromEnvironment(_ environment: [String: String] = ProcessInfo.processInfo.environment) -> WhisperServiceConfiguration {
-        let baseURLString = environment["WHISPER_BASE_URL"]
-        let apiKey = environment["WHISPER_API_KEY"]
-        let model = environment["WHISPER_MODEL"] ?? "turbo"
-        let defaultBaseURL = URL(string: "http://127.0.0.1:8080") ?? URL(fileURLWithPath: "/")
+    func resume(throwing error: Error) {
+        guard prepareToResume() else { return }
+        continuation.resume(throwing: error)
+    }
 
-        let baseURL: URL
-        let source: Source
+    private func prepareToResume() -> Bool {
+        lock.lock()
+        defer { lock.unlock() }
 
-        if let baseURLString,
-           let configuredBaseURL = URL(string: baseURLString) {
-            baseURL = configuredBaseURL
-            source = .explicitBaseURL
-        } else {
-            baseURL = defaultBaseURL
-            source = .defaultLoopback
-        }
-
-        let endpoint = baseURL.appending(path: "v1/audio/transcriptions")
-
-        return WhisperServiceConfiguration(
-            transcriptionURL: endpoint,
-            model: model,
-            apiKey: apiKey,
-            source: source
-        )
+        guard !didResume else { return false }
+        didResume = true
+        recognitionTask?.cancel()
+        recognitionTask = nil
+        return true
     }
 }
 
@@ -176,7 +151,7 @@ final class VoiceNoteRecorder: NSObject, ObservableObject {
 
         let hasPermission = await requestPermission()
         guard hasPermission else {
-            throw WhisperDictationError.microphonePermissionDenied
+            throw NativeDictationError.microphonePermissionDenied
         }
 
         let session = AVAudioSession.sharedInstance()
@@ -209,7 +184,7 @@ final class VoiceNoteRecorder: NSObject, ObservableObject {
 
     func stopRecording() throws -> URL {
         guard isRecording else {
-            throw WhisperDictationError.noRecordingInProgress
+            throw NativeDictationError.noRecordingInProgress
         }
 
         stopMetering()
@@ -218,7 +193,7 @@ final class VoiceNoteRecorder: NSObject, ObservableObject {
         isRecording = false
 
         guard let finishedRecordingURL = recordingURL else {
-            throw WhisperDictationError.recordingFileMissing
+            throw NativeDictationError.recordingFileMissing
         }
 
         recordingURL = nil
@@ -322,44 +297,34 @@ final class VoiceNoteRecorder: NSObject, ObservableObject {
     }
 }
 
-enum WhisperDictationError: LocalizedError {
-    case invalidResponse
-    case serverError(statusCode: Int, message: String)
+enum NativeDictationError: LocalizedError {
     case emptyTranscript
-    case unreachableServer(endpoint: URL, detail: String)
     case microphonePermissionDenied
+    case onDeviceRecognitionUnavailable
+    case recognizerUnavailable
+    case recognitionFailed(String)
     case noRecordingInProgress
     case recordingFileMissing
+    case speechRecognitionPermissionDenied
 
     var errorDescription: String? {
         switch self {
-        case .invalidResponse:
-            return "Whisper server returned an invalid response."
-        case .serverError(let statusCode, let message):
-            return "Whisper server error (\(statusCode)): \(message)"
         case .emptyTranscript:
             return "No speech was detected in the recording."
-        case .unreachableServer(let endpoint, let detail):
-            return "Could not reach the Whisper server at \(endpoint.host ?? endpoint.absoluteString). \(detail)"
         case .microphonePermissionDenied:
             return "Microphone permission is required to dictate notes."
+        case .onDeviceRecognitionUnavailable:
+            return "On-device speech recognition is not available for the current language."
+        case .recognizerUnavailable:
+            return "Speech recognition is not available right now."
+        case .recognitionFailed(let detail):
+            return "Speech recognition failed. \(detail)"
         case .noRecordingInProgress:
             return "No recording is currently in progress."
         case .recordingFileMissing:
             return "The recorded audio file is missing."
-        }
-    }
-}
-
-private struct WhisperTranscriptionResponse: Decodable {
-    let text: String
-    let language: String?
-}
-
-private extension Data {
-    mutating func append(_ string: String) {
-        if let data = string.data(using: .utf8) {
-            append(data)
+        case .speechRecognitionPermissionDenied:
+            return "Speech recognition permission is required to dictate notes."
         }
     }
 }

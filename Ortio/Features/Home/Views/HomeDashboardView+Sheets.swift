@@ -333,16 +333,18 @@ struct ModelNotesSheet: View {
 
     private func dictationMessage(for error: Error) -> String {
         switch error {
-        case WhisperDictationError.microphonePermissionDenied:
+        case NativeDictationError.microphonePermissionDenied:
             return "Microphone access needed."
-        case WhisperDictationError.emptyTranscript:
+        case NativeDictationError.speechRecognitionPermissionDenied:
+            return "Speech access needed."
+        case NativeDictationError.emptyTranscript:
             return "No speech detected."
-        case WhisperDictationError.unreachableServer(endpoint: _, detail: _):
-            return "Whisper server offline."
-        case WhisperDictationError.serverError(statusCode: _, message: _):
-            return "Server error."
-        case WhisperDictationError.invalidResponse:
-            return "Invalid server response."
+        case NativeDictationError.onDeviceRecognitionUnavailable:
+            return "Offline dictation unavailable."
+        case NativeDictationError.recognizerUnavailable:
+            return "Dictation unavailable."
+        case NativeDictationError.recognitionFailed:
+            return "Could not transcribe."
         default:
             return error.localizedDescription
         }

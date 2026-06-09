@@ -94,8 +94,8 @@
 		EBB39FA23E7F4E9B6F5AC5DE /* CaptureFolderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 937F4E6BAA4D88C31B02F7A2 /* CaptureFolderManager.swift */; };
 		EC12CB7D534703EF66FD24A3 /* OnboardingButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 582079B00769338A44396A91 /* OnboardingButtonView.swift */; };
 		ECD4CF3A807BBF6903917966 /* OnboardingStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72EC56DBEBF68E8FB4EB7AD /* OnboardingStateMachine.swift */; };
-		ED3F347A74F2FDA972B60DC0 /* WhisperDictationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E983A39242328316A20A44 /* WhisperDictationService.swift */; };
-		EE570264D2C79BDEE0356258 /* WhisperDictationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1D3A09091F8C73768211C1 /* WhisperDictationServiceTests.swift */; };
+		ED3F347A74F2FDA972B60DC0 /* NativeDictationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E983A39242328316A20A44 /* NativeDictationService.swift */; };
+		EE570264D2C79BDEE0356258 /* NativeDictationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1D3A09091F8C73768211C1 /* NativeDictationServiceTests.swift */; };
 		F721A1ED9AC4FE69A0AB0359 /* ModelsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF80C4DFCC8F4FAC4328F42 /* ModelsViewModel.swift */; };
 		F79FFE6AA96636A0F031C96F /* ReconstructionPrimaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74A725A5130296737A0A609 /* ReconstructionPrimaryView.swift */; };
 		FC1B9A366407C51AEF1FC370 /* FileManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C89E7A42694442BDE136658 /* FileManagerProtocol.swift */; };
@@ -130,7 +130,7 @@
 		2AD6E0ECD328B2CB0BA317C4 /* CaptureOverlayView+LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaptureOverlayView+LocalizedString.swift"; sourceTree = "<group>"; };
 		2AEE13610A7400309B9FD87B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		2D3CAC402661DD7DC0108A64 /* ThemeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeController.swift; sourceTree = "<group>"; };
-		30E983A39242328316A20A44 /* WhisperDictationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhisperDictationService.swift; sourceTree = "<group>"; };
+		30E983A39242328316A20A44 /* NativeDictationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeDictationService.swift; sourceTree = "<group>"; };
 		31DBFF86BA55A0955F3C0297 /* CapturePrimaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePrimaryView.swift; sourceTree = "<group>"; };
 		34DC97B003F974F066179E65 /* HomeSearchTransitionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSearchTransitionCoordinator.swift; sourceTree = "<group>"; };
 		3ADF6DAF9FA0340F4FE41D61 /* CaptureOverlayView+Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaptureOverlayView+Buttons.swift"; sourceTree = "<group>"; };
@@ -203,7 +203,7 @@
 		C09081E76A1B2B40542F3F6F /* CaptureOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureOverlayView.swift; sourceTree = "<group>"; };
 		C3DDA9D5578BA521909481DF /* ScanPasses-iPad-FixedHeight-3.mp4 */ = {isa = PBXFileReference; path = "ScanPasses-iPad-FixedHeight-3.mp4"; sourceTree = "<group>"; };
 		C823BA0229B541952CD44655 /* CaptureUtilitiesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureUtilitiesTests.swift; sourceTree = "<group>"; };
-		CA1D3A09091F8C73768211C1 /* WhisperDictationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhisperDictationServiceTests.swift; sourceTree = "<group>"; };
+		CA1D3A09091F8C73768211C1 /* NativeDictationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeDictationServiceTests.swift; sourceTree = "<group>"; };
 		CE776109FAE7C32D6512935D /* TutorialVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialVideoView.swift; sourceTree = "<group>"; };
 		D03445EDDC906A611C41DDD2 /* AppDataModel+Orbit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDataModel+Orbit.swift"; sourceTree = "<group>"; };
 		D03AC8379CA8AC8DB06D6F90 /* GlobalSearchViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSearchViewModelTests.swift; sourceTree = "<group>"; };
@@ -300,7 +300,7 @@
 			children = (
 				D03AC8379CA8AC8DB06D6F90 /* GlobalSearchViewModelTests.swift */,
 				14E0B930CB5F3F0554B2A869 /* HomeSearchTransitionCoordinatorTests.swift */,
-				CA1D3A09091F8C73768211C1 /* WhisperDictationServiceTests.swift */,
+				CA1D3A09091F8C73768211C1 /* NativeDictationServiceTests.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -462,7 +462,7 @@
 		469D893EBC4D2A38EE632DB5 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				30E983A39242328316A20A44 /* WhisperDictationService.swift */,
+				30E983A39242328316A20A44 /* NativeDictationService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -956,7 +956,7 @@
 				86E057247B658C48D4BD07A9 /* ThemeControllerTests.swift in Sources */,
 				3FB879A073B394F29DFE6FBF /* ThemeTests.swift in Sources */,
 				CAA5C32799A1DAC666831714 /* UserSettingsRepositoryTests.swift in Sources */,
-				EE570264D2C79BDEE0356258 /* WhisperDictationServiceTests.swift in Sources */,
+				EE570264D2C79BDEE0356258 /* NativeDictationServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1022,7 +1022,7 @@
 				CA7ABCFAA07679146ED61E61 /* UntilProcessingCompleteFilter.swift in Sources */,
 				4409932704B0E1A02C62C014 /* User.swift in Sources */,
 				7C34B5C84D5F59D5AF9C421E /* UserSettingsRepository.swift in Sources */,
-				ED3F347A74F2FDA972B60DC0 /* WhisperDictationService.swift in Sources */,
+				ED3F347A74F2FDA972B60DC0 /* NativeDictationService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1184,9 +1184,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Ortio/Info.plist;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
-				INFOPLIST_KEY_NSAppTransportSecurity_NSAllowsLocalNetworking = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app uses the camera to scan objects.";
-				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "This app can connect to a Whisper server on your local network for note dictation.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app uses the microphone so you can dictate model notes.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "This app uses speech recognition so you can dictate model notes.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -1247,9 +1245,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Ortio/Info.plist;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
-				INFOPLIST_KEY_NSAppTransportSecurity_NSAllowsLocalNetworking = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app uses the camera to scan objects.";
-				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "This app can connect to a Whisper server on your local network for note dictation.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app uses the microphone so you can dictate model notes.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "This app uses speech recognition so you can dictate model notes.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
