@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>logFormatVersion</key>
+	<integer>12</integer>
+	<key>logs</key>
+	<dict>
+		<key>7B5C4D72-9034-47CE-B06B-771601C88209</key>
+		<dict>
+			<key>className</key>
+			<string>IDECommandLineBuildLog</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>7B5C4D72-9034-47CE-B06B-771601C88209.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>S</string>
+				<key>totalNumberOfAnalyzerIssues</key>
+				<integer>0</integer>
+				<key>totalNumberOfErrors</key>
+				<integer>0</integer>
+				<key>totalNumberOfTestFailures</key>
+				<integer>0</integer>
+				<key>totalNumberOfWarnings</key>
+				<integer>0</integer>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>Ortio project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>Ortio</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Building project Ortio with scheme Ortio and configuration Debug</string>
+			<key>timeStartedRecording</key>
+			<real>799954334.057971</real>
+			<key>timeStoppedRecording</key>
+			<real>799954336.70419204</real>
+			<key>title</key>
+			<string>Building project Ortio with scheme Ortio and configuration Debug</string>
+			<key>uniqueIdentifier</key>
+			<string>7B5C4D72-9034-47CE-B06B-771601C88209</string>
+		</dict>
+		<key>7F86CBB2-271B-48F8-8DF8-2541F0C378EE</key>
+		<dict>
+			<key>className</key>
+			<string>IDECommandLineBuildLog</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>7F86CBB2-271B-48F8-8DF8-2541F0C378EE.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>S</string>
+				<key>totalNumberOfAnalyzerIssues</key>
+				<integer>0</integer>
+				<key>totalNumberOfErrors</key>
+				<integer>0</integer>
+				<key>totalNumberOfTestFailures</key>
+				<integer>0</integer>
+				<key>totalNumberOfWarnings</key>
+				<integer>0</integer>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>Ortio project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>Ortio</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Building project Ortio with scheme Ortio and configuration Debug</string>
+			<key>timeStartedRecording</key>
+			<real>800086678.26614106</real>
+			<key>timeStoppedRecording</key>
+			<real>800086681.81698501</real>
+			<key>title</key>
+			<string>Building project Ortio with scheme Ortio and configuration Debug</string>
+			<key>uniqueIdentifier</key>
+			<string>7F86CBB2-271B-48F8-8DF8-2541F0C378EE</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

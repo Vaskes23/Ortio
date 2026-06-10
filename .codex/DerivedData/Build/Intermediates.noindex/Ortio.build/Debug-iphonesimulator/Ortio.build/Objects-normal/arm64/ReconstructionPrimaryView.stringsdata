@@ -1,0 +1,16 @@
+{
+  "source": "/Users/matyasvascak/Desktop/Code/Ortio/Ortio/Features/Capture/Views/ReconstructionPrimaryView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "OK",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 111
+        }
+      }
+    ]
+  },
+  "version": 1
+}

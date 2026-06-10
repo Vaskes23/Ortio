@@ -1,0 +1,30 @@
+{
+  "/Users/matyasvascak/Desktop/Code/Ortio/Ortio/Core/Repositories/LibraryFileStore.swift" : {
+    "const-values" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/LibraryFileStore.swiftconstvalues",
+    "dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/LibraryFileStore.d",
+    "diagnostics" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/LibraryFileStore.dia",
+    "object" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/LibraryFileStore.o",
+    "swift-dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/LibraryFileStore.swiftdeps"
+  },
+  "/Users/matyasvascak/Desktop/Code/Ortio/Ortio/Features/Home/Models/LibraryItem.swift" : {
+    "const-values" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/LibraryItem.swiftconstvalues",
+    "dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/LibraryItem.d",
+    "diagnostics" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/LibraryItem.dia",
+    "object" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/LibraryItem.o",
+    "swift-dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/LibraryItem.swiftdeps"
+  },
+  "/Users/matyasvascak/Desktop/Code/Ortio/Ortio/Features/Import/ViewModels/ImportViewModel.swift" : {
+    "const-values" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/ImportViewModel.swiftconstvalues",
+    "dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/ImportViewModel.d",
+    "diagnostics" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/ImportViewModel.dia",
+    "object" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/ImportViewModel.o",
+    "swift-dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/ImportViewModel.swiftdeps"
+  },
+  "/Users/matyasvascak/Desktop/Code/Ortio/Ortio/Features/Import/Views/ImportView.swift" : {
+    "const-values" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/ImportView.swiftconstvalues",
+    "dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/ImportView.d",
+    "diagnostics" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/ImportView.dia",
+    "object" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/ImportView.o",
+    "swift-dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/ImportView.swiftdeps"
+  }
+}

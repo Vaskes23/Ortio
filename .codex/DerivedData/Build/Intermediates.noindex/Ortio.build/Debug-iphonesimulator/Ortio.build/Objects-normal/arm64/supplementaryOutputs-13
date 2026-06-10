@@ -1,0 +1,30 @@
+{
+  "/Users/matyasvascak/Desktop/Code/Ortio/Ortio/App/ThemeController.swift" : {
+    "const-values" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/ThemeController.swiftconstvalues",
+    "dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/ThemeController.d",
+    "diagnostics" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/ThemeController.dia",
+    "object" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/ThemeController.o",
+    "swift-dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/ThemeController.swiftdeps"
+  },
+  "/Users/matyasvascak/Desktop/Code/Ortio/Ortio/Features/Capture/Utilities/TimedMessageList.swift" : {
+    "const-values" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/TimedMessageList.swiftconstvalues",
+    "dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/TimedMessageList.d",
+    "diagnostics" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/TimedMessageList.dia",
+    "object" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/TimedMessageList.o",
+    "swift-dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/TimedMessageList.swiftdeps"
+  },
+  "/Users/matyasvascak/Desktop/Code/Ortio/Ortio/Features/Capture/Utilities/UntilProcessingCompleteFilter.swift" : {
+    "const-values" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/UntilProcessingCompleteFilter.swiftconstvalues",
+    "dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/UntilProcessingCompleteFilter.d",
+    "diagnostics" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/UntilProcessingCompleteFilter.dia",
+    "object" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/UntilProcessingCompleteFilter.o",
+    "swift-dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/UntilProcessingCompleteFilter.swiftdeps"
+  },
+  "/Users/matyasvascak/Desktop/Code/Ortio/Ortio/SharedUI/TutorialVideoView.swift" : {
+    "const-values" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/TutorialVideoView.swiftconstvalues",
+    "dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/TutorialVideoView.d",
+    "diagnostics" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/TutorialVideoView.dia",
+    "object" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/TutorialVideoView.o",
+    "swift-dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/TutorialVideoView.swiftdeps"
+  }
+}

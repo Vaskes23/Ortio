@@ -1,0 +1,16 @@
+{
+  "source": "/Users/matyasvascak/Desktop/Code/Ortio/Ortio/Features/Capture/Views/FeedbackView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "%@",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 18
+        }
+      }
+    ]
+  },
+  "version": 1
+}

@@ -1,0 +1,37 @@
+{
+  "/Users/matyasvascak/Desktop/Code/Ortio/Ortio/Features/Capture/Views/HelpPageView.swift" : {
+    "const-values" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/HelpPageView.swiftconstvalues",
+    "dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/HelpPageView.d",
+    "diagnostics" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/HelpPageView.dia",
+    "object" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/HelpPageView.o",
+    "swift-dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/HelpPageView.swiftdeps"
+  },
+  "/Users/matyasvascak/Desktop/Code/Ortio/Ortio/Features/Home/ViewModels/GlobalSearchViewModel.swift" : {
+    "const-values" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/GlobalSearchViewModel.swiftconstvalues",
+    "dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/GlobalSearchViewModel.d",
+    "diagnostics" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/GlobalSearchViewModel.dia",
+    "object" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/GlobalSearchViewModel.o",
+    "swift-dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/GlobalSearchViewModel.swiftdeps"
+  },
+  "/Users/matyasvascak/Desktop/Code/Ortio/Ortio/Features/Home/Views/HomeDashboardView+Components.swift" : {
+    "const-values" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/HomeDashboardView+Components.swiftconstvalues",
+    "dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/HomeDashboardView+Components.d",
+    "diagnostics" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/HomeDashboardView+Components.dia",
+    "object" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/HomeDashboardView+Components.o",
+    "swift-dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/HomeDashboardView+Components.swiftdeps"
+  },
+  "/Users/matyasvascak/Desktop/Code/Ortio/Ortio/Features/Home/Views/HomeDashboardView+Editors.swift" : {
+    "const-values" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/HomeDashboardView+Editors.swiftconstvalues",
+    "dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/HomeDashboardView+Editors.d",
+    "diagnostics" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/HomeDashboardView+Editors.dia",
+    "object" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/HomeDashboardView+Editors.o",
+    "swift-dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/HomeDashboardView+Editors.swiftdeps"
+  },
+  "/Users/matyasvascak/Desktop/Code/Ortio/Ortio/Features/Home/Views/HomeDashboardView+QuickActions.swift" : {
+    "const-values" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/HomeDashboardView+QuickActions.swiftconstvalues",
+    "dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/HomeDashboardView+QuickActions.d",
+    "diagnostics" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/HomeDashboardView+QuickActions.dia",
+    "object" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/HomeDashboardView+QuickActions.o",
+    "swift-dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/HomeDashboardView+QuickActions.swiftdeps"
+  }
+}

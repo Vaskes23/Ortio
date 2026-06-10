@@ -1,0 +1,30 @@
+{
+  "/Users/matyasvascak/Desktop/Code/Ortio/Ortio/Features/Onboarding/ViewModels/OnboardingStateMachine.swift" : {
+    "const-values" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/OnboardingStateMachine.swiftconstvalues",
+    "dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/OnboardingStateMachine.d",
+    "diagnostics" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/OnboardingStateMachine.dia",
+    "object" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/OnboardingStateMachine.o",
+    "swift-dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/OnboardingStateMachine.swiftdeps"
+  },
+  "/Users/matyasvascak/Desktop/Code/Ortio/Ortio/Features/Onboarding/Views/OnboardingButtonView.swift" : {
+    "const-values" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/OnboardingButtonView.swiftconstvalues",
+    "dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/OnboardingButtonView.d",
+    "diagnostics" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/OnboardingButtonView.dia",
+    "object" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/OnboardingButtonView.o",
+    "swift-dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/OnboardingButtonView.swiftdeps"
+  },
+  "/Users/matyasvascak/Desktop/Code/Ortio/Ortio/Features/Onboarding/Views/OnboardingTutorialView+LocalizedString.swift" : {
+    "const-values" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/OnboardingTutorialView+LocalizedString.swiftconstvalues",
+    "dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/OnboardingTutorialView+LocalizedString.d",
+    "diagnostics" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/OnboardingTutorialView+LocalizedString.dia",
+    "object" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/OnboardingTutorialView+LocalizedString.o",
+    "swift-dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/OnboardingTutorialView+LocalizedString.swiftdeps"
+  },
+  "/Users/matyasvascak/Desktop/Code/Ortio/Ortio/Features/Onboarding/Views/OnboardingTutorialView.swift" : {
+    "const-values" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/OnboardingTutorialView.swiftconstvalues",
+    "dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/OnboardingTutorialView.d",
+    "diagnostics" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/OnboardingTutorialView.dia",
+    "object" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/OnboardingTutorialView.o",
+    "swift-dependencies" : "/Users/matyasvascak/Desktop/Code/Ortio/.codex/DerivedData/Build/Intermediates.noindex/Ortio.build/Debug-iphonesimulator/Ortio.build/Objects-normal/arm64/OnboardingTutorialView.swiftdeps"
+  }
+}

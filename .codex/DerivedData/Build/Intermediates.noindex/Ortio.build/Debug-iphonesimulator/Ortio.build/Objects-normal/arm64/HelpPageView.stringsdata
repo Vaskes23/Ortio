@@ -1,0 +1,32 @@
+{
+  "source": "/Users/matyasvascak/Desktop/Code/Ortio/Ortio/Features/Capture/Views/HelpPageView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Scanning Info",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 43
+        }
+      },
+      {
+        "comment": "",
+        "key": "Capture Help",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 18
+        }
+      },
+      {
+        "comment": "",
+        "key": "HIDDEN SPACER",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 145
+        }
+      }
+    ]
+  },
+  "version": 1
+}

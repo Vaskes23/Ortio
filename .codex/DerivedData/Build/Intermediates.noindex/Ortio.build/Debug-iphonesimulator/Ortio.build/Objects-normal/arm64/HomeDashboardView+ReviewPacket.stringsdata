@@ -1,0 +1,64 @@
+{
+  "source": "/Users/matyasvascak/Desktop/Code/Ortio/Ortio/Features/Home/Views/HomeDashboardView+ReviewPacket.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Share for Review",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 130
+        }
+      },
+      {
+        "comment": "",
+        "key": "Close share for review",
+        "location": {
+          "startingColumn": 33,
+          "startingLine": 155
+        }
+      },
+      {
+        "comment": "",
+        "key": "Includes model file and review brief.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 175
+        }
+      },
+      {
+        "comment": "",
+        "key": "Show Less",
+        "location": {
+          "startingColumn": 46,
+          "startingLine": 235
+        }
+      },
+      {
+        "comment": "",
+        "key": "Show All Notes",
+        "location": {
+          "startingColumn": 60,
+          "startingLine": 235
+        }
+      },
+      {
+        "comment": "",
+        "key": "Includes model file and review brief.",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 309
+        }
+      },
+      {
+        "comment": "",
+        "key": "Preview unavailable",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 549
+        }
+      }
+    ]
+  },
+  "version": 1
+}

@@ -1,0 +1,80 @@
+{
+  "source": "/Users/matyasvascak/Desktop/Code/Ortio/Ortio/Features/Models/Views/ModelsView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Models",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 72
+        }
+      },
+      {
+        "comment": "",
+        "key": "Search models or notes",
+        "location": {
+          "startingColumn": 62,
+          "startingLine": 73
+        }
+      },
+      {
+        "comment": "",
+        "key": "Error",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 129
+        }
+      },
+      {
+        "comment": "",
+        "key": "New Scan",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 95
+        }
+      },
+      {
+        "comment": "",
+        "key": "Help",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 104
+        }
+      },
+      {
+        "comment": "",
+        "key": "OK",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 133
+        }
+      },
+      {
+        "comment": "",
+        "key": "Profile settings",
+        "location": {
+          "startingColumn": 29,
+          "startingLine": 198
+        }
+      },
+      {
+        "comment": "",
+        "key": "Remove from favorites",
+        "location": {
+          "startingColumn": 62,
+          "startingLine": 249
+        }
+      },
+      {
+        "comment": "",
+        "key": "Add to favorites",
+        "location": {
+          "startingColumn": 88,
+          "startingLine": 249
+        }
+      }
+    ]
+  },
+  "version": 1
+}

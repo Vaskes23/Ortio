@@ -1,0 +1,120 @@
+{
+  "source": "/Users/matyasvascak/Desktop/Code/Ortio/Ortio/Features/Import/Views/ImportView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Import",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 39
+        }
+      },
+      {
+        "comment": "",
+        "key": "Search files",
+        "location": {
+          "startingColumn": 53,
+          "startingLine": 40
+        }
+      },
+      {
+        "comment": "",
+        "key": "Error",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 68
+        }
+      },
+      {
+        "comment": "",
+        "key": "Storage location",
+        "location": {
+          "startingColumn": 17,
+          "startingLine": 89
+        }
+      },
+      {
+        "comment": "",
+        "key": "Imported objects",
+        "location": {
+          "startingColumn": 17,
+          "startingLine": 100
+        }
+      },
+      {
+        "comment": "",
+        "key": "Import new 3D model",
+        "location": {
+          "startingColumn": 41,
+          "startingLine": 55
+        }
+      },
+      {
+        "comment": "",
+        "key": "OK",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 72
+        }
+      },
+      {
+        "comment": "",
+        "key": "On My iPhone",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 93
+        }
+      },
+      {
+        "comment": "",
+        "key": "Preview %@",
+        "location": {
+          "startingColumn": 33,
+          "startingLine": 146
+        }
+      },
+      {
+        "comment": "",
+        "key": "Preview",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 150
+        }
+      },
+      {
+        "comment": "",
+        "key": "Storage",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 168
+        }
+      },
+      {
+        "comment": "",
+        "key": "Choose storage location",
+        "location": {
+          "startingColumn": 21,
+          "startingLine": 162
+        }
+      },
+      {
+        "comment": "",
+        "key": "On My iPhone",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 163
+        }
+      },
+      {
+        "comment": "",
+        "key": "iCloud Drive",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 164
+        }
+      }
+    ]
+  },
+  "version": 1
+}
