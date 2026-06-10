@@ -5,6 +5,10 @@
 # Finder
 .DS_Store
 
+# Local agent and IDE state
+.codex/
+.idea/
+
 # Xcode - User files
 xcuserdata/
 
