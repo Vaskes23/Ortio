@@ -19,11 +19,11 @@ struct EmptyLibraryCard: View {
             HStack(spacing: 12) {
                 Button("Start Scan", action: onScan)
                     .buttonStyle(.borderedProminent)
-                    .tint(.black)
+                    .tint(OrtioDesignSystem.Palette.primaryAccent)
 
                 Button("Import File", action: onImport)
                     .buttonStyle(.bordered)
-                    .tint(.primary)
+                    .tint(OrtioDesignSystem.Palette.primaryText)
             }
         }
         .padding(22)
@@ -43,13 +43,7 @@ struct HomeQuickActionButton: View {
     var body: some View {
         Button(action: action) {
             VStack(spacing: 8) {
-                ZStack {
-                    QuickActionIconGlassSurface(isSelected: isSelected)
-
-                    Image(systemName: systemName)
-                        .font(.title3.weight(.medium))
-                        .foregroundStyle(.primary)
-                }
+                QuickActionIconGlassSurface(systemName: systemName, isSelected: isSelected)
 
                 Text(title)
                     .font(.custom("Helvetica-Bold", size: 11))
@@ -65,35 +59,47 @@ struct HomeQuickActionButton: View {
 }
 
 private struct QuickActionIconGlassSurface: View {
+    let systemName: String
     let isSelected: Bool
 
     @ViewBuilder
     var body: some View {
         if #available(iOS 26, *) {
-            Circle()
-                .fill(isSelected ? OrtioDesignSystem.accentSoft.opacity(0.28) : Color.white.opacity(0.08))
+            Image(systemName: systemName)
+                .font(.system(size: 27, weight: .semibold))
+                .symbolRenderingMode(.monochrome)
+                .foregroundStyle(OrtioDesignSystem.Palette.primaryText)
                 .frame(width: 64, height: 64)
+                .background {
+                    Circle()
+                        .fill(isSelected ? OrtioDesignSystem.Palette.selectedGlassTint : OrtioDesignSystem.Palette.glassTransitionFill)
+                }
                 .overlay(Circle().stroke(OrtioDesignSystem.subtleBorder, lineWidth: 1))
                 .glassEffect(
                     .regular
-                        .tint(isSelected ? OrtioDesignSystem.accentSoft.opacity(0.55) : Color.white.opacity(0.18))
+                        .tint(isSelected ? OrtioDesignSystem.Palette.selectedGlassEffectTint : OrtioDesignSystem.Palette.glassTint)
                         .interactive(),
                     in: Circle()
                 )
         } else {
-            Circle()
-                .fill(.ultraThinMaterial)
+            Image(systemName: systemName)
+                .font(.system(size: 27, weight: .semibold))
+                .symbolRenderingMode(.monochrome)
+                .foregroundStyle(OrtioDesignSystem.Palette.primaryText)
                 .frame(width: 64, height: 64)
                 .background(
                     Circle()
-                        .fill(isSelected ? OrtioDesignSystem.accentSoft.opacity(0.38) : OrtioDesignSystem.elevatedSurface.opacity(0.32))
+                        .fill(.ultraThinMaterial)
+                        .background(
+                            Circle()
+                                .fill(isSelected ? OrtioDesignSystem.Palette.selectedGlassTint : OrtioDesignSystem.Palette.mutedGlassFill)
+                        )
                 )
                 .overlay(Circle().stroke(OrtioDesignSystem.subtleBorder, lineWidth: 1))
                 .shadow(color: OrtioDesignSystem.shadow.opacity(0.55), radius: 12, x: 0, y: 7)
         }
     }
 }
-
 // MARK: - ScanPillButton
 
 struct ScanPillButton: View {
@@ -102,11 +108,11 @@ struct ScanPillButton: View {
         Button(action: action) {
             Label("Scan", systemImage: "camera")
                 .font(.headline.weight(.semibold))
-                .foregroundStyle(.white)
+                .foregroundStyle(OrtioDesignSystem.Palette.lightText)
                 .padding(.horizontal, 22)
                 .padding(.vertical, 16)
-                .background(Capsule(style: .continuous).fill(Color.black.opacity(0.88)))
-                .shadow(color: Color.black.opacity(0.18), radius: 24, x: 0, y: 14)
+                .background(Capsule(style: .continuous).fill(OrtioDesignSystem.Palette.primaryAccent))
+                .shadow(color: OrtioDesignSystem.Palette.strongShadow, radius: 24, x: 0, y: 14)
         }
         .buttonStyle(.plain)
         .accessibilityLabel("Start new scan")
@@ -170,18 +176,18 @@ struct ToolActionCard: View {
 
                     Image(systemName: systemName)
                         .font(.title3)
-                        .foregroundStyle(.primary)
+                        .foregroundStyle(OrtioDesignSystem.Palette.primaryText)
                 }
 
                 Text(title)
                     .font(.headline)
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(OrtioDesignSystem.Palette.primaryText)
 
                 Spacer()
 
                 Image(systemName: "chevron.right")
                     .font(.footnote.weight(.semibold))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(OrtioDesignSystem.Palette.secondaryText)
             }
             .padding(18)
             .frame(maxWidth: .infinity, alignment: .leading)

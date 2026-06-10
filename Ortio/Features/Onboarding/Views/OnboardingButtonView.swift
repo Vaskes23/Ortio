@@ -32,14 +32,14 @@ struct OnboardingButtonView: View {
                 let currentStateInputs = onboardingStateMachine.currentStateInputs()
                 if currentStateInputs.contains(where: { $0 == .continue(isFlippable: false) || $0 == .continue(isFlippable: true) }) {
                     CreateButton(buttonLabel: LocalizedString.continue,
-                                 buttonLabelColor: .white,
+                                 buttonLabelColor: OrtioDesignSystem.Palette.lightText,
                                  shouldApplyBackground: true,
                                  action: { transition(with: .continue(isFlippable: appModel.isObjectFlippable)) }
                     )
                 }
                 if currentStateInputs.contains(where: { $0 == .flipObjectAnyway }) {
                     CreateButton(buttonLabel: LocalizedString.flipAnyway,
-                                 buttonLabelColor: .blue,
+                                 buttonLabelColor: OrtioDesignSystem.Palette.primaryAccent,
                                  action: {
                         userHasIndicatedFlipObjectAnyway = true
                         transition(with: .flipObjectAnyway)
@@ -47,21 +47,22 @@ struct OnboardingButtonView: View {
                 }
                 if currentStateInputs.contains(where: { $0 == .skip(isFlippable: false) || $0 == .skip(isFlippable: true) }) {
                     CreateButton(buttonLabel: LocalizedString.skip,
-                                 buttonLabelColor: .blue,
+                                 buttonLabelColor: OrtioDesignSystem.Palette.primaryAccent,
                                  action: {
                         transition(with: .skip(isFlippable: appModel.isObjectFlippable))
                     })
                 }
                 if currentStateInputs.contains(where: { $0 == .finish }) {
+                    let isComplete = onboardingStateMachine.currentState == .thirdSegmentComplete
                     CreateButton(buttonLabel: LocalizedString.finish,
-                                 buttonLabelColor: onboardingStateMachine.currentState == .thirdSegmentComplete ? .white : .blue,
-                                 shouldApplyBackground: onboardingStateMachine.currentState == .thirdSegmentComplete,
+                                 buttonLabelColor: isComplete ? OrtioDesignSystem.Palette.lightText : OrtioDesignSystem.Palette.primaryAccent,
+                                 shouldApplyBackground: isComplete,
                                  showBusyIndicator: session.state == .finishing,
                                  action: { [weak session] in session?.finish() })
                 }
                 if currentStateInputs.contains(where: { $0 == .objectCannotBeFlipped }) {
                     CreateButton(buttonLabel: LocalizedString.cannotFlipYourObject,
-                                 buttonLabelColor: .blue,
+                                 buttonLabelColor: OrtioDesignSystem.Palette.primaryAccent,
                                  action: {
                         userHasIndicatedObjectCannotBeFlipped = true
                         transition(with: .objectCannotBeFlipped)
@@ -124,8 +125,8 @@ private struct CreateButton: View {
 
     @EnvironmentObject var appModel: AppDataModel
     let buttonLabel: String
-    var buttonLabelColor: Color = Color.white
-    var buttonBackgroundColor: Color = Color.blue
+    var buttonLabelColor: Color = OrtioDesignSystem.Palette.lightText
+    var buttonBackgroundColor: Color = OrtioDesignSystem.Palette.primaryAccent
     var shouldApplyBackground = false
     var showBusyIndicator = false
     let action: () -> Void
@@ -146,7 +147,7 @@ private struct CreateButton: View {
                             Spacer().frame(maxWidth: 48)
                             ProgressView()
                                 .progressViewStyle(CircularProgressViewStyle(
-                                    tint: shouldApplyBackground ? .white : (colorScheme == .light ? .black : .white)))
+                                    tint: shouldApplyBackground ? OrtioDesignSystem.Palette.lightText : OrtioDesignSystem.Palette.primaryText))
                         }
                     }
                     Text(buttonLabel)
@@ -195,7 +196,7 @@ private struct CancelButton: View {
                     .font(.headline)
                     .bold()
                     .padding(30)
-                    .foregroundColor(.blue)
+                    .foregroundColor(OrtioDesignSystem.Palette.primaryAccent)
             })
     }
 }

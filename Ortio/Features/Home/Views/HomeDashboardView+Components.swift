@@ -23,7 +23,7 @@ struct DashboardHeader: View {
         HStack(alignment: .center, spacing: 12) {
             Text("Ortio")
                 .font(.custom("Helvetica-Bold", size: 38))
-                .foregroundStyle(.primary)
+                .foregroundStyle(OrtioDesignSystem.Palette.primaryText)
                 .frame(maxWidth: transition.showsTitle ? .infinity : 0, alignment: .leading)
                 .opacity(transition.showsTitle ? 1 : 0)
                 .scaleEffect(transition.showsTitle ? 1 : 0.92, anchor: .leading)
@@ -84,7 +84,7 @@ private struct SearchHeaderChrome: View {
             Button(action: onSearchTap) {
                 Image(systemName: "magnifyingglass")
                     .font(.headline.weight(.semibold))
-                    .foregroundStyle(transition.showsSearchFieldContents ? .secondary : .primary)
+                    .foregroundStyle(transition.showsSearchFieldContents ? OrtioDesignSystem.Palette.secondaryText : OrtioDesignSystem.Palette.primaryText)
                     .frame(width: 20, height: 20)
             }
             .buttonStyle(.plain)
@@ -125,7 +125,7 @@ private struct SearchHeaderChrome: View {
         .frame(maxWidth: transition.shellIsExpanded ? .infinity : compactShellWidth, alignment: .trailing)
         .background {
             Capsule(style: .continuous)
-                .fill(Color.black.opacity(transition.isTransitioning ? 0.035 : 0))
+                .fill(transition.isTransitioning ? OrtioDesignSystem.Palette.glassTransitionFill : OrtioDesignSystem.Palette.clear)
         }
         .ortioHeaderGlassCapsule()
         .contentShape(Capsule(style: .continuous))
@@ -135,7 +135,7 @@ private struct SearchHeaderChrome: View {
         Button(action: onCloseSearch) {
             Image(systemName: "xmark")
                 .font(.headline.weight(.semibold))
-                .foregroundStyle(.primary)
+                .foregroundStyle(OrtioDesignSystem.Palette.primaryText)
                 .opacity(transition.showsCloseGlyph ? 1 : 0)
                 .frame(width: closeBubbleSize, height: closeBubbleSize)
         }
@@ -143,7 +143,7 @@ private struct SearchHeaderChrome: View {
         .frame(width: transition.showsCloseBubble ? closeBubbleSize : 0, height: closeBubbleSize)
         .background {
             Circle()
-                .fill(Color.black.opacity(transition.isTransitioning ? 0.035 : 0))
+                .fill(transition.isTransitioning ? OrtioDesignSystem.Palette.glassTransitionFill : OrtioDesignSystem.Palette.clear)
         }
         .ortioHeaderGlassCircle()
         .contentShape(Circle())
@@ -167,7 +167,7 @@ private struct UserAccessoryContent: View {
             } else {
                 Text(userInitials)
                     .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(OrtioDesignSystem.Palette.lightText)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Circle().fill(OrtioDesignSystem.accent))
             }
@@ -235,7 +235,7 @@ struct HomeSearchEmptyState: View {
         VStack(alignment: .leading, spacing: 10) {
             Text("No matching models")
                 .font(.title3.weight(.semibold))
-                .foregroundStyle(.primary)
+                .foregroundStyle(OrtioDesignSystem.Palette.primaryText)
 
             Text("Try a different name or clear the query.")
                 .foregroundStyle(OrtioDesignSystem.mutedText)
@@ -267,7 +267,7 @@ struct DashboardSection: View {
 
                 Text(title)
                     .font(.title3.weight(.semibold))
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(OrtioDesignSystem.Palette.primaryText)
                     .padding(.top, 18)
                     .padding(.bottom, 18)
             }
@@ -313,7 +313,7 @@ struct LibraryCard: View {
                     HStack(spacing: 14) {
                         Text(item.displayTitle)
                             .font(.system(size: 19, weight: .regular))
-                            .foregroundStyle(.primary)
+                            .foregroundStyle(OrtioDesignSystem.Palette.primaryText)
                             .multilineTextAlignment(.leading)
 
                         Spacer(minLength: 0)
@@ -328,7 +328,7 @@ struct LibraryCard: View {
                     Button(action: onToggleNotes) {
                         Image(systemName: "note.text")
                             .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(OrtioDesignSystem.Palette.secondaryText)
                             .opacity(isNotesExpanded || !item.notes.isEmpty ? 0.9 : 0.18)
                             .frame(width: 28, height: 28)
                     }
@@ -338,7 +338,7 @@ struct LibraryCard: View {
                     Button(action: onTogglePin) {
                         Image(systemName: "pin.fill")
                             .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(OrtioDesignSystem.Palette.secondaryText)
                             .opacity(item.isFavorite ? 0.9 : 0.18)
                             .frame(width: 28, height: 28)
                     }
@@ -350,7 +350,7 @@ struct LibraryCard: View {
             if isNotesExpanded {
                 Text(item.notes.isEmpty ? "No notes added." : item.notes)
                     .font(.subheadline)
-                    .foregroundStyle(item.notes.isEmpty ? .tertiary : .secondary)
+                    .foregroundStyle(item.notes.isEmpty ? OrtioDesignSystem.Palette.tertiaryText : OrtioDesignSystem.Palette.secondaryText)
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(.leading, 1)
                     .transition(.opacity.combined(with: .move(edge: .top)))

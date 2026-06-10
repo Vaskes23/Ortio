@@ -33,7 +33,7 @@ struct CaptureOverlayView: View {
                     .opacity(shouldShowNextButton ? 1 : 0)
                     .disabled(!shouldShowNextButton)
             }
-            .foregroundColor(.white)
+            .foregroundColor(OrtioDesignSystem.Palette.lightText)
 
             Spacer()
 
@@ -86,7 +86,7 @@ struct CaptureOverlayView: View {
         }
         .padding()
         .padding(.horizontal, 15)
-        .background(shouldShowTutorial ? Color.black.opacity(0.5) : .clear)
+        .background(shouldShowTutorial ? OrtioDesignSystem.Palette.overlayScrim : OrtioDesignSystem.Palette.clear)
         .allowsHitTesting(!shouldShowTutorial)
         .animation(.default, value: shouldShowTutorial)
         .background {
@@ -166,7 +166,7 @@ private struct BoundingBoxGuidanceView: View {
                 Text(guidanceText)
                     .font(.callout)
                     .bold()
-                    .foregroundColor(.white)
+                    .foregroundColor(OrtioDesignSystem.Palette.lightText)
                     .transition(.opacity)
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: horizontalSizeClass == .regular ? 400 : 360)

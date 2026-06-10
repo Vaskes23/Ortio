@@ -41,7 +41,7 @@ struct TutorialVideoView: View {
                 Spacer(minLength: 28)
             }
         }
-        .foregroundColor(.white)
+        .foregroundColor(OrtioDesignSystem.Palette.lightText)
         .onAppear {
             startTutorialTasks()
         }

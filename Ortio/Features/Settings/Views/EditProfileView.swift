@@ -44,7 +44,7 @@ struct EditProfileView: View {
                                 .resizable()
                                 .frame(width: 56, height: 56)
                                 .clipShape(Circle())
-                                .foregroundColor(.gray)
+                                .foregroundColor(OrtioDesignSystem.Palette.secondaryText)
                                 .rotation3DEffect(.degrees(isFlipped ? 0 : 180), axis: (x: 0, y: 1, z: 0))
                                 .animation(.default, value: rotationAngle)
                         }
@@ -58,7 +58,7 @@ struct EditProfileView: View {
                         PhotosPicker(selection: $selectedPhotosPickerItem, matching: .images) {
                             Text("Choose Photo")
                                 .font(.caption)
-                                .foregroundColor(.blue)
+                                .foregroundColor(OrtioDesignSystem.Palette.primaryAccent)
                         }
                     }
 
@@ -71,7 +71,7 @@ struct EditProfileView: View {
                 VStack(spacing: 16) {
                     HStack {
                         Image(systemName: "person")
-                            .foregroundColor(.gray)
+                            .foregroundColor(OrtioDesignSystem.Palette.secondaryText)
                             .frame(width: 20)
                         TextField("Name", text: $viewModel.name)
                             .font(.callout)
@@ -81,7 +81,7 @@ struct EditProfileView: View {
 
                     HStack {
                         Image(systemName: "at")
-                            .foregroundColor(.gray)
+                            .foregroundColor(OrtioDesignSystem.Palette.secondaryText)
                             .frame(width: 20)
                         TextField("Username", text: $username)
                             .font(.callout)

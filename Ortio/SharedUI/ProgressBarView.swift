@@ -82,7 +82,7 @@ struct ProgressBarView: View {
                 }
                 .font(.subheadline)
             }
-            .foregroundColor(.secondary)
+            .foregroundColor(OrtioDesignSystem.Palette.secondaryText)
         }
         .task {
             await loadImageCount()

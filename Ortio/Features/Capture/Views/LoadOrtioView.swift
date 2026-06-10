@@ -26,13 +26,13 @@ struct LoadOrtioView: View {
                 VStack(spacing: 16) {
                     Image(systemName: "exclamationmark.triangle")
                         .font(.largeTitle)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(OrtioDesignSystem.Palette.secondaryText)
                     Text("Object capture is not supported on this device.")
                         .font(.headline)
                         .multilineTextAlignment(.center)
                     Text("A device with LiDAR Scanner is required.")
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(OrtioDesignSystem.Palette.secondaryText)
                 }
                 .padding()
             } else if showProgressView {
@@ -77,7 +77,9 @@ private struct CircularProgressView: View {
             ZStack {
                 Spacer()
                 ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: colorScheme == .light ? .black : .white))
+                    .progressViewStyle(CircularProgressViewStyle(
+                        tint: colorScheme == .light ? OrtioDesignSystem.Palette.primaryText : OrtioDesignSystem.Palette.lightText
+                    ))
                 Spacer()
             }
             Spacer()

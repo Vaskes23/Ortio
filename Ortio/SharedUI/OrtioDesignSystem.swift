@@ -9,56 +9,65 @@ import SwiftUI
 import UIKit
 
 enum OrtioDesignSystem {
+    enum Palette {
+        static let background = Color(hex: 0xE3E4E4)
+        static let surface = Color(hex: 0xF4F4F5)
+        static let darkText = Color(hex: 0x111111)
+        static let primaryAccent = Color(hex: 0x002FA7)
+        static let secondary = Color(hex: 0x8E8E8E)
+        static let highlight = Color(hex: 0x00A36C)
+
+        static let clear = Color.clear
+        static let lightText = surface
+        static let primaryText = darkText
+        static let secondaryText = secondary
+        static let tertiaryText = secondary.opacity(0.58)
+        static let border = darkText.opacity(0.10)
+        static let subtleBorder = darkText.opacity(0.05)
+        static let shadow = darkText.opacity(0.10)
+        static let strongShadow = darkText.opacity(0.18)
+        static let glassTransitionFill = darkText.opacity(0.035)
+        static let glassTint = surface.opacity(0.08)
+        static let selectedGlassTint = primaryAccent.opacity(0.28)
+        static let selectedGlassEffectTint = primaryAccent.opacity(0.45)
+        static let mutedGlassFill = surface.opacity(0.32)
+        static let overlayScrim = darkText.opacity(0.50)
+        static let destructive = Color(uiColor: .systemRed)
+        static let favorite = Color(uiColor: .systemYellow)
+    }
+
     static var shellGradient: Color {
         appBackground
     }
 
     static var appBackground: Color {
-        dynamicColor(
-            light: UIColor(red: 227.0 / 255.0, green: 228.0 / 255.0, blue: 228.0 / 255.0, alpha: 1),
-            dark: UIColor(red: 227.0 / 255.0, green: 228.0 / 255.0, blue: 228.0 / 255.0, alpha: 1)
-        )
+        Palette.background
     }
 
     static var surface: Color {
-        dynamicColor(
-            light: UIColor(white: 1, alpha: 0.82),
-            dark: UIColor(red: 0.15, green: 0.16, blue: 0.20, alpha: 0.84)
-        )
+        Palette.surface.opacity(0.82)
     }
 
     static var elevatedSurface: Color {
-        dynamicColor(
-            light: UIColor(white: 1, alpha: 0.94),
-            dark: UIColor(red: 0.18, green: 0.19, blue: 0.24, alpha: 0.94)
-        )
+        Palette.surface.opacity(0.94)
     }
 
     static var subtleBorder: Color {
-        dynamicColor(
-            light: UIColor.black.withAlphaComponent(0.05),
-            dark: UIColor.white.withAlphaComponent(0.10)
-        )
+        Palette.subtleBorder
     }
 
-    static let accent = Color(red: 0.94, green: 0.63, blue: 0.55)
+    static let accent = Palette.primaryAccent
 
     static var accentSoft: Color {
-        dynamicColor(
-            light: UIColor(red: 0.99, green: 0.92, blue: 0.89, alpha: 1),
-            dark: UIColor(red: 0.30, green: 0.20, blue: 0.18, alpha: 0.86)
-        )
+        Palette.primaryAccent.opacity(0.12)
     }
 
     static var shadow: Color {
-        dynamicColor(
-            light: UIColor.black.withAlphaComponent(0.08),
-            dark: UIColor.black.withAlphaComponent(0.36)
-        )
+        Palette.shadow
     }
 
     static var mutedText: Color {
-        Color(uiColor: .secondaryLabel)
+        Palette.secondaryText
     }
 
     enum Radius {
@@ -72,6 +81,17 @@ enum OrtioDesignSystem {
             uiColor: UIColor { traitCollection in
                 traitCollection.userInterfaceStyle == .dark ? dark : light
             }
+        )
+    }
+}
+
+private extension Color {
+    init(hex: UInt, alpha: Double = 1) {
+        self.init(
+            red: Double((hex >> 16) & 0xFF) / 255.0,
+            green: Double((hex >> 8) & 0xFF) / 255.0,
+            blue: Double(hex & 0xFF) / 255.0,
+            opacity: alpha
         )
     }
 }

@@ -37,7 +37,7 @@ private struct SearchEmptyState: View {
         VStack(alignment: .leading, spacing: 10) {
             Text("No matching models")
                 .font(.title3.weight(.semibold))
-                .foregroundStyle(.primary)
+                .foregroundStyle(OrtioDesignSystem.Palette.primaryText)
 
             Text("Try a different name or clear the query.")
                 .foregroundStyle(OrtioDesignSystem.mutedText)
@@ -56,14 +56,14 @@ private struct SearchResultRow: View {
             HStack(spacing: 12) {
                 Text(item.displayTitle)
                     .font(.system(size: 21, weight: .regular))
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(OrtioDesignSystem.Palette.primaryText)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .multilineTextAlignment(.leading)
 
                 if item.isFavorite {
                     Image(systemName: "pin.fill")
                         .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(OrtioDesignSystem.Palette.secondaryText)
                 }
             }
             .padding(.vertical, 14)

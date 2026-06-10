@@ -30,10 +30,10 @@ extension CaptureOverlayView {
                     Text(buttonlabel)
                         .font(.body)
                         .fontWeight(.bold)
-                        .foregroundColor(.white)
+                        .foregroundColor(OrtioDesignSystem.Palette.lightText)
                         .padding(.horizontal, 25)
                         .padding(.vertical, 20)
-                        .background(.blue)
+                        .background(OrtioDesignSystem.Palette.primaryAccent)
                         .clipShape(Capsule())
                 })
         }
@@ -78,7 +78,7 @@ extension CaptureOverlayView {
                             .font(.footnote)
                             .opacity(0.7)
                     }
-                    .foregroundColor(.white)
+                    .foregroundColor(OrtioDesignSystem.Palette.lightText)
                     .fontWeight(.semibold)
                 })
         }
@@ -113,11 +113,11 @@ extension CaptureOverlayView {
                     if session.canRequestImageCapture {
                         Text(Image(systemName: "button.programmable"))
                             .font(.largeTitle)
-                            .foregroundColor(.white)
+                            .foregroundColor(OrtioDesignSystem.Palette.lightText)
                     } else {
                         Text(Image(systemName: "button.programmable"))
                             .font(.largeTitle)
-                            .foregroundColor(.gray)
+                            .foregroundColor(OrtioDesignSystem.Palette.secondaryText)
                     }
                 }
             )
@@ -161,7 +161,7 @@ extension CaptureOverlayView {
                         .opacity(0.7)
                         .fontWeight(.semibold)
                 }
-                .foregroundColor(.white)
+                .foregroundColor(OrtioDesignSystem.Palette.lightText)
             })
         }
     }
@@ -175,7 +175,7 @@ extension CaptureOverlayView {
             Button(action: {
                 logger.log("\(LocalizedString.cancel) button clicked!")
                 appModel.objectCaptureSession?.cancel()
-                presentationMode.wrappedValue.dismiss() 
+                presentationMode.wrappedValue.dismiss()
             }, label: {
                 Text(LocalizedString.cancel)
                     .modifier(VisualEffectRoundedCorner())
@@ -199,7 +199,7 @@ extension CaptureOverlayView {
                 .fontDesign(.rounded)
                 .bold()
             }
-            .foregroundColor(session.feedback.contains(.overCapturing) ? .red : .white)
+            .foregroundColor(session.feedback.contains(.overCapturing) ? OrtioDesignSystem.Palette.destructive : OrtioDesignSystem.Palette.lightText)
         }
     }
 
@@ -209,7 +209,7 @@ extension CaptureOverlayView {
                 .padding(16.0)
                 .font(.subheadline)
                 .bold()
-                .foregroundColor(.white)
+                .foregroundColor(OrtioDesignSystem.Palette.lightText)
                 .background(.ultraThinMaterial)
                 .environment(\.colorScheme, .dark)
                 .cornerRadius(15)

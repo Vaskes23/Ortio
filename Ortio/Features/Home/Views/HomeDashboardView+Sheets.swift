@@ -128,7 +128,7 @@ struct ModelNotesSheet: View {
             if notes.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                 Text("Add notes")
                     .font(.system(size: 18, weight: .regular, design: .rounded))
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(OrtioDesignSystem.Palette.tertiaryText)
                     .padding(.top, 28)
                     .padding(.leading, 24)
                     .allowsHitTesting(false)

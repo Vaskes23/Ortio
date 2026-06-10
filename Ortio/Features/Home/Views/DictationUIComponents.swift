@@ -183,11 +183,11 @@ private struct DictationErrorCapsule: View {
         HStack(spacing: 12) {
             Image(systemName: "exclamationmark.circle.fill")
                 .font(.footnote.weight(.semibold))
-                .foregroundStyle(Color(uiColor: .systemRed))
+                .foregroundStyle(OrtioDesignSystem.Palette.destructive)
 
             Text(message)
                 .font(.footnote)
-                .foregroundStyle(Color(uiColor: .systemRed))
+                .foregroundStyle(OrtioDesignSystem.Palette.destructive)
                 .lineLimit(2)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
@@ -298,9 +298,9 @@ struct DictationOrb: View {
         case .shell:
             DictationPalette.orbBorder
         case .primaryAction:
-            Color.clear
+            OrtioDesignSystem.Palette.clear
         case .mutedAction:
-            Color.clear
+            OrtioDesignSystem.Palette.clear
         }
     }
 
@@ -313,93 +313,55 @@ struct DictationOrb: View {
 
 enum DictationPalette {
     static var shellFill: Color {
-        dynamicColor(
-            light: UIColor(white: 1, alpha: 0.98),
-            dark: UIColor(red: 0.22, green: 0.23, blue: 0.28, alpha: 0.98)
-        )
+        OrtioDesignSystem.Palette.surface.opacity(0.98)
     }
 
     static var shellGlyph: Color {
-        dynamicColor(
-            light: .black,
-            dark: .white
-        )
+        OrtioDesignSystem.Palette.primaryText
     }
 
     static var capsuleFill: Color {
-        dynamicColor(
-            light: UIColor(white: 1, alpha: 0.96),
-            dark: UIColor(red: 0.19, green: 0.20, blue: 0.25, alpha: 0.96)
-        )
+        OrtioDesignSystem.Palette.surface.opacity(0.96)
     }
 
     static var capsuleStroke: Color {
-        dynamicColor(
-            light: UIColor.black.withAlphaComponent(0.05),
-            dark: UIColor.white.withAlphaComponent(0.08)
-        )
+        OrtioDesignSystem.Palette.subtleBorder
     }
 
     static var waveform: Color {
-        dynamicColor(
-            light: UIColor(red: 0.74, green: 0.74, blue: 0.76, alpha: 1),
-            dark: UIColor.white.withAlphaComponent(0.38)
-        )
+        OrtioDesignSystem.Palette.secondaryText.opacity(0.58)
     }
 
     static var waveformEmphasis: Color {
-        dynamicColor(
-            light: UIColor(red: 0.49, green: 0.49, blue: 0.51, alpha: 1),
-            dark: UIColor.white.withAlphaComponent(0.76)
-        )
+        OrtioDesignSystem.Palette.secondaryText
     }
 
     static var primaryText: Color {
-        Color(uiColor: .label)
+        OrtioDesignSystem.Palette.primaryText
     }
 
     static var secondaryText: Color {
-        Color(uiColor: .secondaryLabel)
+        OrtioDesignSystem.Palette.secondaryText
     }
 
     static var primaryActionFill: Color {
-        dynamicColor(
-            light: .black,
-            dark: .white
-        )
+        OrtioDesignSystem.Palette.primaryAccent
     }
 
     static var primaryActionGlyph: Color {
-        dynamicColor(
-            light: .white,
-            dark: .black
-        )
+        OrtioDesignSystem.Palette.lightText
     }
 
     static var mutedActionFill: Color {
-        dynamicColor(
-            light: UIColor(red: 0.58, green: 0.58, blue: 0.60, alpha: 1),
-            dark: UIColor(red: 0.34, green: 0.35, blue: 0.40, alpha: 1)
-        )
+        OrtioDesignSystem.Palette.secondary
     }
 
     static var mutedActionGlyph: Color {
-        dynamicColor(
-            light: .white,
-            dark: UIColor.white.withAlphaComponent(0.92)
-        )
+        OrtioDesignSystem.Palette.lightText
     }
 
-    static let orbShadow = Color.black.opacity(0.10)
-    static let orbBorder = Color.black.opacity(0.04)
-
-    private static func dynamicColor(light: UIColor, dark: UIColor) -> Color {
-        Color(
-            uiColor: UIColor { traitCollection in
-                traitCollection.userInterfaceStyle == .dark ? dark : light
-            }
-        )
-    }
+    static let orbShadow = OrtioDesignSystem.Palette.shadow
+    static let orbBorder = OrtioDesignSystem.Palette.subtleBorder
 }
 
 // MARK: - TimeInterval Extension

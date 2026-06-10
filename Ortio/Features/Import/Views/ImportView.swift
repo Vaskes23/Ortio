@@ -49,7 +49,7 @@ struct ImportView: View {
                     } label: {
                         Image(systemName: "plus")
                             .font(.title2.weight(.semibold))
-                            .foregroundStyle(.primary)
+                            .foregroundStyle(OrtioDesignSystem.Palette.primaryText)
                     }
                     .sensoryFeedback(.impact, trigger: presentImporter)
                     .accessibilityLabel("Import new 3D model")
@@ -135,12 +135,12 @@ struct FileRow: View {
                 .lineLimit(1)
             Spacer()
             Text(model.date.formatted(.dateTime.day().month().year()))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(OrtioDesignSystem.Palette.secondaryText)
                 .font(.caption)
             Button(action: onPreview) {
                 Image(systemName: "eye")
                     .font(.body)
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(OrtioDesignSystem.Palette.primaryText)
             }
             .buttonStyle(.borderless)
             .accessibilityLabel("Preview \(model.displayTitle)")
@@ -162,7 +162,7 @@ struct StoragePickerView: View {
             Section("Choose storage location") {
                 Label("On My iPhone", systemImage: "iphone")
                 Label("iCloud Drive", systemImage: "icloud")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(OrtioDesignSystem.Palette.secondaryText)
             }
         }
         .navigationTitle("Storage")

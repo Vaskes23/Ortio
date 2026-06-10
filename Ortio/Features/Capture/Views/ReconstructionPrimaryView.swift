@@ -79,7 +79,7 @@ struct ReconstructionProgressView: View {
                             .font(.headline)
                             .bold()
                             .padding(30)
-                            .foregroundColor(.blue)
+                            .foregroundColor(OrtioDesignSystem.Palette.primaryAccent)
                     })
                     .padding(.trailing)
 

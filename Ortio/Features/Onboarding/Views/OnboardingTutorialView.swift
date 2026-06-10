@@ -35,7 +35,7 @@ struct OnboardingTutorialView: View {
                             if let orbitImageName = getOrbitImageName(orbit: orbit) {
                                 Text(Image(systemName: orbitImageName))
                                     .font(.system(size: 28))
-                                    .foregroundColor(.gray)
+                                    .foregroundColor(OrtioDesignSystem.Palette.secondaryText)
                             }
                         }
                     }

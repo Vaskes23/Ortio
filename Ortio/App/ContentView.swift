@@ -17,7 +17,7 @@ struct ContentView: View {
         NavigationStack {
             HomeDashboardView()
         }
-        .tint(.primary)
+        .tint(OrtioDesignSystem.Palette.primaryAccent)
     }
 }
 

@@ -18,7 +18,7 @@ struct FeedbackView: View {
                 Text("\(activeMessage.message)")
                     .font(.headline)
                     .fontWeight(.bold)
-                    .foregroundColor(.white)
+                    .foregroundColor(OrtioDesignSystem.Palette.lightText)
                     .environment(\.colorScheme, .dark)
                     .transition(.opacity)
             }
