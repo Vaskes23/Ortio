@@ -24,7 +24,8 @@ final class FileManagerProtocolTests: XCTestCase {
     
     func testFileManagerConformsToFileManagerProtocol() {
         // Act & Assert
-        XCTAssertTrue(FileManager.default is FileManagerProtocol)
+        let protocolFileManager: FileManagerProtocol = FileManager.default
+        XCTAssertNotNil(protocolFileManager)
     }
     
     func testFileManagerProtocolContentsOfDirectory() throws {
@@ -216,8 +217,8 @@ final class FileManagerProtocolTests: XCTestCase {
             _ = try protocolFileManager.contentsOfDirectory(at: URL(fileURLWithPath: "/"), includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
         }())
         
-        XCTAssertNoThrow(try {
+        XCTAssertNoThrow({
             _ = protocolFileManager.fileExists(atPath: "/", isDirectory: nil)
         }())
     }
-} 
+}

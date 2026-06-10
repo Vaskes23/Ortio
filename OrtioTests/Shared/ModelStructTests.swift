@@ -33,8 +33,7 @@ final class ModelStructTests: XCTestCase {
         let identifiableURL = ModelsModel.IdentifiableCaptureURL(url: url)
         
         // Assert
-        XCTAssertNotNil(identifiableURL.id)
-        XCTAssertTrue(identifiableURL.id is UUID)
+        XCTAssertEqual(identifiableURL.id, url.standardizedFileURL.path)
     }
     
     func testModelsModelIdentifiableCaptureURLUniqueIds() {
@@ -95,10 +94,9 @@ final class ModelStructTests: XCTestCase {
         
         // Act
         let identifiableURL = ImportModel.IdentifiableURL(url: url)
-        
+
         // Assert
-        XCTAssertNotNil(identifiableURL.id)
-        XCTAssertTrue(identifiableURL.id is UUID)
+        XCTAssertNotEqual(identifiableURL.id.uuidString, "")
     }
     
     func testImportModelIdentifiableURLUniqueIds() {
@@ -152,8 +150,8 @@ final class ModelStructTests: XCTestCase {
         
         // Assert
         XCTAssertEqual(identifiableURL1.url, identifiableURL2.url)
-        // IDs should be different even with same URL
-        XCTAssertNotEqual(identifiableURL1.id, identifiableURL2.id)
+        // IDs are URL-stable so SwiftUI lists preserve row identity across refreshes.
+        XCTAssertEqual(identifiableURL1.id, identifiableURL2.id)
     }
     
     func testImportModelIdentifiableURLEquality() {
@@ -258,4 +256,4 @@ final class ModelStructTests: XCTestCase {
         // Assert
         XCTAssertEqual(urlWithoutExtension.lastPathComponent, "import")
     }
-} 
+}

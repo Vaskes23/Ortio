@@ -28,7 +28,10 @@ final class ImportTests: XCTestCase {
         let date = Date(timeIntervalSince1970: 0)
         let folderName = ImportViewModel.createUniqueFolderName(from: date)
         XCTAssertTrue(folderName.hasPrefix("Model_"))
-        XCTAssertEqual(String(folderName.dropFirst("Model_".count)).count, 14)
+        // Format: Model_YYYYMMddHHmmss_XXXXXXXX (14 timestamp + 1 underscore + 8 UUID = 23)
+        let suffix = String(folderName.dropFirst("Model_".count))
+        XCTAssertEqual(suffix.count, 23)
+        XCTAssertEqual(suffix[suffix.index(suffix.startIndex, offsetBy: 14)], "_")
     }
 
     func testCreateNewScanDirectoryFailure() async throws {

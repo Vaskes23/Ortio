@@ -86,7 +86,7 @@ struct HomeDashboardView: View {
                         selectedFilter: $selectedFilter,
                         onOpenTools: { showingTools = true }
                     )
-                    .frame(height: searchTransition.showsQuickActions ? 110 : 0, alignment: .top)
+                    .frame(height: searchTransition.showsQuickActions ? 86 : 0, alignment: .top)
                     .opacity(searchTransition.showsQuickActions ? 1 : 0)
                     .clipped()
                     .allowsHitTesting(searchTransition.showsQuickActions)
@@ -141,8 +141,8 @@ struct HomeDashboardView: View {
                 requestLibraryRefresh()
             }
         }
-        .onChange(of: storedModels.count) { _, _ in requestLibraryRefresh() }
-        .onChange(of: capturedMetadata.count) { _, _ in requestLibraryRefresh() }
+        .onChange(of: storedModels) { _, _ in requestLibraryRefresh() }
+        .onChange(of: capturedMetadata) { _, _ in requestLibraryRefresh() }
         .fullScreenCover(isPresented: $showingSettings) {
             SettingsView()
         }
@@ -170,7 +170,7 @@ struct HomeDashboardView: View {
             }
         }
         .sheet(isPresented: $showingCapture) {
-            LoadGuidedCaptureView()
+            LoadOrtioView()
         }
         .sheet(isPresented: $showingImportLibrary) {
             ImportView(viewModel: ImportViewModel(repository: libraryRepository))

@@ -17,6 +17,7 @@ struct ProgressBarView: View {
     var processingStageDescription: String?
 
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @State private var numOfImages: Int = 0
 
     private var formattedEstimatedRemainingTime: String? {
         guard let estimatedRemainingTime = estimatedRemainingTime else { return nil }
@@ -28,15 +29,16 @@ struct ProgressBarView: View {
         return formatter.string(from: estimatedRemainingTime)
     }
 
-    private var numOfImages: Int {
-        guard let folderManager = appModel.scanFolderManager else { return 0 }
-        guard let urls = try? FileManager.default.contentsOfDirectory(
-            at: folderManager.imagesFolder,
-            includingPropertiesForKeys: nil
-        ) else {
-            return 0
-        }
-        return urls.filter { $0.pathExtension.uppercased() == "HEIC" }.count
+    private func loadImageCount() async {
+        guard let folderManager = appModel.scanFolderManager else { return }
+        let imagesFolder = folderManager.imagesFolder
+        let count = await Task.detached {
+            (try? FileManager.default.contentsOfDirectory(
+                at: imagesFolder,
+                includingPropertiesForKeys: nil
+            ))?.filter { $0.pathExtension.uppercased() == "HEIC" }.count ?? 0
+        }.value
+        numOfImages = count
     }
 
     var body: some View {
@@ -80,7 +82,10 @@ struct ProgressBarView: View {
                 }
                 .font(.subheadline)
             }
-            .foregroundColor(.secondary)
+            .foregroundColor(OrtioDesignSystem.Palette.secondaryText)
+        }
+        .task {
+            await loadImageCount()
         }
     }
 

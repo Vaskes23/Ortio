@@ -99,13 +99,13 @@ struct SettingsView: View {
         VStack(spacing: 0) {
             HStack(spacing: 12) {
                 Image(systemName: icon)
-                    .foregroundColor(.primary)
+                    .foregroundColor(OrtioDesignSystem.Palette.primaryText)
                     .frame(width: 20)
 
                 Text(title)
                     .font(.callout)
                     .fontWeight(.medium)
-                    .foregroundColor(.primary)
+                    .foregroundColor(OrtioDesignSystem.Palette.primaryText)
 
                 Spacer()
 
@@ -142,13 +142,13 @@ struct ThemePicker: View {
                 } label: {
                     HStack {
                         Image(systemName: iconForTheme(theme))
-                            .foregroundColor(.primary)
+                            .foregroundColor(OrtioDesignSystem.Palette.primaryText)
                             .frame(width: 20)
 
                         Text(theme.description)
                             .font(.callout)
                             .fontWeight(.medium)
-                            .foregroundColor(.primary)
+                            .foregroundColor(OrtioDesignSystem.Palette.primaryText)
 
                         Spacer()
 
@@ -160,7 +160,7 @@ struct ThemePicker: View {
                     }
                     .padding(.vertical, 12)
                     .padding(.horizontal, 16)
-                    .background(Color.clear)
+                    .background(OrtioDesignSystem.Palette.clear)
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(PlainButtonStyle())
@@ -187,7 +187,7 @@ private struct SettingsHeader: View {
 
             Text("Settings")
                 .font(.headline.weight(.semibold))
-                .foregroundStyle(.primary)
+                .foregroundStyle(OrtioDesignSystem.Palette.primaryText)
 
             Spacer()
 
@@ -199,7 +199,7 @@ private struct SettingsHeader: View {
                     .overlay(Circle().stroke(OrtioDesignSystem.subtleBorder, lineWidth: 1))
             }
             .buttonStyle(.plain)
-            .foregroundStyle(.primary)
+            .foregroundStyle(OrtioDesignSystem.Palette.primaryText)
             .accessibilityLabel("Close settings")
         }
     }
@@ -257,7 +257,7 @@ private struct SettingsProfileCard: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
                     .font(.headline)
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(OrtioDesignSystem.Palette.primaryText)
 
                 Text(subtitle.isEmpty ? "Edit profile" : "@\(subtitle)")
                     .font(.subheadline)
@@ -268,7 +268,7 @@ private struct SettingsProfileCard: View {
 
             Image(systemName: "chevron.right")
                 .font(.footnote.weight(.semibold))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(OrtioDesignSystem.Palette.secondaryText)
         }
         .padding(18)
         .ortioCardStyle()

@@ -77,8 +77,9 @@ struct ModelsView: View {
                         withAnimation(.spring()) {
                             scaleEffect = 1.5
                         }
-                        Task {
+                        Task { @MainActor in
                             try? await Task.sleep(for: .milliseconds(200))
+                            guard !Task.isCancelled else { return }
                             withAnimation(.spring()) {
                                 scaleEffect = 1.0
                                 navigateToSettings = true
@@ -185,12 +186,12 @@ struct ProfileAvatar: View {
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 32, height: 32)
                     .clipShape(Circle())
-                    .overlay(Circle().stroke(.separator, lineWidth: 1))
+                    .overlay(Circle().stroke(OrtioDesignSystem.Palette.border, lineWidth: 1))
                     .scaleEffect(scaleEffect)
             } else {
                 Image(systemName: "person.crop.circle.fill")
                     .font(.title2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(OrtioDesignSystem.Palette.secondaryText)
                     .scaleEffect(scaleEffect)
             }
         }
@@ -214,10 +215,10 @@ struct ModelCard: View {
             Button(action: action) {
                 ZStack {
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(.background)
+                        .fill(OrtioDesignSystem.Palette.surface)
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
-                                .stroke(.separator, lineWidth: 0.5)
+                                .stroke(OrtioDesignSystem.Palette.border, lineWidth: 0.5)
                         )
                         .frame(height: 120)
 
@@ -229,7 +230,7 @@ struct ModelCard: View {
                         } else {
                             Image(systemName: "cube.transparent")
                                 .font(.title)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(OrtioDesignSystem.Palette.secondaryText)
                                 .onAppear(perform: generateThumbnail)
                         }
                     }
@@ -241,7 +242,7 @@ struct ModelCard: View {
                             Button(action: onToggleFavorite) {
                                 Image(systemName: isFavorite ? "star.fill" : "star")
                                     .font(.caption)
-                                    .foregroundStyle(isFavorite ? .yellow : .secondary)
+                                    .foregroundStyle(isFavorite ? OrtioDesignSystem.Palette.favorite : OrtioDesignSystem.Palette.secondaryText)
                             }
                             .frame(width: 44, height: 44)
                             .sensoryFeedback(.selection, trigger: isFavorite)
@@ -256,7 +257,7 @@ struct ModelCard: View {
 
             Text(displayName)
                 .font(.caption)
-                .foregroundStyle(.primary)
+                .foregroundStyle(OrtioDesignSystem.Palette.primaryText)
                 .lineLimit(2)
                 .multilineTextAlignment(.center)
         }

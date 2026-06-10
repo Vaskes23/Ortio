@@ -63,7 +63,7 @@ struct ReconstructionProgressView: View {
         horizontalSizeClass == .regular ? 60.0 : 24.0
     }
     private func isReconstructing() -> Bool {
-        return !completed && !gotError && !cancelled
+        !completed && !gotError && !cancelled
     }
 
     var body: some View {
@@ -79,7 +79,7 @@ struct ReconstructionProgressView: View {
                             .font(.headline)
                             .bold()
                             .padding(30)
-                            .foregroundColor(.blue)
+                            .foregroundColor(OrtioDesignSystem.Palette.primaryAccent)
                     })
                     .padding(.trailing)
 
@@ -105,7 +105,7 @@ struct ReconstructionProgressView: View {
         .frame(maxWidth: .infinity)
         .padding(.bottom, 20)
         .alert(
-            "Failed:  " + (error != nil  ? "\(String(describing: error!))" : ""),
+            "Failed:  " + (error.map { String(describing: $0) } ?? "Unknown error"),
             isPresented: $gotError,
             actions: {
                 Button("OK") {
@@ -116,9 +116,20 @@ struct ReconstructionProgressView: View {
             message: {}
         )
         .task {
-            precondition(appModel.state == .reconstructing)
-            assert(appModel.photogrammetrySession != nil)
-            let session = appModel.photogrammetrySession!
+            guard appModel.state == .reconstructing else {
+                logger.warning("ReconstructionProgressView.task started in unexpected state: \(String(describing: appModel.state))")
+                gotError = true
+                error = NSError(domain: "ReconstructionPrimaryView", code: -1,
+                                userInfo: [NSLocalizedDescriptionKey: "Reconstruction started in an unexpected state."])
+                return
+            }
+            guard let session = appModel.photogrammetrySession else {
+                logger.error("ReconstructionProgressView.task: photogrammetrySession is nil")
+                gotError = true
+                error = NSError(domain: "ReconstructionPrimaryView", code: -2,
+                                userInfo: [NSLocalizedDescriptionKey: "The photogrammetry session is unavailable."])
+                return
+            }
 
             let outputs = UntilProcessingCompleteFilter(input: session.outputs)
             do {
@@ -141,9 +152,9 @@ struct ReconstructionProgressView: View {
                         }
                     case .requestComplete(let request, _):
                         switch request {
-                            case .modelFile(_, _, _):
+                            case .modelFile:
                                 logger.log("RequestComplete: .modelFile")
-                            case .modelEntity(_, _), .bounds, .poses, .pointCloud:
+                            case .modelEntity, .bounds, .poses, .pointCloud:
                                 // Not supported yet
                                 break
                             @unknown default:
@@ -162,7 +173,7 @@ struct ReconstructionProgressView: View {
                     case .processingCancelled:
                         cancelled = true
                         appModel.state = .restart
-                    case .invalidSample(id: _, reason: _), .skippedSample(id: _), .automaticDownsampling:
+                    case .invalidSample, .skippedSample, .automaticDownsampling:
                         continue
                     case .stitchingIncomplete:
                         break

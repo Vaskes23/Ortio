@@ -22,6 +22,19 @@ struct LoadOrtioView: View {
                 if let session = appModel.objectCaptureSession {
                     CapturePrimaryView(session: session)
                 }
+            } else if appModel.state == .unsupported {
+                VStack(spacing: 16) {
+                    Image(systemName: "exclamationmark.triangle")
+                        .font(.largeTitle)
+                        .foregroundStyle(OrtioDesignSystem.Palette.secondaryText)
+                    Text("Object capture is not supported on this device.")
+                        .font(.headline)
+                        .multilineTextAlignment(.center)
+                    Text("A device with LiDAR Scanner is required.")
+                        .font(.subheadline)
+                        .foregroundStyle(OrtioDesignSystem.Palette.secondaryText)
+                }
+                .padding()
             } else if showProgressView {
                 CircularProgressView()
             }
@@ -41,7 +54,7 @@ struct LoadOrtioView: View {
             }
         }
         .alert(
-            "Failed:  " + (appModel.error != nil  ? "\(String(describing: appModel.error!))" : ""), // swiftlint:disable:this force_unwrapping
+            "Failed:  " + (appModel.error.map { String(describing: $0) } ?? "Unknown error"),
             isPresented: $showErrorAlert,
             actions: {
                 Button("OK") {
@@ -64,7 +77,9 @@ private struct CircularProgressView: View {
             ZStack {
                 Spacer()
                 ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: colorScheme == .light ? .black : .white))
+                    .progressViewStyle(CircularProgressViewStyle(
+                        tint: colorScheme == .light ? OrtioDesignSystem.Palette.primaryText : OrtioDesignSystem.Palette.lightText
+                    ))
                 Spacer()
             }
             Spacer()

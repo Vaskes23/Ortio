@@ -6,6 +6,7 @@ Custom SwiftUI View for showing the tutorial stack.
 */
 
 import SwiftUI
+import UIKit
 
 /// Top-level view containing a tabbed view of each of the help pages.
 struct HelpPageView: View {
@@ -15,7 +16,7 @@ struct HelpPageView: View {
         ZStack {
             VStack(alignment: .leading) {
                 HStack {
-                    Text("Capture Help").foregroundColor(.secondary)
+                    Text("Capture Help").foregroundColor(OrtioDesignSystem.Palette.secondaryText)
                     Spacer()
                     Button(action: {
                         withAnimation {
@@ -23,7 +24,7 @@ struct HelpPageView: View {
                         }},
                            label: {
                         Image(systemName: "xmark.circle.fill")
-                            .foregroundColor(.init(white: 0.7, opacity: 0.5))
+                            .foregroundColor(OrtioDesignSystem.Palette.secondaryText.opacity(0.5))
                             .font(.title)
                     })
                 }
@@ -33,9 +34,9 @@ struct HelpPageView: View {
                     EnvironmentHelpPageView()
                 }
                 .tabViewStyle(PageTabViewStyle())
-                .onAppear() {
-                    UIPageControl.appearance().currentPageIndicatorTintColor = .black
-                    UIPageControl.appearance().pageIndicatorTintColor = .lightGray
+                .onAppear {
+                    UIPageControl.appearance().currentPageIndicatorTintColor = UIColor(OrtioDesignSystem.Palette.primaryText)
+                    UIPageControl.appearance().pageIndicatorTintColor = UIColor(OrtioDesignSystem.Palette.secondaryText)
                 }
 
             }.padding()
@@ -58,12 +59,12 @@ private struct TutorialPageView: View {
         GeometryReader { geomReader in
             VStack(alignment: .leading) {
                 Text(pageName)
-                    .foregroundColor(.primary)
+                    .foregroundColor(OrtioDesignSystem.Palette.primaryText)
                     .font(.largeTitle)
                     .bold()
 
                 Text(imageCaption)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(OrtioDesignSystem.Palette.secondaryText)
 
                 Image(imageName)
                     .resizable()
@@ -134,12 +135,12 @@ private struct ProConListView: View {
 
                 Text(Image(systemName: "checkmark.circle"))
                     .bold()
-                    .foregroundColor(.green)
+                    .foregroundColor(OrtioDesignSystem.Palette.highlight)
             }
 
             ForEach(pros, id: \.self) { pro in
                 Text(pro)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(OrtioDesignSystem.Palette.secondaryText)
             }
 
             Text("HIDDEN SPACER")
@@ -156,12 +157,12 @@ private struct ProConListView: View {
 
                 Text(Image(systemName: "xmark.circle"))
                     .bold()
-                    .foregroundColor(.red)
+                    .foregroundColor(OrtioDesignSystem.Palette.destructive)
             }
 
             ForEach(cons, id: \.self) { con in
                 Text(con)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(OrtioDesignSystem.Palette.secondaryText)
             }
         }
     }
@@ -177,10 +178,10 @@ private struct PositiveLabel: View {
         Group {
             Label(title: {
                 Text(text)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(OrtioDesignSystem.Palette.secondaryText)
             }, icon: {
                 Image(systemName: "checkmark.circle")
-                    .foregroundColor(.green)
+                    .foregroundColor(OrtioDesignSystem.Palette.highlight)
             })
         }
     }
@@ -196,10 +197,10 @@ private struct NegativeLabel: View {
         Group {
             Label(title: {
                 Text(text)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(OrtioDesignSystem.Palette.secondaryText)
             }, icon: {
                 Image(systemName: "xmark.circle")
-                    .foregroundColor(.red)
+                    .foregroundColor(OrtioDesignSystem.Palette.destructive)
             })
         }
     }

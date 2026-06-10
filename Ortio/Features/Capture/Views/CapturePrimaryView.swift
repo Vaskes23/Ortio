@@ -69,7 +69,7 @@ struct CapturePrimaryView: View {
 
 private struct GradientBackground: View {
     private let gradient = LinearGradient(
-        colors: [.black.opacity(0.4), .clear],
+        colors: [OrtioDesignSystem.Palette.overlayScrim.opacity(0.8), OrtioDesignSystem.Palette.clear],
         startPoint: .top,
         endPoint: .bottom
     )

@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import os
 
 enum LibraryRepositoryError: LocalizedError {
     case modelNotFound
@@ -34,6 +35,7 @@ protocol LibraryRepositoryProtocol {
     func pruneMissingImportedModelsIfNeeded(models: [Models], context: ModelContext) async
     func importFile(_ url: URL, existingModels: [Models], context: ModelContext) async throws
     func deleteImportedModels(at offsets: IndexSet, from storedModels: [Models], context: ModelContext) async throws
+    func deleteImportedModels(_ models: [Models], context: ModelContext) async throws
     func toggleFavorite(
         for item: LibraryItem,
         storedModels: [Models],
@@ -58,7 +60,8 @@ protocol LibraryRepositoryProtocol {
 
 @MainActor
 final class LibraryRepository: LibraryRepositoryProtocol {
-    private let fileStore: any LibraryFileStoreProtocol
+    private static let logger = Logger(subsystem: "com.ortio", category: "LibraryRepository")
+    nonisolated private let fileStore: any LibraryFileStoreProtocol
 
     nonisolated init(fileStore: any LibraryFileStoreProtocol = LibraryFileStore()) {
         self.fileStore = fileStore
@@ -75,7 +78,8 @@ final class LibraryRepository: LibraryRepositoryProtocol {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMddHHmmss"
         let dateString = formatter.string(from: date ?? Date())
-        return "Model_\(dateString)"
+        let uniqueSuffix = UUID().uuidString.prefix(8)
+        return "Model_\(dateString)_\(uniqueSuffix)"
     }
 
     func capturedModelURLs() async throws -> [URL] {
@@ -107,7 +111,11 @@ final class LibraryRepository: LibraryRepositoryProtocol {
             context.delete(model)
         }
 
-        try? context.save()
+        do {
+            try context.save()
+        } catch {
+            Self.logger.warning("Failed to save after pruning missing models: \(error.localizedDescription)")
+        }
     }
 
     func importFile(_ url: URL, existingModels: [Models], context: ModelContext) async throws {
@@ -148,6 +156,14 @@ final class LibraryRepository: LibraryRepositoryProtocol {
             context.delete(modelToDelete)
         }
 
+        try context.save()
+    }
+
+    func deleteImportedModels(_ models: [Models], context: ModelContext) async throws {
+        for modelToDelete in models {
+            try await fileStore.deleteImportedModelDirectory(containing: modelToDelete.model)
+            context.delete(modelToDelete)
+        }
         try context.save()
     }
 

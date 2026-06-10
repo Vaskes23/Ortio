@@ -49,7 +49,7 @@ struct ImportView: View {
                     } label: {
                         Image(systemName: "plus")
                             .font(.title2.weight(.semibold))
-                            .foregroundStyle(.primary)
+                            .foregroundStyle(OrtioDesignSystem.Palette.primaryText)
                     }
                     .sensoryFeedback(.impact, trigger: presentImporter)
                     .accessibilityLabel("Import new 3D model")
@@ -60,7 +60,7 @@ struct ImportView: View {
                 allowedContentTypes: [.usd, .usdz, .realityFile],
                 allowsMultipleSelection: true,
                 onCompletion: { result in
-                    Task {
+                    Task { @MainActor in
                         await viewModel.handleImport(result: result, existingModels: storedModels, context: modelContext)
                     }
                 }
@@ -104,8 +104,9 @@ struct ImportView: View {
                 }
             }
             .onDelete { offsets in
-                Task {
-                    await viewModel.deleteModel(at: offsets, from: storedModels, context: modelContext)
+                let modelsToDelete = offsets.map { filteredModels[$0] }
+                Task { @MainActor in
+                    await viewModel.deleteModels(modelsToDelete, context: modelContext)
                 }
             }
         }
@@ -134,12 +135,12 @@ struct FileRow: View {
                 .lineLimit(1)
             Spacer()
             Text(model.date.formatted(.dateTime.day().month().year()))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(OrtioDesignSystem.Palette.secondaryText)
                 .font(.caption)
             Button(action: onPreview) {
                 Image(systemName: "eye")
                     .font(.body)
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(OrtioDesignSystem.Palette.primaryText)
             }
             .buttonStyle(.borderless)
             .accessibilityLabel("Preview \(model.displayTitle)")
@@ -161,7 +162,7 @@ struct StoragePickerView: View {
             Section("Choose storage location") {
                 Label("On My iPhone", systemImage: "iphone")
                 Label("iCloud Drive", systemImage: "icloud")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(OrtioDesignSystem.Palette.secondaryText)
             }
         }
         .navigationTitle("Storage")

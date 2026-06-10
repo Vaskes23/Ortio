@@ -66,6 +66,16 @@ class ImportViewModel {
         }
     }
 
+    /// Deletes the specified models by identity, removing both file system directories and SwiftData records.
+    func deleteModels(_ models: [Models], context: ModelContext) async {
+        do {
+            try await repository.deleteImportedModels(models, context: context)
+        } catch {
+            Self.logger.error("Error deleting imported model: \(error.localizedDescription)")
+            errorMessage = "Delete failed: \(error.localizedDescription)"
+        }
+    }
+
     /// Processes the result of the file importer, importing each selected file.
     func handleImport(result: Result<[URL], Error>, existingModels: [Models], context: ModelContext) async {
         switch result {

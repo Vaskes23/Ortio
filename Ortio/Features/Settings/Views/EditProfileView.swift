@@ -44,7 +44,7 @@ struct EditProfileView: View {
                                 .resizable()
                                 .frame(width: 56, height: 56)
                                 .clipShape(Circle())
-                                .foregroundColor(.gray)
+                                .foregroundColor(OrtioDesignSystem.Palette.secondaryText)
                                 .rotation3DEffect(.degrees(isFlipped ? 0 : 180), axis: (x: 0, y: 1, z: 0))
                                 .animation(.default, value: rotationAngle)
                         }
@@ -58,7 +58,7 @@ struct EditProfileView: View {
                         PhotosPicker(selection: $selectedPhotosPickerItem, matching: .images) {
                             Text("Choose Photo")
                                 .font(.caption)
-                                .foregroundColor(.blue)
+                                .foregroundColor(OrtioDesignSystem.Palette.primaryAccent)
                         }
                     }
 
@@ -71,7 +71,7 @@ struct EditProfileView: View {
                 VStack(spacing: 16) {
                     HStack {
                         Image(systemName: "person")
-                            .foregroundColor(.gray)
+                            .foregroundColor(OrtioDesignSystem.Palette.secondaryText)
                             .frame(width: 20)
                         TextField("Name", text: $viewModel.name)
                             .font(.callout)
@@ -81,7 +81,7 @@ struct EditProfileView: View {
 
                     HStack {
                         Image(systemName: "at")
-                            .foregroundColor(.gray)
+                            .foregroundColor(OrtioDesignSystem.Palette.secondaryText)
                             .frame(width: 20)
                         TextField("Username", text: $username)
                             .font(.callout)
@@ -98,16 +98,18 @@ struct EditProfileView: View {
             username = viewModel.user.username
             selectedImage = viewModel.user.profileUIImage
         }
-        .onChange(of: selectedPhotosPickerItem) { newItem in
-            Task {
+        .onChange(of: selectedPhotosPickerItem) { _, newItem in
+            Task { @MainActor in
                 if let newItem = newItem,
                    let data = try? await newItem.loadTransferable(type: Data.self),
                    let uiImage = UIImage(data: data) {
+                    guard !Task.isCancelled else { return }
                     withAnimation(.easeInOut(duration: 0.6)) {
                         rotationAngle += 180
                         isFlipped.toggle()
                     }
                     try? await Task.sleep(for: .milliseconds(300))
+                    guard !Task.isCancelled else { return }
                     selectedImage = uiImage
                 }
             }

@@ -22,7 +22,7 @@ struct OnboardingView: View {
 
     var body: some View {
         ZStack {
-            Color(colorScheme == .light ? .white : .black).ignoresSafeArea()
+            OrtioDesignSystem.Palette.background.ignoresSafeArea()
             if let session = appModel.objectCaptureSession {
                 OnboardingTutorialView(session: session, onboardingStateMachine: stateMachine)
                 OnboardingButtonView(session: session, onboardingStateMachine: stateMachine)
