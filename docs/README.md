@@ -5,21 +5,13 @@
 These docs describe the supported iOS app and the current stabilization work:
 
 - [../README.md](/Users/matyasvascak/Desktop/Code/Ortio/README.md): current repo status and supported build/test flow
-- [implementation/SUMMARY.md](/Users/matyasvascak/Desktop/Code/Ortio/docs/implementation/SUMMARY.md): high-level project summary with historical notes
-- [database/schema.sql](/Users/matyasvascak/Desktop/Code/Ortio/docs/database/schema.sql): deferred backend schema reference
+- [implementation/ORTIO_REDESIGN_PLANNER.md](/Users/matyasvascak/Desktop/Code/Ortio/docs/implementation/ORTIO_REDESIGN_PLANNER.md): current redesign and stabilization planning notes
 
-## Historical Documentation
+## Removed Historical Material
 
-The following documents describe deferred shared-framework and visionOS prototype work. They remain useful as design history, but they are not active setup instructions for the current repo state:
-
-- [getting-started/QUICK_START.md](/Users/matyasvascak/Desktop/Code/Ortio/docs/getting-started/QUICK_START.md)
-- [getting-started/FRAMEWORK_SETUP_GUIDE.md](/Users/matyasvascak/Desktop/Code/Ortio/docs/getting-started/FRAMEWORK_SETUP_GUIDE.md)
-- [implementation/IMPLEMENTATION_PLAN.md](/Users/matyasvascak/Desktop/Code/Ortio/docs/implementation/IMPLEMENTATION_PLAN.md)
-- [implementation/IMPLEMENTATION_PROGRESS.md](/Users/matyasvascak/Desktop/Code/Ortio/docs/implementation/IMPLEMENTATION_PROGRESS.md)
+Deferred shared-framework, visionOS, widget, backend, and excluded-test prototype material was removed from the active tree. Use Git history if those references are needed later.
 
 ## Current Supported Build Graph
 
 - `Ortio`
 - `OrtioTests`
-
-Archived prototype code now lives under [../DeferredPrototypes/README.md](/Users/matyasvascak/Desktop/Code/Ortio/DeferredPrototypes/README.md).

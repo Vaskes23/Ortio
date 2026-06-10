@@ -14,7 +14,6 @@ fileGroups:
   - project.yml
   - .swiftlint.yml
   - docs
-  - DeferredPrototypes
   - Requirements
 settings:
   base:
@@ -134,10 +133,6 @@ targets:
       - path: OrtioTests
         excludes:
           - "**/.DS_Store"
-          - "Shared/AnnotationModelTests.swift"
-          - "mocks/MockNetworkService.swift"
-          - "Core/BindingExtensionTests.swift"
-          - "Features/Models/ModelsViewModelTests.swift"
     dependencies:
       - target: Ortio
     settings:
