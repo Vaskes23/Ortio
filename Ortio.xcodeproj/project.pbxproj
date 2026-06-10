@@ -194,7 +194,7 @@
 		AA188F843B5A0E8269EE4B1A /* SampleModelSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleModelSeeder.swift; sourceTree = "<group>"; };
 		ACADE0D270FA3A3D7BFF65A2 /* OrtioTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrtioTests.swift; sourceTree = "<group>"; };
 		AF59BE5B720BADC45D62CE14 /* OrtioDesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrtioDesignSystem.swift; sourceTree = "<group>"; };
-		B2254C1DEBCAD7A0A4384FE9 /* CLAUDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CLAUDE.md; sourceTree = "<group>"; };
+		B2254C1DEBCAD7A0A4384FE9 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
 		B3B298FACB151FAC94C3C4BB /* ImportModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportModel.swift; sourceTree = "<group>"; };
 		B4434D16D985937C0F49AF9E /* LibraryRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryRepositoryTests.swift; sourceTree = "<group>"; };
 		B5695A3DFCF960530DE6A56D /* ThemeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeTests.swift; sourceTree = "<group>"; };
@@ -499,7 +499,7 @@
 			isa = PBXGroup;
 			children = (
 				D181B859C04D0511C87AFA5E /* .swiftlint.yml */,
-				B2254C1DEBCAD7A0A4384FE9 /* CLAUDE.md */,
+				B2254C1DEBCAD7A0A4384FE9 /* AGENTS.md */,
 				A72753D0081BCF94EE57B779 /* project.yml */,
 				9766E6B869719A1C91D0B005 /* README.md */,
 				500339322FEB24E1D3ED48AD /* Configuration */,

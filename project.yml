@@ -10,7 +10,7 @@ options:
   generateEmptyDirectories: true
 fileGroups:
   - README.md
-  - CLAUDE.md
+  - AGENTS.md
   - project.yml
   - .swiftlint.yml
   - docs
