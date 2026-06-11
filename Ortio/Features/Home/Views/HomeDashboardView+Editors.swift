@@ -43,6 +43,7 @@ struct RenameModelSheet: View {
                 TextField("Model name", text: $proposedName)
                     .textInputAutocapitalization(.words)
                     .disableAutocorrection(true)
+                    .foregroundStyle(OrtioDesignSystem.Palette.primaryText)
                     .focused($isNameFieldFocused)
             }
             .navigationTitle("Change Name")

@@ -158,7 +158,7 @@ enum LibraryHomeFilter: String, CaseIterable, Identifiable {
         case .all: "Recents"
         case .captured: "Captured"
         case .imported: "Imported"
-        case .favorites: "Favorites"
+        case .favorites: "Pinned"
         }
     }
 
@@ -167,7 +167,14 @@ enum LibraryHomeFilter: String, CaseIterable, Identifiable {
         case .all: "clock"
         case .captured: "camera"
         case .imported: "square.and.arrow.down"
-        case .favorites: "star"
+        case .favorites: "pin.fill"
+        }
+    }
+
+    var symbolRotationDegrees: Double {
+        switch self {
+        case .favorites: 40
+        default: 0
         }
     }
 }

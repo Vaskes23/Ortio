@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		02F797CBAEFFAE5784F1A5BD /* Courtyard Townhouse.usdz in Resources */ = {isa = PBXBuildFile; fileRef = A122021ECB2C26CE559BC163 /* Courtyard Townhouse.usdz */; };
 		086110E81365C819AA3F93D1 /* HomeDashboardView+Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FF112B8F3003B68E7DF4F8 /* HomeDashboardView+Components.swift */; };
 		151B75D2032DDDFE8C26DDE7 /* LibraryRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4434D16D985937C0F49AF9E /* LibraryRepositoryTests.swift */; };
 		182104D51F7E4FDDB6F1897A /* OnboardingTutorialView+LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E8E8F28BD18DE4FF655F74 /* OnboardingTutorialView+LocalizedString.swift */; };
@@ -20,6 +21,7 @@
 		2971DFF9598CA766C5AF195D /* ScanPasses-iPad-FixedHeight-3.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = C3DDA9D5578BA521909481DF /* ScanPasses-iPad-FixedHeight-3.mp4 */; };
 		2B5931CB433B5968E7145D67 /* GlobalSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8475E39E44DB76152EBA17FF /* GlobalSearchViewModel.swift */; };
 		2BE639337A414FDB8E33B0E0 /* NativeDictationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69E531ACD0790D24D58432E6 /* NativeDictationService.swift */; };
+		2CD1A1BF9E0F6310FBBAE99E /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2A03C88C211282FA53C331D1 /* README.md */; };
 		3133135A2E700B2DC145DFAF /* LibraryFileStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E820CB6EABEC996513D44B /* LibraryFileStoreTests.swift */; };
 		33694972C3E01853A6C14CEF /* ScanPasses-iPhone-FixedHeight-1.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 5D433C4EB330F71E7B6A1EF9 /* ScanPasses-iPhone-FixedHeight-1.mp4 */; };
 		337C7D3260D548F044A564DB /* CaptureOverlayView+LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AD6E0ECD328B2CB0BA317C4 /* CaptureOverlayView+LocalizedString.swift */; };
@@ -30,6 +32,7 @@
 		4409932704B0E1A02C62C014 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099B2697E8C2736EEB9F0158 /* User.swift */; };
 		4459180799FB9A23AD1B8626 /* GlobalSearchViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03AC8379CA8AC8DB06D6F90 /* GlobalSearchViewModelTests.swift */; };
 		44920348142798638CC58853 /* ImportViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8DC4A9CB17C3A6DECA78C5 /* ImportViewModelTests.swift */; };
+		4724F57EDFF2F3832194D530 /* Skyline Massing Study.usdz in Resources */ = {isa = PBXBuildFile; fileRef = CDC77E02FDA80A808848294F /* Skyline Massing Study.usdz */; };
 		4BB1CF5E4E5831166586B1EB /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5664658887A6E0103EB8B89 /* SettingsViewModel.swift */; };
 		4BDF1241B3C32DAB57C16315 /* LibraryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C13E3C2F3185979A7F84FF /* LibraryRepository.swift */; };
 		4E786691FFC84E817A533F40 /* ImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A143E8B94EA21AA54D551FA8 /* ImportView.swift */; };
@@ -50,6 +53,7 @@
 		6B090E47B271018C439395E9 /* GlobalSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DD9D9F548EA19A6CB81E42 /* GlobalSearchView.swift */; };
 		6B39A803AAD206C67D3DF075 /* CitcularHome.usdz in Resources */ = {isa = PBXBuildFile; fileRef = F08DE1D67D0D532EC3AD00C3 /* CitcularHome.usdz */; };
 		6F279FEC33E6B1550F879F77 /* ScanPasses-iPad-FixedHeight-unflippable-high.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = D614FE78D14AA63B31E995AF /* ScanPasses-iPad-FixedHeight-unflippable-high.mp4 */; };
+		724E64A86B1B8AB77998F30A /* Riverside Office Tower.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 9D25FCAF0683B87ED50F39B5 /* Riverside Office Tower.usdz */; };
 		72543B8DAF973E2D9A3FC85A /* ImportModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B298FACB151FAC94C3C4BB /* ImportModel.swift */; };
 		75B2176E6A3E32C8BC088191 /* HomeDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806D0E4CC4DD20C736C9830E /* HomeDashboardView.swift */; };
 		7C34B5C84D5F59D5AF9C421E /* UserSettingsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9185B107B25DD55B93CE1FEA /* UserSettingsRepository.swift */; };
@@ -72,13 +76,16 @@
 		96F6B85365B2145D2270C34A /* FeedbackMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890FDE20B93D48B9A4068008 /* FeedbackMessages.swift */; };
 		998FBD03EA9AB038D2EBD9F0 /* ImportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9453E3D998DD639553B59C /* ImportTests.swift */; };
 		9D23222179D94AEA41B8B068 /* PathConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD752922301E3954407ED73 /* PathConstants.swift */; };
+		A470E986A767248CC926BAF0 /* Timber Cabin Concept.usdz in Resources */ = {isa = PBXBuildFile; fileRef = F5E7C16EEBE0F35B463D2BB0 /* Timber Cabin Concept.usdz */; };
 		A5E75DBB750E0DA1F0EE06BF /* HomeDashboardView+Editors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8803F9E75AACB560FC2FEBB7 /* HomeDashboardView+Editors.swift */; };
-		ADE20516E19A4853F4F82906 /* AGENTS.md in Resources */ = {isa = PBXBuildFile; fileRef = 6A776199AE7C384C678ED9C0 /* AGENTS.md */; };
+		AAD8D7D3792B3A6CBC4403B6 /* Museum Stair Hall.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 301BA6913591BD6E6D4E5F1B /* Museum Stair Hall.usdz */; };
 		AE024C69ADE3CD14992F2909 /* ScanPasses-iPhone-FixedHeight-2.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = A65C8B40107D7CD78C5D45A7 /* ScanPasses-iPhone-FixedHeight-2.mp4 */; };
+		B460FEFEE2556920EE177B4D /* Glass House Concept.usdz in Resources */ = {isa = PBXBuildFile; fileRef = F7D4F1369A41225073D6B1BE /* Glass House Concept.usdz */; };
 		B6D8A49550B87E3D504075CF /* HomeDashboardView+QuickActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D30467CC8804FD819CF9C95 /* HomeDashboardView+QuickActions.swift */; };
 		BC80A8C69B7EF39348FCCF3B /* ProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8246F24644041A72C861FD /* ProgressBarView.swift */; };
 		C08772F22C47F87A497FC0E9 /* OnboardingTutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87FE6B3EF1A5C77F27C9937F /* OnboardingTutorialView.swift */; };
 		C5E39EF50966126310FEAB65 /* TutorialVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE776109FAE7C32D6512935D /* TutorialVideoView.swift */; };
+		C6D39B4AB389ED0DE5FB4BAE /* Urban Corner Block.usdz in Resources */ = {isa = PBXBuildFile; fileRef = E5D1B4354941EE944714DD57 /* Urban Corner Block.usdz */; };
 		C7CAA544E26B944DDF4AB189 /* ThemeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3CAC402661DD7DC0108A64 /* ThemeController.swift */; };
 		C926DD069FADA245EC023FBA /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21817ED4DB541CAB9EA911FD /* Models.swift */; };
 		CA7ABCFAA07679146ED61E61 /* UntilProcessingCompleteFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B8FDD9AC2B4D8090CBC157 /* UntilProcessingCompleteFilter.swift */; };
@@ -93,11 +100,14 @@
 		E0B53640070DBF6FD9866D8C /* SettingsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B71A761F35AAE61B90C9BFC /* SettingsViewModelTests.swift */; };
 		E14A2FAA944D6CC923C139C2 /* NativeDictationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2EF7B5299CCDB42AC4303A6 /* NativeDictationServiceTests.swift */; };
 		E404256709F3317B52F0F69D /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA7C422DD37E8DB19AFF402 /* FeedbackView.swift */; };
+		E462CADAFDF44FF72FB635C0 /* Atrium Pavilion.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 8C1416DF4FEC375F3F04A0B6 /* Atrium Pavilion.usdz */; };
 		E7EBFBE8E0D84EFBEC623E7B /* DictationUIComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A883E021CB9591CD8DADE8B /* DictationUIComponents.swift */; };
 		EB084AE6D6C0FF3AB2A22D07 /* ScanPasses-iPhone-FixedHeight-unflippable-low.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 5A47BEDAEA44DC75ED0257B0 /* ScanPasses-iPhone-FixedHeight-unflippable-low.mp4 */; };
 		EBB39FA23E7F4E9B6F5AC5DE /* CaptureFolderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 937F4E6BAA4D88C31B02F7A2 /* CaptureFolderManager.swift */; };
 		EC12CB7D534703EF66FD24A3 /* OnboardingButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 582079B00769338A44396A91 /* OnboardingButtonView.swift */; };
+		ECB7B53E3338F0C643A9C78C /* Gallery Loft Interior.usdz in Resources */ = {isa = PBXBuildFile; fileRef = AEB34DB86E3B9A97355F5DDE /* Gallery Loft Interior.usdz */; };
 		ECD4CF3A807BBF6903917966 /* OnboardingStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72EC56DBEBF68E8FB4EB7AD /* OnboardingStateMachine.swift */; };
+		F42C3E172123CAAC48D0086F /* Modular Studio Facade.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 67BFF46A4CDFB193E4B1EE7D /* Modular Studio Facade.usdz */; };
 		F721A1ED9AC4FE69A0AB0359 /* ModelsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF80C4DFCC8F4FAC4328F42 /* ModelsViewModel.swift */; };
 		F79FFE6AA96636A0F031C96F /* ReconstructionPrimaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74A725A5130296737A0A609 /* ReconstructionPrimaryView.swift */; };
 		FC1B9A366407C51AEF1FC370 /* FileManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C89E7A42694442BDE136658 /* FileManagerProtocol.swift */; };
@@ -114,6 +124,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		052D7CE1257664AB4DF4EA3C /* documentation-goal.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "documentation-goal.md"; sourceTree = "<group>"; };
 		05E8E8F28BD18DE4FF655F74 /* OnboardingTutorialView+LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OnboardingTutorialView+LocalizedString.swift"; sourceTree = "<group>"; };
 		0614283290A52438E9B5FEB3 /* ScanPasses-iPad-FixedHeight-1.mp4 */ = {isa = PBXFileReference; path = "ScanPasses-iPad-FixedHeight-1.mp4"; sourceTree = "<group>"; };
 		099B2697E8C2736EEB9F0158 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -126,16 +137,19 @@
 		2114CB8486E9FD8F9C8DC173 /* OnboardingButtonView+LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OnboardingButtonView+LocalizedString.swift"; sourceTree = "<group>"; };
 		21817ED4DB541CAB9EA911FD /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		250B9B0E382F67AD4CE4887A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		2A03C88C211282FA53C331D1 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2A8246F24644041A72C861FD /* ProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBarView.swift; sourceTree = "<group>"; };
 		2AD6E0ECD328B2CB0BA317C4 /* CaptureOverlayView+LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaptureOverlayView+LocalizedString.swift"; sourceTree = "<group>"; };
 		2AEE13610A7400309B9FD87B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		2D3CAC402661DD7DC0108A64 /* ThemeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeController.swift; sourceTree = "<group>"; };
+		301BA6913591BD6E6D4E5F1B /* Museum Stair Hall.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "Museum Stair Hall.usdz"; sourceTree = "<group>"; };
 		31DBFF86BA55A0955F3C0297 /* CapturePrimaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePrimaryView.swift; sourceTree = "<group>"; };
 		34DC97B003F974F066179E65 /* HomeSearchTransitionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSearchTransitionCoordinator.swift; sourceTree = "<group>"; };
 		3ADF6DAF9FA0340F4FE41D61 /* CaptureOverlayView+Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaptureOverlayView+Buttons.swift"; sourceTree = "<group>"; };
 		4263A8183E8B209A72017AE4 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		4C89E7A42694442BDE136658 /* FileManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerProtocol.swift; sourceTree = "<group>"; };
 		5424EA9310E1ED50DDB71CEE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		55F4EA45639640D311C46DE3 /* workflows.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = workflows.md; sourceTree = "<group>"; };
 		574AE9BD34EF8E92C20FDAD7 /* FileManagerProtocolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerProtocolTests.swift; sourceTree = "<group>"; };
 		582079B00769338A44396A91 /* OnboardingButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingButtonView.swift; sourceTree = "<group>"; };
 		5A47BEDAEA44DC75ED0257B0 /* ScanPasses-iPhone-FixedHeight-unflippable-low.mp4 */ = {isa = PBXFileReference; path = "ScanPasses-iPhone-FixedHeight-unflippable-low.mp4"; sourceTree = "<group>"; };
@@ -145,12 +159,13 @@
 		61C13E3C2F3185979A7F84FF /* LibraryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryRepository.swift; sourceTree = "<group>"; };
 		6203A8EE54AE99FB6F3D8345 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6448B0FB6BFE59BF3E5FDEF0 /* MatyasVascakBachelorThesisProposal.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = MatyasVascakBachelorThesisProposal.md; sourceTree = "<group>"; };
+		67BFF46A4CDFB193E4B1EE7D /* Modular Studio Facade.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "Modular Studio Facade.usdz"; sourceTree = "<group>"; };
 		67FEE7C4410EA1EAF166BCF8 /* AppDataModel+State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDataModel+State.swift"; sourceTree = "<group>"; };
 		69E531ACD0790D24D58432E6 /* NativeDictationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeDictationService.swift; sourceTree = "<group>"; };
-		6A776199AE7C384C678ED9C0 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
 		6B71A761F35AAE61B90C9BFC /* SettingsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModelTests.swift; sourceTree = "<group>"; };
 		6B8DC4A9CB17C3A6DECA78C5 /* ImportViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportViewModelTests.swift; sourceTree = "<group>"; };
 		712BD5430286FFB50213CB89 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
+		71D052D128B48AB6BAFAE489 /* architecture.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = architecture.md; sourceTree = "<group>"; };
 		76BC1FAAB7F0626DE655128C /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		7A9B6A80F1D65FEBCB724ACB /* ModelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsTests.swift; sourceTree = "<group>"; };
 		7CF80C4DFCC8F4FAC4328F42 /* ModelsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsViewModel.swift; sourceTree = "<group>"; };
@@ -164,7 +179,7 @@
 		890FDE20B93D48B9A4068008 /* FeedbackMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackMessages.swift; sourceTree = "<group>"; };
 		89E820CB6EABEC996513D44B /* LibraryFileStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryFileStoreTests.swift; sourceTree = "<group>"; };
 		8A883E021CB9591CD8DADE8B /* DictationUIComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictationUIComponents.swift; sourceTree = "<group>"; };
-		8E849F4D478170701221A554 /* ORTIO_REDESIGN_PLANNER.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ORTIO_REDESIGN_PLANNER.md; sourceTree = "<group>"; };
+		8C1416DF4FEC375F3F04A0B6 /* Atrium Pavilion.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "Atrium Pavilion.usdz"; sourceTree = "<group>"; };
 		9185B107B25DD55B93CE1FEA /* UserSettingsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingsRepository.swift; sourceTree = "<group>"; };
 		918FB9C151BB747C59421448 /* LoadOrtioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadOrtioView.swift; sourceTree = "<group>"; };
 		937F4E6BAA4D88C31B02F7A2 /* CaptureFolderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureFolderManager.swift; sourceTree = "<group>"; };
@@ -172,11 +187,13 @@
 		94A5D7991B8208A150D782F6 /* OnboardingStateMachineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingStateMachineTests.swift; sourceTree = "<group>"; };
 		9766E6B869719A1C91D0B005 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		97C37AF17F99A541C77F4D18 /* ScanPasses-iPad-FixedHeight-unflippable-low.mp4 */ = {isa = PBXFileReference; path = "ScanPasses-iPad-FixedHeight-unflippable-low.mp4"; sourceTree = "<group>"; };
+		9D25FCAF0683B87ED50F39B5 /* Riverside Office Tower.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "Riverside Office Tower.usdz"; sourceTree = "<group>"; };
 		9D2E24C95F7540FEE0D68736 /* LibraryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryItem.swift; sourceTree = "<group>"; };
 		9DC39B48A222312BE1150C7A /* ModelsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsModel.swift; sourceTree = "<group>"; };
 		9E3E3C7189D1A5484B3512F2 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		9FD752922301E3954407ED73 /* PathConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathConstants.swift; sourceTree = "<group>"; };
 		9FEF27F9AD6EAF3E2DF8AC5C /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
+		A122021ECB2C26CE559BC163 /* Courtyard Townhouse.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "Courtyard Townhouse.usdz"; sourceTree = "<group>"; };
 		A1273134F7063892A7221864 /* ScanPasses-iPad-FixedHeight-2.mp4 */ = {isa = PBXFileReference; path = "ScanPasses-iPad-FixedHeight-2.mp4"; sourceTree = "<group>"; };
 		A143E8B94EA21AA54D551FA8 /* ImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportView.swift; sourceTree = "<group>"; };
 		A21808949E04E57F41F66659 /* ImportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportViewModel.swift; sourceTree = "<group>"; };
@@ -188,6 +205,7 @@
 		A9796E63C317E67349F6158C /* Ortio.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Ortio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA188F843B5A0E8269EE4B1A /* SampleModelSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleModelSeeder.swift; sourceTree = "<group>"; };
 		ACADE0D270FA3A3D7BFF65A2 /* OrtioTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrtioTests.swift; sourceTree = "<group>"; };
+		AEB34DB86E3B9A97355F5DDE /* Gallery Loft Interior.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "Gallery Loft Interior.usdz"; sourceTree = "<group>"; };
 		AF59BE5B720BADC45D62CE14 /* OrtioDesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrtioDesignSystem.swift; sourceTree = "<group>"; };
 		B3B298FACB151FAC94C3C4BB /* ImportModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportModel.swift; sourceTree = "<group>"; };
 		B4434D16D985937C0F49AF9E /* LibraryRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryRepositoryTests.swift; sourceTree = "<group>"; };
@@ -197,6 +215,7 @@
 		C2EF7B5299CCDB42AC4303A6 /* NativeDictationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeDictationServiceTests.swift; sourceTree = "<group>"; };
 		C3DDA9D5578BA521909481DF /* ScanPasses-iPad-FixedHeight-3.mp4 */ = {isa = PBXFileReference; path = "ScanPasses-iPad-FixedHeight-3.mp4"; sourceTree = "<group>"; };
 		C823BA0229B541952CD44655 /* CaptureUtilitiesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureUtilitiesTests.swift; sourceTree = "<group>"; };
+		CDC77E02FDA80A808848294F /* Skyline Massing Study.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "Skyline Massing Study.usdz"; sourceTree = "<group>"; };
 		CE776109FAE7C32D6512935D /* TutorialVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialVideoView.swift; sourceTree = "<group>"; };
 		D03445EDDC906A611C41DDD2 /* AppDataModel+Orbit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDataModel+Orbit.swift"; sourceTree = "<group>"; };
 		D03AC8379CA8AC8DB06D6F90 /* GlobalSearchViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSearchViewModelTests.swift; sourceTree = "<group>"; };
@@ -210,17 +229,27 @@
 		E03CE12BF2E5AA1DB2745E5F /* LibraryFileStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryFileStore.swift; sourceTree = "<group>"; };
 		E0653708831BAC62DEA4B6C4 /* TimedMessageList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimedMessageList.swift; sourceTree = "<group>"; };
 		E5664658887A6E0103EB8B89 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		E5D1B4354941EE944714DD57 /* Urban Corner Block.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "Urban Corner Block.usdz"; sourceTree = "<group>"; };
 		E92362C58242A3344383CC83 /* HomeDashboardView+Sheets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeDashboardView+Sheets.swift"; sourceTree = "<group>"; };
 		E97C4DFE5EFB98A947E5C179 /* OrtioTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = OrtioTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9B8FDD9AC2B4D8090CBC157 /* UntilProcessingCompleteFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UntilProcessingCompleteFilter.swift; sourceTree = "<group>"; };
 		F08DE1D67D0D532EC3AD00C3 /* CitcularHome.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = CitcularHome.usdz; sourceTree = "<group>"; };
 		F2BB03DDAF3B2434C02CF9CB /* OrtioApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrtioApp.swift; sourceTree = "<group>"; };
 		F553EC5A2F5983E5BC18DC43 /* ShotFileInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotFileInfo.swift; sourceTree = "<group>"; };
+		F5E7C16EEBE0F35B463D2BB0 /* Timber Cabin Concept.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "Timber Cabin Concept.usdz"; sourceTree = "<group>"; };
+		F7D4F1369A41225073D6B1BE /* Glass House Concept.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "Glass House Concept.usdz"; sourceTree = "<group>"; };
 		F7FF112B8F3003B68E7DF4F8 /* HomeDashboardView+Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeDashboardView+Components.swift"; sourceTree = "<group>"; };
 		FCD7BEFC9EEF4B401AFE07B8 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		02714AE3C8A0C1AC223B8D6C /* (A Document Being Saved By usdzip) */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "(A Document Being Saved By usdzip)";
+			sourceTree = "<group>";
+		};
 		0295FD3ACE81AB07C2694CA1 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -243,6 +272,13 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		0463B7F385C764EC32FD864C /* (A Document Being Saved By usdzip 11) */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "(A Document Being Saved By usdzip 11)";
+			sourceTree = "<group>";
+		};
 		1595209EF7476E71725D69B9 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -253,6 +289,13 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		1670081DE1054445E2984F6E /* (A Document Being Saved By usdzip 20) */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "(A Document Being Saved By usdzip 20)";
+			sourceTree = "<group>";
+		};
 		18CC87AE687639844084D4A6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -260,6 +303,13 @@
 				E97C4DFE5EFB98A947E5C179 /* OrtioTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		1A8B72D4D6CC3FA863F82B31 /* (A Document Being Saved By usdzip 12) */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "(A Document Being Saved By usdzip 12)";
 			sourceTree = "<group>";
 		};
 		1CA1AA8E65B26DEAF3F45890 /* Views */ = {
@@ -296,6 +346,13 @@
 			path = Home;
 			sourceTree = "<group>";
 		};
+		26AEF329FF38F8762C76ED77 /* (A Document Being Saved By usdzip 5) */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "(A Document Being Saved By usdzip 5)";
+			sourceTree = "<group>";
+		};
 		280341269E0AAD1C5093E5B1 /* Import */ = {
 			isa = PBXGroup;
 			children = (
@@ -309,8 +366,39 @@
 		2B9BC15ED128C00D026879CD /* MockModels */ = {
 			isa = PBXGroup;
 			children = (
+				8C1416DF4FEC375F3F04A0B6 /* Atrium Pavilion.usdz */,
 				F08DE1D67D0D532EC3AD00C3 /* CitcularHome.usdz */,
+				A122021ECB2C26CE559BC163 /* Courtyard Townhouse.usdz */,
+				AEB34DB86E3B9A97355F5DDE /* Gallery Loft Interior.usdz */,
+				F7D4F1369A41225073D6B1BE /* Glass House Concept.usdz */,
+				67BFF46A4CDFB193E4B1EE7D /* Modular Studio Facade.usdz */,
+				301BA6913591BD6E6D4E5F1B /* Museum Stair Hall.usdz */,
+				2A03C88C211282FA53C331D1 /* README.md */,
+				9D25FCAF0683B87ED50F39B5 /* Riverside Office Tower.usdz */,
+				CDC77E02FDA80A808848294F /* Skyline Massing Study.usdz */,
+				F5E7C16EEBE0F35B463D2BB0 /* Timber Cabin Concept.usdz */,
 				D84BE10DFA0721EDFDA8EB55 /* Untitled Object 2.usdz */,
+				E5D1B4354941EE944714DD57 /* Urban Corner Block.usdz */,
+				B4671C94A71951F31CEB17EB /* (A Document Being Saved By usdzip 2) */,
+				7ED1C63E3E38E8538CA60234 /* (A Document Being Saved By usdzip 3) */,
+				D033DA69EC80B6B474B13A87 /* (A Document Being Saved By usdzip 4) */,
+				26AEF329FF38F8762C76ED77 /* (A Document Being Saved By usdzip 5) */,
+				B6CC7BE57ADC0F83BE97CCE6 /* (A Document Being Saved By usdzip 6) */,
+				4D7958CE05B261F343053C5F /* (A Document Being Saved By usdzip 7) */,
+				7F508CD57DE9B874662401CD /* (A Document Being Saved By usdzip 8) */,
+				65F72C24574489530476C938 /* (A Document Being Saved By usdzip 9) */,
+				BFFE0F309A671416E65B4DE4 /* (A Document Being Saved By usdzip 10) */,
+				0463B7F385C764EC32FD864C /* (A Document Being Saved By usdzip 11) */,
+				1A8B72D4D6CC3FA863F82B31 /* (A Document Being Saved By usdzip 12) */,
+				9D620D4C2870ED69686717A7 /* (A Document Being Saved By usdzip 13) */,
+				45ECFD9A5B0C4B27F5AD89D2 /* (A Document Being Saved By usdzip 14) */,
+				558C31DC1719F26013E4A740 /* (A Document Being Saved By usdzip 15) */,
+				B51A80F54E2D11CCBCAD6F2C /* (A Document Being Saved By usdzip 16) */,
+				2F529060B341FB97AE26D00A /* (A Document Being Saved By usdzip 17) */,
+				C1826C97D1485FBB4FD1ED59 /* (A Document Being Saved By usdzip 18) */,
+				79B3718A46FC5CAEB1913B85 /* (A Document Being Saved By usdzip 19) */,
+				1670081DE1054445E2984F6E /* (A Document Being Saved By usdzip 20) */,
+				02714AE3C8A0C1AC223B8D6C /* (A Document Being Saved By usdzip) */,
 			);
 			path = MockModels;
 			sourceTree = "<group>";
@@ -321,6 +409,13 @@
 				E5664658887A6E0103EB8B89 /* SettingsViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		2F529060B341FB97AE26D00A /* (A Document Being Saved By usdzip 17) */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "(A Document Being Saved By usdzip 17)";
 			sourceTree = "<group>";
 		};
 		314EE0A8A00854A3C41A86C4 /* Ortio */ = {
@@ -405,6 +500,13 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		45ECFD9A5B0C4B27F5AD89D2 /* (A Document Being Saved By usdzip 14) */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "(A Document Being Saved By usdzip 14)";
+			sourceTree = "<group>";
+		};
 		461953DC6048F8B5861A4E95 /* Core */ = {
 			isa = PBXGroup;
 			children = (
@@ -423,6 +525,13 @@
 				69E531ACD0790D24D58432E6 /* NativeDictationService.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		4D7958CE05B261F343053C5F /* (A Document Being Saved By usdzip 7) */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "(A Document Being Saved By usdzip 7)";
 			sourceTree = "<group>";
 		};
 		500339322FEB24E1D3ED48AD /* Configuration */ = {
@@ -456,6 +565,13 @@
 				CB9512AE004E289663B5223F /* Requirements */,
 				18CC87AE687639844084D4A6 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		558C31DC1719F26013E4A740 /* (A Document Being Saved By usdzip 15) */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "(A Document Being Saved By usdzip 15)";
 			sourceTree = "<group>";
 		};
 		58DB4212122483250610E39B /* Shared */ = {
@@ -519,6 +635,13 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
+		65F72C24574489530476C938 /* (A Document Being Saved By usdzip 9) */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "(A Document Being Saved By usdzip 9)";
+			sourceTree = "<group>";
+		};
 		7397E6E53AE4A64818BF9E90 /* App */ = {
 			isa = PBXGroup;
 			children = (
@@ -527,6 +650,27 @@
 				2D3CAC402661DD7DC0108A64 /* ThemeController.swift */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		79B3718A46FC5CAEB1913B85 /* (A Document Being Saved By usdzip 19) */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "(A Document Being Saved By usdzip 19)";
+			sourceTree = "<group>";
+		};
+		7ED1C63E3E38E8538CA60234 /* (A Document Being Saved By usdzip 3) */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "(A Document Being Saved By usdzip 3)";
+			sourceTree = "<group>";
+		};
+		7F508CD57DE9B874662401CD /* (A Document Being Saved By usdzip 8) */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "(A Document Being Saved By usdzip 8)";
 			sourceTree = "<group>";
 		};
 		829987E8E672F434A48FE72E /* Home */ = {
@@ -543,7 +687,6 @@
 		8A9C71A129729957899F30CA /* implementation */ = {
 			isa = PBXGroup;
 			children = (
-				8E849F4D478170701221A554 /* ORTIO_REDESIGN_PLANNER.md */,
 			);
 			path = implementation;
 			sourceTree = "<group>";
@@ -551,7 +694,6 @@
 		8C19A8F50775ED88675E6E61 /* Capture */ = {
 			isa = PBXGroup;
 			children = (
-				6A776199AE7C384C678ED9C0 /* AGENTS.md */,
 				C40A29D553BF19A840A67A34 /* Models */,
 				A81F3E3BDD7F4A411A998634 /* Utilities */,
 				6576DBAAA2F7EC9AC7C12344 /* ViewModels */,
@@ -589,10 +731,20 @@
 		93EA7FF06A47FB09180621F2 /* docs */ = {
 			isa = PBXGroup;
 			children = (
+				71D052D128B48AB6BAFAE489 /* architecture.md */,
+				052D7CE1257664AB4DF4EA3C /* documentation-goal.md */,
 				0DD1F377024E5E628DD88DBA /* README.md */,
+				55F4EA45639640D311C46DE3 /* workflows.md */,
 				8A9C71A129729957899F30CA /* implementation */,
 			);
 			path = docs;
+			sourceTree = "<group>";
+		};
+		9D620D4C2870ED69686717A7 /* (A Document Being Saved By usdzip 13) */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "(A Document Being Saved By usdzip 13)";
 			sourceTree = "<group>";
 		};
 		A2A35BDE3B107FE13F00B746 /* Models */ = {
@@ -639,12 +791,47 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		B4671C94A71951F31CEB17EB /* (A Document Being Saved By usdzip 2) */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "(A Document Being Saved By usdzip 2)";
+			sourceTree = "<group>";
+		};
+		B51A80F54E2D11CCBCAD6F2C /* (A Document Being Saved By usdzip 16) */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "(A Document Being Saved By usdzip 16)";
+			sourceTree = "<group>";
+		};
+		B6CC7BE57ADC0F83BE97CCE6 /* (A Document Being Saved By usdzip 6) */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "(A Document Being Saved By usdzip 6)";
+			sourceTree = "<group>";
+		};
 		B86DE4E425D21D35E2CD5CCC /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
 				A72EC56DBEBF68E8FB4EB7AD /* OnboardingStateMachine.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		BFFE0F309A671416E65B4DE4 /* (A Document Being Saved By usdzip 10) */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "(A Document Being Saved By usdzip 10)";
+			sourceTree = "<group>";
+		};
+		C1826C97D1485FBB4FD1ED59 /* (A Document Being Saved By usdzip 18) */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "(A Document Being Saved By usdzip 18)";
 			sourceTree = "<group>";
 		};
 		C2DB8CD502850913327CE1C0 /* Capture */ = {
@@ -689,6 +876,13 @@
 				6448B0FB6BFE59BF3E5FDEF0 /* MatyasVascakBachelorThesisProposal.md */,
 			);
 			path = Requirements;
+			sourceTree = "<group>";
+		};
+		D033DA69EC80B6B474B13A87 /* (A Document Being Saved By usdzip 4) */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "(A Document Being Saved By usdzip 4)";
 			sourceTree = "<group>";
 		};
 		D41CA6F8BDCD7D3994E85ED1 /* Import */ = {
@@ -815,10 +1009,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ADE20516E19A4853F4F82906 /* AGENTS.md in Resources */,
 				51C8E1821EBDBB4953B8715B /* Assets.xcassets in Resources */,
+				E462CADAFDF44FF72FB635C0 /* Atrium Pavilion.usdz in Resources */,
 				6B39A803AAD206C67D3DF075 /* CitcularHome.usdz in Resources */,
+				02F797CBAEFFAE5784F1A5BD /* Courtyard Townhouse.usdz in Resources */,
+				ECB7B53E3338F0C643A9C78C /* Gallery Loft Interior.usdz in Resources */,
+				B460FEFEE2556920EE177B4D /* Glass House Concept.usdz in Resources */,
+				F42C3E172123CAAC48D0086F /* Modular Studio Facade.usdz in Resources */,
+				AAD8D7D3792B3A6CBC4403B6 /* Museum Stair Hall.usdz in Resources */,
 				6A2879844F1BE0DC6775491B /* Preview Assets.xcassets in Resources */,
+				2CD1A1BF9E0F6310FBBAE99E /* README.md in Resources */,
+				724E64A86B1B8AB77998F30A /* Riverside Office Tower.usdz in Resources */,
 				CE0476592CF7B5CAFB173DBE /* ScanPasses-iPad-FixedHeight-1.mp4 in Resources */,
 				1A8EFF3405719974B07820B2 /* ScanPasses-iPad-FixedHeight-2.mp4 in Resources */,
 				2971DFF9598CA766C5AF195D /* ScanPasses-iPad-FixedHeight-3.mp4 in Resources */,
@@ -829,7 +1030,10 @@
 				D24906E36AA9F67405B4D601 /* ScanPasses-iPhone-FixedHeight-3.mp4 in Resources */,
 				96C06A9F88D7F04B7C7F57DD /* ScanPasses-iPhone-FixedHeight-unflippable-high.mp4 in Resources */,
 				EB084AE6D6C0FF3AB2A22D07 /* ScanPasses-iPhone-FixedHeight-unflippable-low.mp4 in Resources */,
+				4724F57EDFF2F3832194D530 /* Skyline Massing Study.usdz in Resources */,
+				A470E986A767248CC926BAF0 /* Timber Cabin Concept.usdz in Resources */,
 				965E5A0396600EA9A4CF4A89 /* Untitled Object 2.usdz in Resources */,
+				C6D39B4AB389ED0DE5FB4BAE /* Urban Corner Block.usdz in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -22,8 +22,10 @@ struct DashboardHeader: View {
     var body: some View {
         HStack(alignment: .center, spacing: 12) {
             Text("Ortio")
-                .font(.custom("Helvetica-Bold", size: 38))
+                .font(.custom("Helvetica-Bold", size: 56))
                 .foregroundStyle(OrtioDesignSystem.Palette.primaryText)
+                .minimumScaleFactor(0.72)
+                .lineLimit(1)
                 .frame(maxWidth: transition.showsTitle ? .infinity : 0, alignment: .leading)
                 .opacity(transition.showsTitle ? 1 : 0)
                 .scaleEffect(transition.showsTitle ? 1 : 0.92, anchor: .leading)
@@ -40,7 +42,7 @@ struct DashboardHeader: View {
             )
             .frame(maxWidth: .infinity, alignment: .trailing)
         }
-        .frame(height: 64)
+        .frame(height: 76)
         .animation(.spring(response: 0.34, dampingFraction: 0.88), value: transition.phase)
     }
 }
@@ -97,6 +99,7 @@ private struct SearchHeaderChrome: View {
                     .autocorrectionDisabled()
                     .focused(isSearchFieldFocused)
                     .font(.headline.weight(.medium))
+                    .foregroundStyle(OrtioDesignSystem.Palette.primaryText)
                     .lineLimit(1)
                     .opacity(transition.showsSearchFieldContents ? 1 : 0)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -187,7 +190,7 @@ private struct UserAccessoryContent: View {
 
 struct QuickActionsRow: View {
     @Binding var selectedFilter: LibraryHomeFilter
-    let onOpenTools: () -> Void
+    let onOpenShare: () -> Void
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -212,17 +215,19 @@ struct QuickActionsRow: View {
                 HomeQuickActionButton(
                     title: filter.title,
                     systemName: filter.symbolName,
+                    rotationDegrees: filter.symbolRotationDegrees,
                     isSelected: selectedFilter == filter
                 ) {
-                    selectedFilter = filter
+                    selectedFilter = selectedFilter == filter ? .all : filter
                 }
             }
 
             HomeQuickActionButton(
-                title: "Tools",
-                systemName: "square.grid.2x2",
+                title: "Share",
+                systemName: "icloud.and.arrow.up",
+                rotationDegrees: 0,
                 isSelected: false,
-                action: onOpenTools
+                action: onOpenShare
             )
         }
     }
@@ -348,12 +353,27 @@ struct LibraryCard: View {
             }
 
             if isNotesExpanded {
-                Text(item.notes.isEmpty ? "No notes added." : item.notes)
-                    .font(.subheadline)
-                    .foregroundStyle(item.notes.isEmpty ? OrtioDesignSystem.Palette.tertiaryText : OrtioDesignSystem.Palette.secondaryText)
-                    .fixedSize(horizontal: false, vertical: true)
+                if item.notes.isEmpty {
+                    Button(action: onAddNotes) {
+                        Text("No notes added.")
+                            .font(.subheadline)
+                            .foregroundStyle(OrtioDesignSystem.Palette.tertiaryText)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
                     .padding(.leading, 1)
                     .transition(.opacity.combined(with: .move(edge: .top)))
+                    .accessibilityLabel("Add notes for \(item.displayTitle)")
+                } else {
+                    Text(item.notes)
+                        .font(.subheadline)
+                        .foregroundStyle(OrtioDesignSystem.Palette.secondaryText)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.leading, 1)
+                        .transition(.opacity.combined(with: .move(edge: .top)))
+                }
             }
         }
         .padding(.vertical, 2)

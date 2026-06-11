@@ -125,6 +125,12 @@ final class GlobalSearchViewModelTests: XCTestCase {
         XCTAssertEqual(favoriteItems.first?.title, "Favorite Model.usdz")
     }
 
+    func testFavoritesFilterUsesPinnedPresentation() {
+        XCTAssertEqual(LibraryHomeFilter.favorites.title, "Pinned")
+        XCTAssertEqual(LibraryHomeFilter.favorites.symbolName, "pin.fill")
+        XCTAssertEqual(LibraryHomeFilter.favorites.symbolRotationDegrees, 40)
+    }
+
     func testFavoriteItemsAreSortedToTopOfRecents() {
         let olderFavorite = Models(
             name: "Pinned.usdz",
