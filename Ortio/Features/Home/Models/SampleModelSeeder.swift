@@ -12,7 +12,17 @@ import SwiftData
 enum SampleModelSeeder {
     private static let bundledSampleNames = [
         "Untitled Object 2.usdz",
-        "CitcularHome.usdz"
+        "CitcularHome.usdz",
+        "Atrium Pavilion.usdz",
+        "Courtyard Townhouse.usdz",
+        "Gallery Loft Interior.usdz",
+        "Glass House Concept.usdz",
+        "Modular Studio Facade.usdz",
+        "Museum Stair Hall.usdz",
+        "Riverside Office Tower.usdz",
+        "Skyline Massing Study.usdz",
+        "Timber Cabin Concept.usdz",
+        "Urban Corner Block.usdz"
     ]
 
     static func seedIfNeeded(

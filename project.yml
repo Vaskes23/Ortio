@@ -92,6 +92,7 @@ targets:
       - path: Ortio
         excludes:
           - "**/.DS_Store"
+          - "**/AGENTS.md"
           - "Info.plist"
     settings:
       base:
