@@ -1,6 +1,6 @@
 //
 //  LibraryRepository.swift
-//  GuidedCapture
+//  Ortio
 //
 //  Created by OpenAI on 08.04.2026.
 //
@@ -9,6 +9,7 @@ import Foundation
 import SwiftData
 import os
 
+/// User-facing failures from library operations that combine SwiftData and filesystem state.
 enum LibraryRepositoryError: LocalizedError {
     case modelNotFound
     case accessDenied(URL)
@@ -26,6 +27,11 @@ enum LibraryRepositoryError: LocalizedError {
     }
 }
 
+/// Coordinates library read and write operations for captured and imported models.
+///
+/// Home, import, and search view models use this boundary instead of mutating
+/// SwiftData records or document-directory files directly. The repository is
+/// `@MainActor` because callers pass `ModelContext` and UI-owned model arrays.
 @MainActor
 protocol LibraryRepositoryProtocol {
     func capturedModelURLs() async throws -> [URL]
@@ -58,6 +64,12 @@ protocol LibraryRepositoryProtocol {
     ) throws
 }
 
+/// Production repository for model library workflows.
+///
+/// This type owns SwiftData mutations and delegates filesystem work to a
+/// `LibraryFileStoreProtocol` actor. Captured models are represented by files
+/// plus optional `CapturedModelMetadata`; imported models are represented by
+/// `Models` records that point at copied files under `Documents/Imports`.
 @MainActor
 final class LibraryRepository: LibraryRepositoryProtocol {
     private static let logger = Logger(subsystem: "com.ortio", category: "LibraryRepository")

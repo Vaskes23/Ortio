@@ -1,6 +1,6 @@
 //
 //  UserSettingsRepository.swift
-//  GuidedCapture
+//  Ortio
 //
 //  Created by OpenAI on 08.04.2026.
 //
@@ -9,12 +9,17 @@ import Foundation
 import SwiftData
 import UIKit
 
+/// UserDefaults-backed settings toggles that are not part of the SwiftData user profile.
 struct UserSettingsPreferences: Equatable {
     var notificationsEnabled: Bool
     var soundEffectsEnabled: Bool
     var receiveEmailsEnabled: Bool
 }
 
+/// Persistence boundary for profile, theme, and simple settings preferences.
+///
+/// Settings view models use this protocol so tests can replace SwiftData and
+/// `UserDefaults` writes with deterministic mocks.
 @MainActor
 protocol UserSettingsRepositoryProtocol {
     func loadPreferences() -> UserSettingsPreferences
@@ -30,6 +35,7 @@ protocol UserSettingsRepositoryProtocol {
     ) throws
 }
 
+/// Production settings repository backed by SwiftData `User` and `UserDefaults`.
 @MainActor
 final class UserSettingsRepository: UserSettingsRepositoryProtocol {
     private enum Keys {

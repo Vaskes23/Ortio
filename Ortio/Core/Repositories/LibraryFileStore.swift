@@ -1,6 +1,6 @@
 //
 //  LibraryFileStore.swift
-//  GuidedCapture
+//  Ortio
 //
 //  Created by OpenAI on 08.04.2026.
 //
@@ -8,6 +8,7 @@
 import Foundation
 import os
 
+/// Concrete folder layout used by an Object Capture session.
 struct CaptureDirectoryLayout: Sendable, Equatable {
     let rootScanFolder: URL
     let imagesFolder: URL
@@ -15,12 +16,19 @@ struct CaptureDirectoryLayout: Sendable, Equatable {
     let modelsFolder: URL
 }
 
+/// Result of copying an imported model into Ortio-managed storage.
 struct ImportedModelFile: Sendable, Equatable {
     let destinationURL: URL
     let fileSize: Double
     let fileDate: Date
 }
 
+/// Actor boundary for all library filesystem operations.
+///
+/// Repository and view-model code should depend on this protocol when tests need
+/// deterministic filesystem behavior. Implementations own document-directory
+/// paths, scan folder creation, import copies, imported directory deletion, and
+/// transient capture cleanup.
 protocol LibraryFileStoreProtocol: Actor {
     func capturedModelURLs() throws -> [URL]
     func createNewScanDirectory() -> URL?
@@ -31,6 +39,11 @@ protocol LibraryFileStoreProtocol: Actor {
     func removeTransientCaptureArtifacts(in rootScanFolder: URL, preservingModels: Bool)
 }
 
+/// Production file store for `Documents/Scans` and `Documents/Imports`.
+///
+/// Methods run on the actor to serialize filesystem access. The actor does not
+/// mutate SwiftData; callers receive URLs or metadata and save records through
+/// repository code on the main actor.
 actor LibraryFileStore: LibraryFileStoreProtocol {
     private static let logger = Logger(subsystem: "com.ortio", category: "LibraryFileStore")
     private let fileManager: FileManagerProtocol

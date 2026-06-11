@@ -52,6 +52,25 @@ Current app root:
 - `Ortio/App/ContentView.swift` hosts the current root `NavigationStack`.
 - `Ortio/Features/Home/Views/HomeDashboardView.swift` is the primary home/library shell.
 
+Architecture and workflow docs:
+
+- `docs/architecture.md` explains the current app structure, diagrams, data flow, persistence boundaries, and test map.
+- `docs/workflows.md` gives task-oriented steps for common changes.
+- `docs/README.md` indexes active docs and local `AGENTS.md` files.
+
+Local agent guides:
+
+- `Ortio/App/AGENTS.md`
+- `Ortio/Core/AGENTS.md`
+- `Ortio/Features/Capture/AGENTS.md`
+- `Ortio/Features/Home/AGENTS.md`
+- `Ortio/Features/Import/AGENTS.md`
+- `Ortio/Features/Models/AGENTS.md`
+- `Ortio/Features/Onboarding/AGENTS.md`
+- `Ortio/Features/Settings/AGENTS.md`
+- `Ortio/SharedUI/AGENTS.md`
+- `OrtioTests/AGENTS.md`
+
 ## SwiftUI Patterns
 
 - Prefer modern Observation on iOS 17+: `@Observable` models owned by `@State`.
@@ -115,5 +134,6 @@ Current app root:
 
 - Do not revert user changes unless explicitly instructed.
 - Keep commits meaningful and scoped.
+- Before any Codex-managed commit, push, or commit-and-push action, run the `documentation-creation` skill at `/Users/matyasvascak/.codex/skills/documentation-creation/SKILL.md` against the current branch changes. Apply any necessary documentation updates before creating the commit or pushing it.
 - Do not stage unrelated local files such as IDE metadata or agent cache folders.
 - Never commit generated junk, temporary files, or local-only server artifacts.

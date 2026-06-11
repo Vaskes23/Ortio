@@ -1,6 +1,6 @@
 //
 //  GlobalSearchViewModel.swift
-//  GuidedCapture
+//  Ortio
 //
 //  Created by OpenAI on 07.04.2026.
 //
@@ -8,6 +8,11 @@
 import Foundation
 import Observation
 
+/// Merges captured filesystem items and imported SwiftData records for Home search.
+///
+/// The view model keeps captured and imported sources separately, then rebuilds a
+/// single sorted list with favorites first, newer items next, and title as the
+/// tie-breaker.
 @MainActor
 @Observable
 final class GlobalSearchViewModel {

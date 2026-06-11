@@ -10,10 +10,12 @@ import Foundation
 import os
 import Speech
 
+/// Transcribes a locally recorded note audio file into text.
 protocol NoteDictationServicing {
     func transcribe(audioFileURL: URL) async throws -> String
 }
 
+/// Default app-facing dictation service using iOS on-device speech recognition.
 struct DefaultNoteDictationService: NoteDictationServicing {
     private let nativeService: NativeDictationService
 
@@ -26,6 +28,11 @@ struct DefaultNoteDictationService: NoteDictationServicing {
     }
 }
 
+/// Local speech recognizer wrapper for model-note dictation.
+///
+/// The service requires speech authorization, a readable audio file, a recognizer
+/// for the configured locale, and on-device recognition support. It does not use
+/// network transcription or external API keys.
 struct NativeDictationService: NoteDictationServicing {
     private let locale: Locale
     private let recognizerFactory: (Locale) -> SFSpeechRecognizer?
@@ -132,6 +139,11 @@ private final class SpeechRecognitionContinuationBox: @unchecked Sendable {
     }
 }
 
+/// Main-actor recorder for temporary note audio and live meter levels.
+///
+/// `startRecording()` activates the audio session and creates a temporary M4A
+/// file. `stopRecording()` returns that file for transcription. `cancelRecording()`
+/// removes the temporary file and resets recorder state.
 @MainActor
 final class VoiceNoteRecorder: NSObject, ObservableObject {
     private static let logger = Logger(subsystem: "com.ortio", category: "VoiceNoteRecorder")

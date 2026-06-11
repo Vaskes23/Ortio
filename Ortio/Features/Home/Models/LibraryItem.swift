@@ -1,18 +1,20 @@
 //
 //  LibraryItem.swift
-//  GuidedCapture
+//  Ortio
 //
 //  Created by OpenAI on 07.04.2026.
 //
 
 import Foundation
 
+/// Immutable metadata used when converting captured model URLs into library items.
 struct CapturedModelMetadataSnapshot: Sendable {
     let displayName: String?
     let notes: String
     let isFavorite: Bool
 }
 
+/// Validation failures that prevent a model URL from opening in preview.
 enum LibraryPreviewValidationError: LocalizedError {
     case nonLocalFile
     case unsupportedFormat
@@ -30,6 +32,12 @@ enum LibraryPreviewValidationError: LocalizedError {
     }
 }
 
+/// Display model that normalizes captured and imported library entries for Home.
+///
+/// Captured items are built from filesystem URLs plus optional metadata.
+/// Imported items are built from SwiftData `Models` records. Keeping both
+/// sources behind this value lets search, filters, preview, rename, notes, and
+/// favorite actions share the same UI surface.
 struct LibraryItem: Identifiable, Equatable {
     enum Source: String, CaseIterable, Identifiable {
         case captured
@@ -136,6 +144,7 @@ struct LibraryItem: Identifiable, Equatable {
     }
 }
 
+/// Filters shown in the Home quick-action row.
 enum LibraryHomeFilter: String, CaseIterable, Identifiable {
     case all
     case captured
@@ -163,6 +172,7 @@ enum LibraryHomeFilter: String, CaseIterable, Identifiable {
     }
 }
 
+/// Validated local model URL that can be presented by `ModelView`.
 struct LibraryPreviewItem: Identifiable, Equatable {
     let url: URL
 

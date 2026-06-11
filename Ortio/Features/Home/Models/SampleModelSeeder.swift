@@ -1,6 +1,6 @@
 //
 //  SampleModelSeeder.swift
-//  GuidedCapture
+//  Ortio
 //
 //  Created by OpenAI on 07.04.2026.
 //

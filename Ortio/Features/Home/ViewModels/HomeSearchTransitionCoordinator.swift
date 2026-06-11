@@ -1,6 +1,6 @@
 //
 //  HomeSearchTransitionCoordinator.swift
-//  GuidedCapture
+//  Ortio
 //
 //  Created by OpenAI on 08.04.2026.
 //

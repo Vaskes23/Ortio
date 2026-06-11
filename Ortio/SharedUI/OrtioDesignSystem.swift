@@ -8,6 +8,10 @@
 import SwiftUI
 import UIKit
 
+/// Shared visual tokens and reusable surface helpers for Ortio screens.
+///
+/// Feature views should prefer these values over one-off colors, radii, shadows,
+/// or glass fallbacks so the app remains visually consistent.
 enum OrtioDesignSystem {
     enum Palette {
         static let background = Color(hex: 0xE3E4E4)
@@ -96,6 +100,7 @@ private extension Color {
     }
 }
 
+/// Standard elevated card treatment for repeated content surfaces.
 struct OrtioCardModifier: ViewModifier {
     func body(content: Content) -> some View {
         content

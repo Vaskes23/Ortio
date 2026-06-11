@@ -23,6 +23,15 @@ Historical shared-framework, visionOS, widget, backend, and excluded-test protot
 └── Ortio.xcodeproj         Generated Xcode project
 ```
 
+## Documentation
+
+- [docs/README.md](/Users/matyasvascak/Desktop/Code/Ortio/docs/README.md): documentation index
+- [docs/architecture.md](/Users/matyasvascak/Desktop/Code/Ortio/docs/architecture.md): current architecture, diagrams, ownership map, persistence boundaries, and test map
+- [docs/workflows.md](/Users/matyasvascak/Desktop/Code/Ortio/docs/workflows.md): task-oriented guides for common app changes
+- [AGENTS.md](/Users/matyasvascak/Desktop/Code/Ortio/AGENTS.md): top-level agent development guide
+
+Feature and ownership-specific `AGENTS.md` files live near the code they govern. Read the closest one before editing a folder.
+
 ## Build and Test
 
 ```bash
