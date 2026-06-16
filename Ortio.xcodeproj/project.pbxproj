@@ -76,6 +76,7 @@
 		96F6B85365B2145D2270C34A /* FeedbackMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890FDE20B93D48B9A4068008 /* FeedbackMessages.swift */; };
 		998FBD03EA9AB038D2EBD9F0 /* ImportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9453E3D998DD639553B59C /* ImportTests.swift */; };
 		9D23222179D94AEA41B8B068 /* PathConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD752922301E3954407ED73 /* PathConstants.swift */; };
+		9EC3C1D7C629D9DBB41C9FCA /* GoogleSignInService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952B3E5601182B6F9C0A5FAC /* GoogleSignInService.swift */; };
 		A470E986A767248CC926BAF0 /* Timber Cabin Concept.usdz in Resources */ = {isa = PBXBuildFile; fileRef = F5E7C16EEBE0F35B463D2BB0 /* Timber Cabin Concept.usdz */; };
 		A5E75DBB750E0DA1F0EE06BF /* HomeDashboardView+Editors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8803F9E75AACB560FC2FEBB7 /* HomeDashboardView+Editors.swift */; };
 		AAD8D7D3792B3A6CBC4403B6 /* Museum Stair Hall.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 301BA6913591BD6E6D4E5F1B /* Museum Stair Hall.usdz */; };
@@ -108,6 +109,7 @@
 		ECB7B53E3338F0C643A9C78C /* Gallery Loft Interior.usdz in Resources */ = {isa = PBXBuildFile; fileRef = AEB34DB86E3B9A97355F5DDE /* Gallery Loft Interior.usdz */; };
 		ECD4CF3A807BBF6903917966 /* OnboardingStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72EC56DBEBF68E8FB4EB7AD /* OnboardingStateMachine.swift */; };
 		F42C3E172123CAAC48D0086F /* Modular Studio Facade.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 67BFF46A4CDFB193E4B1EE7D /* Modular Studio Facade.usdz */; };
+		F6F20ABBD171D83BD63B22AB /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 1ACDDE133F9CAC4B11EABFCD /* GoogleSignIn */; };
 		F721A1ED9AC4FE69A0AB0359 /* ModelsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF80C4DFCC8F4FAC4328F42 /* ModelsViewModel.swift */; };
 		F79FFE6AA96636A0F031C96F /* ReconstructionPrimaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74A725A5130296737A0A609 /* ReconstructionPrimaryView.swift */; };
 		FC1B9A366407C51AEF1FC370 /* FileManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C89E7A42694442BDE136658 /* FileManagerProtocol.swift */; };
@@ -133,6 +135,7 @@
 		0DD1F377024E5E628DD88DBA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		14E0B930CB5F3F0554B2A869 /* HomeSearchTransitionCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSearchTransitionCoordinatorTests.swift; sourceTree = "<group>"; };
 		1A649DD3F8D74CE99356E77A /* ModelsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsView.swift; sourceTree = "<group>"; };
+		1A6E6AC76D80C843CC936A9D /* account-sync-goal.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "account-sync-goal.md"; sourceTree = "<group>"; };
 		1E9265620F259C75CCDB551C /* ScanPasses-iPhone-FixedHeight-3.mp4 */ = {isa = PBXFileReference; path = "ScanPasses-iPhone-FixedHeight-3.mp4"; sourceTree = "<group>"; };
 		2114CB8486E9FD8F9C8DC173 /* OnboardingButtonView+LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OnboardingButtonView+LocalizedString.swift"; sourceTree = "<group>"; };
 		21817ED4DB541CAB9EA911FD /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
@@ -185,6 +188,7 @@
 		937F4E6BAA4D88C31B02F7A2 /* CaptureFolderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureFolderManager.swift; sourceTree = "<group>"; };
 		948A3190C8AEDE9FFA2E393E /* FileManagerMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerMocks.swift; sourceTree = "<group>"; };
 		94A5D7991B8208A150D782F6 /* OnboardingStateMachineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingStateMachineTests.swift; sourceTree = "<group>"; };
+		952B3E5601182B6F9C0A5FAC /* GoogleSignInService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInService.swift; sourceTree = "<group>"; };
 		9766E6B869719A1C91D0B005 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		97C37AF17F99A541C77F4D18 /* ScanPasses-iPad-FixedHeight-unflippable-low.mp4 */ = {isa = PBXFileReference; path = "ScanPasses-iPad-FixedHeight-unflippable-low.mp4"; sourceTree = "<group>"; };
 		9D25FCAF0683B87ED50F39B5 /* Riverside Office Tower.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "Riverside Office Tower.usdz"; sourceTree = "<group>"; };
@@ -242,18 +246,23 @@
 		FCD7BEFC9EEF4B401AFE07B8 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXGroup section */
-		02714AE3C8A0C1AC223B8D6C /* (A Document Being Saved By usdzip) */ = {
-			isa = PBXGroup;
-			children = (
+/* Begin PBXFrameworksBuildPhase section */
+		BEB007157135D869B34503C9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F6F20ABBD171D83BD63B22AB /* GoogleSignIn in Frameworks */,
 			);
-			path = "(A Document Being Saved By usdzip)";
-			sourceTree = "<group>";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
 		0295FD3ACE81AB07C2694CA1 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
 				55661272C1296622B1EA152C /* Models */,
+				4A2A9063F1A89605EB51B7B0 /* Services */,
 				2EA8F09D6D48AA8B128C8700 /* ViewModels */,
 				44AC70D74B2940E8973F1B9A /* Views */,
 			);
@@ -272,13 +281,6 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		0463B7F385C764EC32FD864C /* (A Document Being Saved By usdzip 11) */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "(A Document Being Saved By usdzip 11)";
-			sourceTree = "<group>";
-		};
 		1595209EF7476E71725D69B9 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -289,13 +291,6 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		1670081DE1054445E2984F6E /* (A Document Being Saved By usdzip 20) */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "(A Document Being Saved By usdzip 20)";
-			sourceTree = "<group>";
-		};
 		18CC87AE687639844084D4A6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -303,13 +298,6 @@
 				E97C4DFE5EFB98A947E5C179 /* OrtioTests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		1A8B72D4D6CC3FA863F82B31 /* (A Document Being Saved By usdzip 12) */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "(A Document Being Saved By usdzip 12)";
 			sourceTree = "<group>";
 		};
 		1CA1AA8E65B26DEAF3F45890 /* Views */ = {
@@ -346,13 +334,6 @@
 			path = Home;
 			sourceTree = "<group>";
 		};
-		26AEF329FF38F8762C76ED77 /* (A Document Being Saved By usdzip 5) */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "(A Document Being Saved By usdzip 5)";
-			sourceTree = "<group>";
-		};
 		280341269E0AAD1C5093E5B1 /* Import */ = {
 			isa = PBXGroup;
 			children = (
@@ -379,26 +360,6 @@
 				F5E7C16EEBE0F35B463D2BB0 /* Timber Cabin Concept.usdz */,
 				D84BE10DFA0721EDFDA8EB55 /* Untitled Object 2.usdz */,
 				E5D1B4354941EE944714DD57 /* Urban Corner Block.usdz */,
-				B4671C94A71951F31CEB17EB /* (A Document Being Saved By usdzip 2) */,
-				7ED1C63E3E38E8538CA60234 /* (A Document Being Saved By usdzip 3) */,
-				D033DA69EC80B6B474B13A87 /* (A Document Being Saved By usdzip 4) */,
-				26AEF329FF38F8762C76ED77 /* (A Document Being Saved By usdzip 5) */,
-				B6CC7BE57ADC0F83BE97CCE6 /* (A Document Being Saved By usdzip 6) */,
-				4D7958CE05B261F343053C5F /* (A Document Being Saved By usdzip 7) */,
-				7F508CD57DE9B874662401CD /* (A Document Being Saved By usdzip 8) */,
-				65F72C24574489530476C938 /* (A Document Being Saved By usdzip 9) */,
-				BFFE0F309A671416E65B4DE4 /* (A Document Being Saved By usdzip 10) */,
-				0463B7F385C764EC32FD864C /* (A Document Being Saved By usdzip 11) */,
-				1A8B72D4D6CC3FA863F82B31 /* (A Document Being Saved By usdzip 12) */,
-				9D620D4C2870ED69686717A7 /* (A Document Being Saved By usdzip 13) */,
-				45ECFD9A5B0C4B27F5AD89D2 /* (A Document Being Saved By usdzip 14) */,
-				558C31DC1719F26013E4A740 /* (A Document Being Saved By usdzip 15) */,
-				B51A80F54E2D11CCBCAD6F2C /* (A Document Being Saved By usdzip 16) */,
-				2F529060B341FB97AE26D00A /* (A Document Being Saved By usdzip 17) */,
-				C1826C97D1485FBB4FD1ED59 /* (A Document Being Saved By usdzip 18) */,
-				79B3718A46FC5CAEB1913B85 /* (A Document Being Saved By usdzip 19) */,
-				1670081DE1054445E2984F6E /* (A Document Being Saved By usdzip 20) */,
-				02714AE3C8A0C1AC223B8D6C /* (A Document Being Saved By usdzip) */,
 			);
 			path = MockModels;
 			sourceTree = "<group>";
@@ -409,13 +370,6 @@
 				E5664658887A6E0103EB8B89 /* SettingsViewModel.swift */,
 			);
 			path = ViewModels;
-			sourceTree = "<group>";
-		};
-		2F529060B341FB97AE26D00A /* (A Document Being Saved By usdzip 17) */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "(A Document Being Saved By usdzip 17)";
 			sourceTree = "<group>";
 		};
 		314EE0A8A00854A3C41A86C4 /* Ortio */ = {
@@ -500,13 +454,6 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		45ECFD9A5B0C4B27F5AD89D2 /* (A Document Being Saved By usdzip 14) */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "(A Document Being Saved By usdzip 14)";
-			sourceTree = "<group>";
-		};
 		461953DC6048F8B5861A4E95 /* Core */ = {
 			isa = PBXGroup;
 			children = (
@@ -527,11 +474,12 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		4D7958CE05B261F343053C5F /* (A Document Being Saved By usdzip 7) */ = {
+		4A2A9063F1A89605EB51B7B0 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				952B3E5601182B6F9C0A5FAC /* GoogleSignInService.swift */,
 			);
-			path = "(A Document Being Saved By usdzip 7)";
+			path = Services;
 			sourceTree = "<group>";
 		};
 		500339322FEB24E1D3ED48AD /* Configuration */ = {
@@ -565,13 +513,6 @@
 				CB9512AE004E289663B5223F /* Requirements */,
 				18CC87AE687639844084D4A6 /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		558C31DC1719F26013E4A740 /* (A Document Being Saved By usdzip 15) */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "(A Document Being Saved By usdzip 15)";
 			sourceTree = "<group>";
 		};
 		58DB4212122483250610E39B /* Shared */ = {
@@ -635,13 +576,6 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
-		65F72C24574489530476C938 /* (A Document Being Saved By usdzip 9) */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "(A Document Being Saved By usdzip 9)";
-			sourceTree = "<group>";
-		};
 		7397E6E53AE4A64818BF9E90 /* App */ = {
 			isa = PBXGroup;
 			children = (
@@ -650,27 +584,6 @@
 				2D3CAC402661DD7DC0108A64 /* ThemeController.swift */,
 			);
 			path = App;
-			sourceTree = "<group>";
-		};
-		79B3718A46FC5CAEB1913B85 /* (A Document Being Saved By usdzip 19) */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "(A Document Being Saved By usdzip 19)";
-			sourceTree = "<group>";
-		};
-		7ED1C63E3E38E8538CA60234 /* (A Document Being Saved By usdzip 3) */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "(A Document Being Saved By usdzip 3)";
-			sourceTree = "<group>";
-		};
-		7F508CD57DE9B874662401CD /* (A Document Being Saved By usdzip 8) */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "(A Document Being Saved By usdzip 8)";
 			sourceTree = "<group>";
 		};
 		829987E8E672F434A48FE72E /* Home */ = {
@@ -682,13 +595,6 @@
 				649B92CBB66A465123D7C4EF /* Views */,
 			);
 			path = Home;
-			sourceTree = "<group>";
-		};
-		8A9C71A129729957899F30CA /* implementation */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = implementation;
 			sourceTree = "<group>";
 		};
 		8C19A8F50775ED88675E6E61 /* Capture */ = {
@@ -731,20 +637,13 @@
 		93EA7FF06A47FB09180621F2 /* docs */ = {
 			isa = PBXGroup;
 			children = (
+				1A6E6AC76D80C843CC936A9D /* account-sync-goal.md */,
 				71D052D128B48AB6BAFAE489 /* architecture.md */,
 				052D7CE1257664AB4DF4EA3C /* documentation-goal.md */,
 				0DD1F377024E5E628DD88DBA /* README.md */,
 				55F4EA45639640D311C46DE3 /* workflows.md */,
-				8A9C71A129729957899F30CA /* implementation */,
 			);
 			path = docs;
-			sourceTree = "<group>";
-		};
-		9D620D4C2870ED69686717A7 /* (A Document Being Saved By usdzip 13) */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "(A Document Being Saved By usdzip 13)";
 			sourceTree = "<group>";
 		};
 		A2A35BDE3B107FE13F00B746 /* Models */ = {
@@ -791,47 +690,12 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		B4671C94A71951F31CEB17EB /* (A Document Being Saved By usdzip 2) */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "(A Document Being Saved By usdzip 2)";
-			sourceTree = "<group>";
-		};
-		B51A80F54E2D11CCBCAD6F2C /* (A Document Being Saved By usdzip 16) */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "(A Document Being Saved By usdzip 16)";
-			sourceTree = "<group>";
-		};
-		B6CC7BE57ADC0F83BE97CCE6 /* (A Document Being Saved By usdzip 6) */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "(A Document Being Saved By usdzip 6)";
-			sourceTree = "<group>";
-		};
 		B86DE4E425D21D35E2CD5CCC /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
 				A72EC56DBEBF68E8FB4EB7AD /* OnboardingStateMachine.swift */,
 			);
 			path = ViewModels;
-			sourceTree = "<group>";
-		};
-		BFFE0F309A671416E65B4DE4 /* (A Document Being Saved By usdzip 10) */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "(A Document Being Saved By usdzip 10)";
-			sourceTree = "<group>";
-		};
-		C1826C97D1485FBB4FD1ED59 /* (A Document Being Saved By usdzip 18) */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "(A Document Being Saved By usdzip 18)";
 			sourceTree = "<group>";
 		};
 		C2DB8CD502850913327CE1C0 /* Capture */ = {
@@ -876,13 +740,6 @@
 				6448B0FB6BFE59BF3E5FDEF0 /* MatyasVascakBachelorThesisProposal.md */,
 			);
 			path = Requirements;
-			sourceTree = "<group>";
-		};
-		D033DA69EC80B6B474B13A87 /* (A Document Being Saved By usdzip 4) */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "(A Document Being Saved By usdzip 4)";
 			sourceTree = "<group>";
 		};
 		D41CA6F8BDCD7D3994E85ED1 /* Import */ = {
@@ -953,6 +810,7 @@
 			buildPhases = (
 				A697AD7251BF856E2DAACF87 /* Sources */,
 				32A793E97A8E719A733E1998 /* Resources */,
+				BEB007157135D869B34503C9 /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -960,6 +818,7 @@
 			);
 			name = Ortio;
 			packageProductDependencies = (
+				1ACDDE133F9CAC4B11EABFCD /* GoogleSignIn */,
 			);
 			productName = Ortio;
 			productReference = A9796E63C317E67349F6158C /* Ortio.app */;
@@ -994,6 +853,9 @@
 			);
 			mainGroup = 55874CC8BEB66B8A1957F1F4;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				094A2F2BD98AA5A1756C7C59 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+			);
 			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1094,6 +956,7 @@
 				FC1B9A366407C51AEF1FC370 /* FileManagerProtocol.swift in Sources */,
 				6B090E47B271018C439395E9 /* GlobalSearchView.swift in Sources */,
 				2B5931CB433B5968E7145D67 /* GlobalSearchViewModel.swift in Sources */,
+				9EC3C1D7C629D9DBB41C9FCA /* GoogleSignInService.swift in Sources */,
 				8E4787ADB66D658C6A4B06BC /* HelpPageView.swift in Sources */,
 				086110E81365C819AA3F93D1 /* HomeDashboardView+Components.swift in Sources */,
 				A5E75DBB750E0DA1F0EE06BF /* HomeDashboardView+Editors.swift in Sources */,
@@ -1289,6 +1152,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Ortio/Ortio.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1350,6 +1214,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Ortio/Ortio.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1436,6 +1301,25 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		094A2F2BD98AA5A1756C7C59 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1ACDDE133F9CAC4B11EABFCD /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 094A2F2BD98AA5A1756C7C59 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 66F70ED314FDE954FDCEAB5E /* Project object */;
 }

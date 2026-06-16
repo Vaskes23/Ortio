@@ -8,6 +8,7 @@ These docs describe the supported iOS app and the current stabilization work:
 - [documentation-goal.md](/Users/matyasvascak/Desktop/Code/Ortio/docs/documentation-goal.md): scope and completion bar for the comprehensive documentation pass
 - [architecture.md](/Users/matyasvascak/Desktop/Code/Ortio/docs/architecture.md): architecture explanation, diagrams, data flow, ownership map, and test map
 - [workflows.md](/Users/matyasvascak/Desktop/Code/Ortio/docs/workflows.md): how-to guide for common development tasks
+- [account-sync-goal.md](/Users/matyasvascak/Desktop/Code/Ortio/docs/account-sync-goal.md): Apple-only settings gate and compact Supabase profile storage contract
 
 ## Local Agent Guides
 

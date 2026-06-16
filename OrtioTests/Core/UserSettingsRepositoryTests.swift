@@ -63,4 +63,60 @@ final class UserSettingsRepositoryTests: XCTestCase {
 
         XCTAssertEqual(user.theme, .dark)
     }
+
+    func testSaveAppleAccountStoresMinimalIdentity() throws {
+        let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try ModelContainer(for: User.self, configurations: configuration)
+        let context = ModelContext(container)
+        let user = User(username: "placeholder", name: "Placeholder User", theme: .light, profileImage: nil)
+        var fullName = PersonNameComponents()
+        fullName.givenName = "Ada"
+        fullName.familyName = "Lovelace"
+        context.insert(user)
+        try context.save()
+
+        try repository.saveAppleAccount(
+            identifier: "apple-stable-user-id",
+            email: " ada@example.com ",
+            fullName: fullName,
+            for: user,
+            context: context
+        )
+
+        XCTAssertTrue(user.isSignedInWithApple)
+        XCTAssertEqual(user.accountProvider, "apple")
+        XCTAssertEqual(user.appleUserIdentifier, "apple-stable-user-id")
+        XCTAssertEqual(user.accountEmail, "ada@example.com")
+        XCTAssertEqual(user.name, "Ada Lovelace")
+        XCTAssertNotNil(user.signedInAt)
+    }
+
+    func testSaveGoogleAccountStoresCompactProfile() throws {
+        let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try ModelContainer(for: User.self, configurations: configuration)
+        let context = ModelContext(container)
+        let avatarData = Data([0x01, 0x02, 0x03])
+        let user = User(username: "placeholder", name: "Placeholder User", theme: .light, profileImage: nil)
+        context.insert(user)
+        try context.save()
+
+        try repository.saveGoogleAccount(
+            email: " ada.lovelace@example.com ",
+            fullName: " Ada Lovelace ",
+            profileImageData: avatarData,
+            for: user,
+            context: context
+        )
+
+        XCTAssertTrue(user.isAuthenticated)
+        XCTAssertTrue(user.isSignedInWithGoogle)
+        XCTAssertFalse(user.isSignedInWithApple)
+        XCTAssertEqual(user.accountProvider, "google")
+        XCTAssertNil(user.appleUserIdentifier)
+        XCTAssertEqual(user.accountEmail, "ada.lovelace@example.com")
+        XCTAssertEqual(user.username, "ada.lovelace")
+        XCTAssertEqual(user.name, "Ada Lovelace")
+        XCTAssertEqual(user.profileImage, avatarData)
+        XCTAssertNotNil(user.signedInAt)
+    }
 }

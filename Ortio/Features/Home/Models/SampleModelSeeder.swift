@@ -25,16 +25,19 @@ enum SampleModelSeeder {
         "Urban Corner Block.usdz"
     ]
 
+    private static let bundledSampleSubdirectories = [
+        nil,
+        "MockModels",
+        "Resources/MockModels"
+    ]
+
     static func seedIfNeeded(
         existingModels: [Models],
         context: ModelContext,
         fileManager: FileManager = .default,
         sampleURLs: [URL]? = nil
     ) {
-        let sampleURLs = sampleURLs ?? bundledSampleNames.compactMap { fileName in
-            Bundle.main.url(forResource: fileName, withExtension: nil)
-                ?? Bundle.main.url(forResource: fileName, withExtension: nil, subdirectory: "MockModels")
-        }
+        let sampleURLs = sampleURLs ?? bundledSampleURLs()
 
         guard !sampleURLs.isEmpty else { return }
 
@@ -90,6 +93,14 @@ enum SampleModelSeeder {
         }
 
         try? context.save()
+    }
+
+    private static func bundledSampleURLs(bundle: Bundle = .main) -> [URL] {
+        bundledSampleNames.compactMap { fileName in
+            bundledSampleSubdirectories.lazy.compactMap { subdirectory in
+                bundle.url(forResource: fileName, withExtension: nil, subdirectory: subdirectory)
+            }.first
+        }
     }
 
     private static func preferredModel(from models: [Models], defaultName: String) -> Models? {

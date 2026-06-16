@@ -87,6 +87,41 @@ final class SettingsViewModelTests: XCTestCase {
         XCTAssertNil(viewModel.errorMessage)
     }
 
+    func testCompleteAppleSignInUnlocksAccountSettings() throws {
+        let (_, context) = try makeInMemoryContext()
+        viewModel.loadUser(from: [], context: context)
+        var fullName = PersonNameComponents()
+        fullName.givenName = "Ada"
+
+        viewModel.completeAppleSignIn(
+            identifier: "apple-user-id",
+            email: nil,
+            fullName: fullName,
+            context: context
+        )
+
+        XCTAssertTrue(viewModel.isSignedInWithApple)
+        XCTAssertEqual(viewModel.name, "Ada")
+        XCTAssertNil(viewModel.errorMessage)
+    }
+
+    func testCompleteGoogleSignInUnlocksAccountSettings() throws {
+        let (_, context) = try makeInMemoryContext()
+        viewModel.loadUser(from: [], context: context)
+        let profile = GoogleAccountProfile(
+            email: "ada@example.com",
+            fullName: "Ada Lovelace",
+            avatarData: nil
+        )
+
+        viewModel.completeGoogleSignIn(profile, context: context)
+
+        XCTAssertTrue(viewModel.isAuthenticated)
+        XCTAssertTrue(viewModel.isSignedInWithGoogle)
+        XCTAssertEqual(viewModel.name, "Ada Lovelace")
+        XCTAssertNil(viewModel.errorMessage)
+    }
+
     private func makeInMemoryContext() throws -> (ModelContainer, ModelContext) {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let modelContainer = try ModelContainer(for: User.self, configurations: config)
