@@ -24,29 +24,42 @@ class SettingsViewModel {
     @ObservationIgnored
     private let repository: UserSettingsRepositoryProtocol
 
+    /// Prevents initial preference hydration from immediately writing the same values back to `UserDefaults`.
     @ObservationIgnored
     private var isBootstrappingPreferences = true
 
+    /// Push notification preference mirrored into `UserDefaults` after initialization.
     var notificationsEnabled: Bool {
         didSet { persistPreferencesIfReady() }
     }
+
+    /// Sound effects preference mirrored into `UserDefaults` after initialization.
     var soundEffectsEnabled: Bool {
         didSet { persistPreferencesIfReady() }
     }
+
+    /// Email updates preference mirrored into `UserDefaults` after initialization.
     var receiveEmailsEnabled: Bool {
         didSet { persistPreferencesIfReady() }
     }
+
+    /// Editable display name staged by the profile editor before save.
     var name: String = "Placeholder User"
+
+    /// Current SwiftData user record backing the settings screen.
     var user: User = User()
 
+    /// Whether account settings are unlocked through Apple.
     var isSignedInWithApple: Bool {
         user.isSignedInWithApple
     }
 
+    /// Whether account settings are unlocked through Google.
     var isSignedInWithGoogle: Bool {
         user.isSignedInWithGoogle
     }
 
+    /// Whether any supported provider has unlocked account-owned settings.
     var isAuthenticated: Bool {
         user.isAuthenticated
     }
@@ -54,6 +67,7 @@ class SettingsViewModel {
     /// Set when a save operation fails. Drives the error alert in SettingsView.
     var errorMessage: String?
 
+    /// Creates the settings state model and hydrates local preference flags.
     init(repository: UserSettingsRepositoryProtocol = UserSettingsRepository()) {
         self.repository = repository
         let preferences = repository.loadPreferences()
@@ -74,6 +88,7 @@ class SettingsViewModel {
         }
     }
 
+    /// Saves a theme selection to SwiftData.
     func saveTheme(_ theme: Theme, context: ModelContext) {
         do {
             try repository.saveTheme(theme, for: user, context: context)
@@ -83,6 +98,7 @@ class SettingsViewModel {
         }
     }
 
+    /// Completes Apple authorization by storing the minimal Apple identity returned by AuthenticationServices.
     func completeAppleSignIn(
         identifier: String,
         email: String?,
@@ -104,6 +120,7 @@ class SettingsViewModel {
         }
     }
 
+    /// Completes Google authorization by storing the compact profile returned by `GoogleSignInService`.
     func completeGoogleSignIn(_ profile: GoogleAccountProfile, context: ModelContext) {
         do {
             try repository.saveGoogleAccount(
@@ -120,6 +137,7 @@ class SettingsViewModel {
         }
     }
 
+    /// Persists profile editor changes and returns whether SwiftData accepted the update.
     func saveProfile(username: String, selectedImage: UIImage?, context: ModelContext) -> Bool {
         do {
             try repository.saveProfile(
@@ -137,6 +155,7 @@ class SettingsViewModel {
         }
     }
 
+    /// Writes preference toggles only after initialization has finished.
     private func persistPreferencesIfReady() {
         guard !isBootstrappingPreferences else { return }
         repository.savePreferences(

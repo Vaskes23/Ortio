@@ -18,6 +18,7 @@ struct SettingsView: View {
         category: "AppleSignIn"
     )
 
+    /// Service boundary for Google's OAuth flow and compact profile extraction.
     private let googleSignInService = GoogleSignInService()
 
     @Environment(\.dismiss) private var dismiss
@@ -27,6 +28,7 @@ struct SettingsView: View {
 
     @State private var viewModel = SettingsViewModel()
     @State private var showingSignInRequired = false
+    /// Prevents duplicate Google authorization sheets while the async sign-in flow is active.
     @State private var isGoogleSignInInProgress = false
 
     var body: some View {
@@ -148,6 +150,7 @@ struct SettingsView: View {
         Task { await signInWithGoogle() }
     }
 
+    /// Runs Google's OAuth flow, then persists only the compact account profile returned by the service.
     @MainActor
     private func signInWithGoogle() async {
         guard !isGoogleSignInInProgress else { return }
@@ -163,6 +166,7 @@ struct SettingsView: View {
         }
     }
 
+    /// Handles Apple's authorization callback while ignoring explicit user cancellation.
     private func handleAppleSignIn(_ result: Result<ASAuthorization, any Error>) {
         switch result {
         case .success(let authorization):
@@ -200,6 +204,7 @@ struct SettingsView: View {
         )
     }
 
+    /// Produces a deterministic log-safe summary of Apple authorization error metadata.
     private static func sanitizedUserInfoDescription(_ userInfo: [String: Any]) -> String {
         guard !userInfo.isEmpty else { return "[:]" }
 
@@ -212,6 +217,7 @@ struct SettingsView: View {
         return "[\(entries.joined(separator: ", "))]"
     }
 
+    /// Redacts nested errors and string payloads before they are written to unified logging.
     private static func sanitizedUserInfoValue(_ value: Any) -> String {
         if let error = value as? NSError {
             return "NSError(domain: \(error.domain), code: \(error.code), userInfo: \(sanitizedUserInfoDescription(error.userInfo)))"
@@ -224,6 +230,7 @@ struct SettingsView: View {
         return "<\(type(of: value))>"
     }
 
+    /// Removes emails and long token-like identifiers from diagnostic strings.
     private static func redactedPotentiallySensitiveContent(_ value: String) -> String {
         let emailPattern = #"[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}"#
         let withoutEmails = value.replacingOccurrences(
@@ -380,6 +387,7 @@ private struct SettingsCard<Content: View>: View {
     }
 }
 
+/// Locked account prompt that offers Google as the working provider and keeps Apple visible.
 private struct AccountSyncPrompt: View {
     let isGoogleSignInInProgress: Bool
     let onGoogleSignIn: () -> Void
