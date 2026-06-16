@@ -1,6 +1,6 @@
 # Home Agent Guide
 
-This folder owns the primary app shell: library browsing, filtering, search, preview, model notes, rename/favorite actions, tools entry points, and native dictation UI.
+This folder owns the primary app shell: library browsing, filtering, search, preview, model notes, rename/favorite actions, share entry points, and native dictation UI.
 
 ## Ownership
 

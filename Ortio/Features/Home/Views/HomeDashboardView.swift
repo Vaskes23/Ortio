@@ -23,7 +23,7 @@ struct HomeDashboardView: View {
     @State private var expandedNotesItemIDs: Set<String> = []
     @State private var searchTransition = HomeSearchTransitionCoordinator()
     @State private var showingSettings = false
-    @State private var showingTools = false
+    @State private var showingShare = false
     @State private var showingCapture = false
     @State private var showingImportLibrary = false
     @State private var showingHelp = false
@@ -84,7 +84,7 @@ struct HomeDashboardView: View {
 
                     QuickActionsRow(
                         selectedFilter: $selectedFilter,
-                        onOpenTools: { showingTools = true }
+                        onOpenShare: { showingShare = true }
                     )
                     .frame(height: searchTransition.showsQuickActions ? 86 : 0, alignment: .top)
                     .opacity(searchTransition.showsQuickActions ? 1 : 0)
@@ -122,8 +122,8 @@ struct HomeDashboardView: View {
             }
 
             ScanPillButton(action: { showingCapture = true })
-                .padding(.horizontal, 20)
-                .padding(.bottom, 28)
+                .padding(.horizontal, 35)
+                .padding(.bottom, 0)
                 .opacity(searchTransition.showsScanButton ? 1 : 0)
                 .allowsHitTesting(searchTransition.showsScanButton)
                 .animation(contentAnimation, value: searchTransition.showsScanButton)
@@ -179,21 +179,8 @@ struct HomeDashboardView: View {
             HelpPageView(showInfo: $showingHelp)
                 .padding()
         }
-        .sheet(isPresented: $showingTools) {
-            HomeToolsSheet(
-                onNewScan: {
-                    showingTools = false
-                    showingCapture = true
-                },
-                onImport: {
-                    showingTools = false
-                    showingImportLibrary = true
-                },
-                onHelp: {
-                    showingTools = false
-                    showingHelp = true
-                }
-            )
+        .sheet(isPresented: $showingShare) {
+            HomeShareSheet()
             .presentationDetents([.medium, .large])
             .presentationDragIndicator(.visible)
         }

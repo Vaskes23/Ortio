@@ -89,6 +89,11 @@ struct ModelNotesSheet: View {
                 }
             }
         }
+        .task {
+            try? await Task.sleep(nanoseconds: 350_000_000)
+            guard !Task.isCancelled else { return }
+            isNotesFieldFocused = true
+        }
         .onDisappear {
             dictationTask?.cancel()
             dictationTask = nil
@@ -120,6 +125,7 @@ struct ModelNotesSheet: View {
 
             TextEditor(text: $notes)
                 .font(.system(size: 18, weight: .regular, design: .rounded))
+                .foregroundStyle(OrtioDesignSystem.Palette.primaryText)
                 .scrollContentBackground(.hidden)
                 .focused($isNotesFieldFocused)
                 .padding(.horizontal, 18)
