@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		02F797CBAEFFAE5784F1A5BD /* Courtyard Townhouse.usdz in Resources */ = {isa = PBXBuildFile; fileRef = A122021ECB2C26CE559BC163 /* Courtyard Townhouse.usdz */; };
 		086110E81365C819AA3F93D1 /* HomeDashboardView+Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FF112B8F3003B68E7DF4F8 /* HomeDashboardView+Components.swift */; };
 		151B75D2032DDDFE8C26DDE7 /* LibraryRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4434D16D985937C0F49AF9E /* LibraryRepositoryTests.swift */; };
 		182104D51F7E4FDDB6F1897A /* OnboardingTutorialView+LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E8E8F28BD18DE4FF655F74 /* OnboardingTutorialView+LocalizedString.swift */; };
@@ -20,6 +21,7 @@
 		2971DFF9598CA766C5AF195D /* ScanPasses-iPad-FixedHeight-3.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = C3DDA9D5578BA521909481DF /* ScanPasses-iPad-FixedHeight-3.mp4 */; };
 		2B5931CB433B5968E7145D67 /* GlobalSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8475E39E44DB76152EBA17FF /* GlobalSearchViewModel.swift */; };
 		2BE639337A414FDB8E33B0E0 /* NativeDictationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69E531ACD0790D24D58432E6 /* NativeDictationService.swift */; };
+		2CD1A1BF9E0F6310FBBAE99E /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2A03C88C211282FA53C331D1 /* README.md */; };
 		3133135A2E700B2DC145DFAF /* LibraryFileStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E820CB6EABEC996513D44B /* LibraryFileStoreTests.swift */; };
 		33694972C3E01853A6C14CEF /* ScanPasses-iPhone-FixedHeight-1.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 5D433C4EB330F71E7B6A1EF9 /* ScanPasses-iPhone-FixedHeight-1.mp4 */; };
 		337C7D3260D548F044A564DB /* CaptureOverlayView+LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AD6E0ECD328B2CB0BA317C4 /* CaptureOverlayView+LocalizedString.swift */; };
@@ -30,6 +32,7 @@
 		4409932704B0E1A02C62C014 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099B2697E8C2736EEB9F0158 /* User.swift */; };
 		4459180799FB9A23AD1B8626 /* GlobalSearchViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03AC8379CA8AC8DB06D6F90 /* GlobalSearchViewModelTests.swift */; };
 		44920348142798638CC58853 /* ImportViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8DC4A9CB17C3A6DECA78C5 /* ImportViewModelTests.swift */; };
+		4724F57EDFF2F3832194D530 /* Skyline Massing Study.usdz in Resources */ = {isa = PBXBuildFile; fileRef = CDC77E02FDA80A808848294F /* Skyline Massing Study.usdz */; };
 		4BB1CF5E4E5831166586B1EB /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5664658887A6E0103EB8B89 /* SettingsViewModel.swift */; };
 		4BDF1241B3C32DAB57C16315 /* LibraryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C13E3C2F3185979A7F84FF /* LibraryRepository.swift */; };
 		4E786691FFC84E817A533F40 /* ImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A143E8B94EA21AA54D551FA8 /* ImportView.swift */; };
@@ -50,6 +53,7 @@
 		6B090E47B271018C439395E9 /* GlobalSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DD9D9F548EA19A6CB81E42 /* GlobalSearchView.swift */; };
 		6B39A803AAD206C67D3DF075 /* CitcularHome.usdz in Resources */ = {isa = PBXBuildFile; fileRef = F08DE1D67D0D532EC3AD00C3 /* CitcularHome.usdz */; };
 		6F279FEC33E6B1550F879F77 /* ScanPasses-iPad-FixedHeight-unflippable-high.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = D614FE78D14AA63B31E995AF /* ScanPasses-iPad-FixedHeight-unflippable-high.mp4 */; };
+		724E64A86B1B8AB77998F30A /* Riverside Office Tower.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 9D25FCAF0683B87ED50F39B5 /* Riverside Office Tower.usdz */; };
 		72543B8DAF973E2D9A3FC85A /* ImportModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B298FACB151FAC94C3C4BB /* ImportModel.swift */; };
 		75B2176E6A3E32C8BC088191 /* HomeDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806D0E4CC4DD20C736C9830E /* HomeDashboardView.swift */; };
 		7C34B5C84D5F59D5AF9C421E /* UserSettingsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9185B107B25DD55B93CE1FEA /* UserSettingsRepository.swift */; };
@@ -73,12 +77,16 @@
 		998FBD03EA9AB038D2EBD9F0 /* ImportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9453E3D998DD639553B59C /* ImportTests.swift */; };
 		9D23222179D94AEA41B8B068 /* PathConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD752922301E3954407ED73 /* PathConstants.swift */; };
 		9EC3C1D7C629D9DBB41C9FCA /* GoogleSignInService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952B3E5601182B6F9C0A5FAC /* GoogleSignInService.swift */; };
+		A470E986A767248CC926BAF0 /* Timber Cabin Concept.usdz in Resources */ = {isa = PBXBuildFile; fileRef = F5E7C16EEBE0F35B463D2BB0 /* Timber Cabin Concept.usdz */; };
 		A5E75DBB750E0DA1F0EE06BF /* HomeDashboardView+Editors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8803F9E75AACB560FC2FEBB7 /* HomeDashboardView+Editors.swift */; };
+		AAD8D7D3792B3A6CBC4403B6 /* Museum Stair Hall.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 301BA6913591BD6E6D4E5F1B /* Museum Stair Hall.usdz */; };
 		AE024C69ADE3CD14992F2909 /* ScanPasses-iPhone-FixedHeight-2.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = A65C8B40107D7CD78C5D45A7 /* ScanPasses-iPhone-FixedHeight-2.mp4 */; };
+		B460FEFEE2556920EE177B4D /* Glass House Concept.usdz in Resources */ = {isa = PBXBuildFile; fileRef = F7D4F1369A41225073D6B1BE /* Glass House Concept.usdz */; };
 		B6D8A49550B87E3D504075CF /* HomeDashboardView+QuickActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D30467CC8804FD819CF9C95 /* HomeDashboardView+QuickActions.swift */; };
 		BC80A8C69B7EF39348FCCF3B /* ProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8246F24644041A72C861FD /* ProgressBarView.swift */; };
 		C08772F22C47F87A497FC0E9 /* OnboardingTutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87FE6B3EF1A5C77F27C9937F /* OnboardingTutorialView.swift */; };
 		C5E39EF50966126310FEAB65 /* TutorialVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE776109FAE7C32D6512935D /* TutorialVideoView.swift */; };
+		C6D39B4AB389ED0DE5FB4BAE /* Urban Corner Block.usdz in Resources */ = {isa = PBXBuildFile; fileRef = E5D1B4354941EE944714DD57 /* Urban Corner Block.usdz */; };
 		C7CAA544E26B944DDF4AB189 /* ThemeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3CAC402661DD7DC0108A64 /* ThemeController.swift */; };
 		C926DD069FADA245EC023FBA /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21817ED4DB541CAB9EA911FD /* Models.swift */; };
 		CA7ABCFAA07679146ED61E61 /* UntilProcessingCompleteFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B8FDD9AC2B4D8090CBC157 /* UntilProcessingCompleteFilter.swift */; };
@@ -93,11 +101,14 @@
 		E0B53640070DBF6FD9866D8C /* SettingsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B71A761F35AAE61B90C9BFC /* SettingsViewModelTests.swift */; };
 		E14A2FAA944D6CC923C139C2 /* NativeDictationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2EF7B5299CCDB42AC4303A6 /* NativeDictationServiceTests.swift */; };
 		E404256709F3317B52F0F69D /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA7C422DD37E8DB19AFF402 /* FeedbackView.swift */; };
+		E462CADAFDF44FF72FB635C0 /* Atrium Pavilion.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 8C1416DF4FEC375F3F04A0B6 /* Atrium Pavilion.usdz */; };
 		E7EBFBE8E0D84EFBEC623E7B /* DictationUIComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A883E021CB9591CD8DADE8B /* DictationUIComponents.swift */; };
 		EB084AE6D6C0FF3AB2A22D07 /* ScanPasses-iPhone-FixedHeight-unflippable-low.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 5A47BEDAEA44DC75ED0257B0 /* ScanPasses-iPhone-FixedHeight-unflippable-low.mp4 */; };
 		EBB39FA23E7F4E9B6F5AC5DE /* CaptureFolderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 937F4E6BAA4D88C31B02F7A2 /* CaptureFolderManager.swift */; };
 		EC12CB7D534703EF66FD24A3 /* OnboardingButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 582079B00769338A44396A91 /* OnboardingButtonView.swift */; };
+		ECB7B53E3338F0C643A9C78C /* Gallery Loft Interior.usdz in Resources */ = {isa = PBXBuildFile; fileRef = AEB34DB86E3B9A97355F5DDE /* Gallery Loft Interior.usdz */; };
 		ECD4CF3A807BBF6903917966 /* OnboardingStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72EC56DBEBF68E8FB4EB7AD /* OnboardingStateMachine.swift */; };
+		F42C3E172123CAAC48D0086F /* Modular Studio Facade.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 67BFF46A4CDFB193E4B1EE7D /* Modular Studio Facade.usdz */; };
 		F6F20ABBD171D83BD63B22AB /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 1ACDDE133F9CAC4B11EABFCD /* GoogleSignIn */; };
 		F721A1ED9AC4FE69A0AB0359 /* ModelsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF80C4DFCC8F4FAC4328F42 /* ModelsViewModel.swift */; };
 		F79FFE6AA96636A0F031C96F /* ReconstructionPrimaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74A725A5130296737A0A609 /* ReconstructionPrimaryView.swift */; };
@@ -129,10 +140,12 @@
 		2114CB8486E9FD8F9C8DC173 /* OnboardingButtonView+LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OnboardingButtonView+LocalizedString.swift"; sourceTree = "<group>"; };
 		21817ED4DB541CAB9EA911FD /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		250B9B0E382F67AD4CE4887A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		2A03C88C211282FA53C331D1 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2A8246F24644041A72C861FD /* ProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBarView.swift; sourceTree = "<group>"; };
 		2AD6E0ECD328B2CB0BA317C4 /* CaptureOverlayView+LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaptureOverlayView+LocalizedString.swift"; sourceTree = "<group>"; };
 		2AEE13610A7400309B9FD87B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		2D3CAC402661DD7DC0108A64 /* ThemeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeController.swift; sourceTree = "<group>"; };
+		301BA6913591BD6E6D4E5F1B /* Museum Stair Hall.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "Museum Stair Hall.usdz"; sourceTree = "<group>"; };
 		31DBFF86BA55A0955F3C0297 /* CapturePrimaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePrimaryView.swift; sourceTree = "<group>"; };
 		34DC97B003F974F066179E65 /* HomeSearchTransitionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSearchTransitionCoordinator.swift; sourceTree = "<group>"; };
 		3ADF6DAF9FA0340F4FE41D61 /* CaptureOverlayView+Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaptureOverlayView+Buttons.swift"; sourceTree = "<group>"; };
@@ -149,6 +162,7 @@
 		61C13E3C2F3185979A7F84FF /* LibraryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryRepository.swift; sourceTree = "<group>"; };
 		6203A8EE54AE99FB6F3D8345 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6448B0FB6BFE59BF3E5FDEF0 /* MatyasVascakBachelorThesisProposal.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = MatyasVascakBachelorThesisProposal.md; sourceTree = "<group>"; };
+		67BFF46A4CDFB193E4B1EE7D /* Modular Studio Facade.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "Modular Studio Facade.usdz"; sourceTree = "<group>"; };
 		67FEE7C4410EA1EAF166BCF8 /* AppDataModel+State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDataModel+State.swift"; sourceTree = "<group>"; };
 		69E531ACD0790D24D58432E6 /* NativeDictationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeDictationService.swift; sourceTree = "<group>"; };
 		6B71A761F35AAE61B90C9BFC /* SettingsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModelTests.swift; sourceTree = "<group>"; };
@@ -168,6 +182,7 @@
 		890FDE20B93D48B9A4068008 /* FeedbackMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackMessages.swift; sourceTree = "<group>"; };
 		89E820CB6EABEC996513D44B /* LibraryFileStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryFileStoreTests.swift; sourceTree = "<group>"; };
 		8A883E021CB9591CD8DADE8B /* DictationUIComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictationUIComponents.swift; sourceTree = "<group>"; };
+		8C1416DF4FEC375F3F04A0B6 /* Atrium Pavilion.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "Atrium Pavilion.usdz"; sourceTree = "<group>"; };
 		9185B107B25DD55B93CE1FEA /* UserSettingsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingsRepository.swift; sourceTree = "<group>"; };
 		918FB9C151BB747C59421448 /* LoadOrtioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadOrtioView.swift; sourceTree = "<group>"; };
 		937F4E6BAA4D88C31B02F7A2 /* CaptureFolderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureFolderManager.swift; sourceTree = "<group>"; };
@@ -176,11 +191,13 @@
 		952B3E5601182B6F9C0A5FAC /* GoogleSignInService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInService.swift; sourceTree = "<group>"; };
 		9766E6B869719A1C91D0B005 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		97C37AF17F99A541C77F4D18 /* ScanPasses-iPad-FixedHeight-unflippable-low.mp4 */ = {isa = PBXFileReference; path = "ScanPasses-iPad-FixedHeight-unflippable-low.mp4"; sourceTree = "<group>"; };
+		9D25FCAF0683B87ED50F39B5 /* Riverside Office Tower.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "Riverside Office Tower.usdz"; sourceTree = "<group>"; };
 		9D2E24C95F7540FEE0D68736 /* LibraryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryItem.swift; sourceTree = "<group>"; };
 		9DC39B48A222312BE1150C7A /* ModelsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsModel.swift; sourceTree = "<group>"; };
 		9E3E3C7189D1A5484B3512F2 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		9FD752922301E3954407ED73 /* PathConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathConstants.swift; sourceTree = "<group>"; };
 		9FEF27F9AD6EAF3E2DF8AC5C /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
+		A122021ECB2C26CE559BC163 /* Courtyard Townhouse.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "Courtyard Townhouse.usdz"; sourceTree = "<group>"; };
 		A1273134F7063892A7221864 /* ScanPasses-iPad-FixedHeight-2.mp4 */ = {isa = PBXFileReference; path = "ScanPasses-iPad-FixedHeight-2.mp4"; sourceTree = "<group>"; };
 		A143E8B94EA21AA54D551FA8 /* ImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportView.swift; sourceTree = "<group>"; };
 		A21808949E04E57F41F66659 /* ImportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportViewModel.swift; sourceTree = "<group>"; };
@@ -192,6 +209,7 @@
 		A9796E63C317E67349F6158C /* Ortio.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Ortio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA188F843B5A0E8269EE4B1A /* SampleModelSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleModelSeeder.swift; sourceTree = "<group>"; };
 		ACADE0D270FA3A3D7BFF65A2 /* OrtioTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrtioTests.swift; sourceTree = "<group>"; };
+		AEB34DB86E3B9A97355F5DDE /* Gallery Loft Interior.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "Gallery Loft Interior.usdz"; sourceTree = "<group>"; };
 		AF59BE5B720BADC45D62CE14 /* OrtioDesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrtioDesignSystem.swift; sourceTree = "<group>"; };
 		B3B298FACB151FAC94C3C4BB /* ImportModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportModel.swift; sourceTree = "<group>"; };
 		B4434D16D985937C0F49AF9E /* LibraryRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryRepositoryTests.swift; sourceTree = "<group>"; };
@@ -201,6 +219,7 @@
 		C2EF7B5299CCDB42AC4303A6 /* NativeDictationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeDictationServiceTests.swift; sourceTree = "<group>"; };
 		C3DDA9D5578BA521909481DF /* ScanPasses-iPad-FixedHeight-3.mp4 */ = {isa = PBXFileReference; path = "ScanPasses-iPad-FixedHeight-3.mp4"; sourceTree = "<group>"; };
 		C823BA0229B541952CD44655 /* CaptureUtilitiesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureUtilitiesTests.swift; sourceTree = "<group>"; };
+		CDC77E02FDA80A808848294F /* Skyline Massing Study.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "Skyline Massing Study.usdz"; sourceTree = "<group>"; };
 		CE776109FAE7C32D6512935D /* TutorialVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialVideoView.swift; sourceTree = "<group>"; };
 		D03445EDDC906A611C41DDD2 /* AppDataModel+Orbit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDataModel+Orbit.swift"; sourceTree = "<group>"; };
 		D03AC8379CA8AC8DB06D6F90 /* GlobalSearchViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSearchViewModelTests.swift; sourceTree = "<group>"; };
@@ -214,12 +233,15 @@
 		E03CE12BF2E5AA1DB2745E5F /* LibraryFileStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryFileStore.swift; sourceTree = "<group>"; };
 		E0653708831BAC62DEA4B6C4 /* TimedMessageList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimedMessageList.swift; sourceTree = "<group>"; };
 		E5664658887A6E0103EB8B89 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		E5D1B4354941EE944714DD57 /* Urban Corner Block.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "Urban Corner Block.usdz"; sourceTree = "<group>"; };
 		E92362C58242A3344383CC83 /* HomeDashboardView+Sheets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeDashboardView+Sheets.swift"; sourceTree = "<group>"; };
 		E97C4DFE5EFB98A947E5C179 /* OrtioTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = OrtioTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9B8FDD9AC2B4D8090CBC157 /* UntilProcessingCompleteFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UntilProcessingCompleteFilter.swift; sourceTree = "<group>"; };
 		F08DE1D67D0D532EC3AD00C3 /* CitcularHome.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = CitcularHome.usdz; sourceTree = "<group>"; };
 		F2BB03DDAF3B2434C02CF9CB /* OrtioApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrtioApp.swift; sourceTree = "<group>"; };
 		F553EC5A2F5983E5BC18DC43 /* ShotFileInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotFileInfo.swift; sourceTree = "<group>"; };
+		F5E7C16EEBE0F35B463D2BB0 /* Timber Cabin Concept.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "Timber Cabin Concept.usdz"; sourceTree = "<group>"; };
+		F7D4F1369A41225073D6B1BE /* Glass House Concept.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "Glass House Concept.usdz"; sourceTree = "<group>"; };
 		F7FF112B8F3003B68E7DF4F8 /* HomeDashboardView+Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeDashboardView+Components.swift"; sourceTree = "<group>"; };
 		FCD7BEFC9EEF4B401AFE07B8 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -325,8 +347,19 @@
 		2B9BC15ED128C00D026879CD /* MockModels */ = {
 			isa = PBXGroup;
 			children = (
+				8C1416DF4FEC375F3F04A0B6 /* Atrium Pavilion.usdz */,
 				F08DE1D67D0D532EC3AD00C3 /* CitcularHome.usdz */,
+				A122021ECB2C26CE559BC163 /* Courtyard Townhouse.usdz */,
+				AEB34DB86E3B9A97355F5DDE /* Gallery Loft Interior.usdz */,
+				F7D4F1369A41225073D6B1BE /* Glass House Concept.usdz */,
+				67BFF46A4CDFB193E4B1EE7D /* Modular Studio Facade.usdz */,
+				301BA6913591BD6E6D4E5F1B /* Museum Stair Hall.usdz */,
+				2A03C88C211282FA53C331D1 /* README.md */,
+				9D25FCAF0683B87ED50F39B5 /* Riverside Office Tower.usdz */,
+				CDC77E02FDA80A808848294F /* Skyline Massing Study.usdz */,
+				F5E7C16EEBE0F35B463D2BB0 /* Timber Cabin Concept.usdz */,
 				D84BE10DFA0721EDFDA8EB55 /* Untitled Object 2.usdz */,
+				E5D1B4354941EE944714DD57 /* Urban Corner Block.usdz */,
 			);
 			path = MockModels;
 			sourceTree = "<group>";
@@ -839,8 +872,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				51C8E1821EBDBB4953B8715B /* Assets.xcassets in Resources */,
+				E462CADAFDF44FF72FB635C0 /* Atrium Pavilion.usdz in Resources */,
 				6B39A803AAD206C67D3DF075 /* CitcularHome.usdz in Resources */,
+				02F797CBAEFFAE5784F1A5BD /* Courtyard Townhouse.usdz in Resources */,
+				ECB7B53E3338F0C643A9C78C /* Gallery Loft Interior.usdz in Resources */,
+				B460FEFEE2556920EE177B4D /* Glass House Concept.usdz in Resources */,
+				F42C3E172123CAAC48D0086F /* Modular Studio Facade.usdz in Resources */,
+				AAD8D7D3792B3A6CBC4403B6 /* Museum Stair Hall.usdz in Resources */,
 				6A2879844F1BE0DC6775491B /* Preview Assets.xcassets in Resources */,
+				2CD1A1BF9E0F6310FBBAE99E /* README.md in Resources */,
+				724E64A86B1B8AB77998F30A /* Riverside Office Tower.usdz in Resources */,
 				CE0476592CF7B5CAFB173DBE /* ScanPasses-iPad-FixedHeight-1.mp4 in Resources */,
 				1A8EFF3405719974B07820B2 /* ScanPasses-iPad-FixedHeight-2.mp4 in Resources */,
 				2971DFF9598CA766C5AF195D /* ScanPasses-iPad-FixedHeight-3.mp4 in Resources */,
@@ -851,7 +892,10 @@
 				D24906E36AA9F67405B4D601 /* ScanPasses-iPhone-FixedHeight-3.mp4 in Resources */,
 				96C06A9F88D7F04B7C7F57DD /* ScanPasses-iPhone-FixedHeight-unflippable-high.mp4 in Resources */,
 				EB084AE6D6C0FF3AB2A22D07 /* ScanPasses-iPhone-FixedHeight-unflippable-low.mp4 in Resources */,
+				4724F57EDFF2F3832194D530 /* Skyline Massing Study.usdz in Resources */,
+				A470E986A767248CC926BAF0 /* Timber Cabin Concept.usdz in Resources */,
 				965E5A0396600EA9A4CF4A89 /* Untitled Object 2.usdz in Resources */,
+				C6D39B4AB389ED0DE5FB4BAE /* Urban Corner Block.usdz in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
