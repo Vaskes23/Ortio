@@ -11,3 +11,11 @@
 // approach in your own projects—it's only useful for sample code projects because
 // they are frequently downloaded and don't have a development team set.
 SAMPLE_CODE_DISAMBIGUATOR=${DEVELOPMENT_TEAM}
+
+// Google Sign-In configuration. Keep local OAuth values in
+// Configuration/Secrets.xcconfig so they are not committed.
+GOOGLE_SIGN_IN_CLIENT_ID =
+GOOGLE_SIGN_IN_REVERSED_CLIENT_ID =
+GOOGLE_SIGN_IN_SERVER_CLIENT_ID =
+
+#include? "Secrets.xcconfig"

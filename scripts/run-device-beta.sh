@@ -8,6 +8,7 @@ DEVICE_NAME="${ORTIO_DEVICE_NAME:-M5Test}"
 BUNDLE_ID="${ORTIO_BUNDLE_ID:-com.example.apple-samplecode.OrtioD763CZ24GN}"
 DERIVED_DATA_PATH="${ORTIO_DERIVED_DATA_PATH:-/private/tmp/OrtioDeviceDerivedDataBeta}"
 APP_PATH="${DERIVED_DATA_PATH}/Build/Products/Debug-iphoneos/Ortio.app"
+BUILD_LOG="/tmp/ortio-device-build.log"
 INSTALL_LOG="/tmp/ortio-device-install.log"
 LAUNCH_LOG="/tmp/ortio-device-launch.log"
 INFO_LOG="/tmp/ortio-device-info.log"
@@ -18,7 +19,12 @@ print_tunnel_recovery() {
   echo "" >&2
   echo "CoreDevice could see the iPhone, but could not open its tunnel." >&2
   echo "Fix: keep the iPhone unlocked, unplug/replug USB, accept Trust prompts, then rerun this action." >&2
-  echo "Also keep VPN/network-filter apps disconnected while CoreDevice opens the device tunnel." >&2
+  echo "If a VPN is active, keep it connected and check for a stale CoreDevice link-local interface instead of disconnecting the VPN." >&2
+  echo "Useful diagnosis:" >&2
+  echo "  /usr/bin/log show --last 5m --style compact --predicate 'eventMessage CONTAINS[c] \"Got tunnel endpoint\" OR eventMessage CONTAINS[c] \"Network is down\"'" >&2
+  echo "If the log shows an endpoint like fe80::...%en9 and ping6 to that scoped address reports Network is unreachable," >&2
+  echo "bring down only that stale interface with explicit admin approval, for example:" >&2
+  echo "  osascript -e 'do shell script \"ifconfig en9 down\" with administrator privileges'" >&2
   echo "If it persists, open Xcode beta's Devices and Simulators window once to let Xcode repair the connection." >&2
 }
 
@@ -32,11 +38,41 @@ print_ddi_recovery() {
   echo "  DEVELOPER_DIR=${DEVELOPER_DIR} xcodebuild -downloadPlatform iOS" >&2
 }
 
+print_apple_sign_in_provisioning_recovery() {
+  echo "" >&2
+  echo "The app target now requests Sign in with Apple, but the selected provisioning team/profile does not support it." >&2
+  echo "The current bundle identifier is ${BUNDLE_ID}." >&2
+  echo "" >&2
+  echo "Fix:" >&2
+  echo "  1. Use a paid Apple Developer Program team in Xcode, not a Personal Team." >&2
+  echo "  2. In Apple Developer Portal, create or update the explicit App ID for ${BUNDLE_ID}." >&2
+  echo "  3. Enable the Sign in with Apple capability for that App ID." >&2
+  echo "  4. Refresh automatic signing in Xcode or rerun this script; it passes -allowProvisioningUpdates." >&2
+  echo "" >&2
+  echo "A Personal Team cannot create a provisioning profile with the com.apple.developer.applesignin entitlement." >&2
+}
+
 log_has_ddi_failure() {
   local log_path="$1"
 
   grep -Eqi \
     "developer disk image|preferredDDI|Unable to find a valid DDI|No DDI was found" \
+    "${log_path}" 2>/dev/null
+}
+
+log_has_tunnel_failure() {
+  local log_path="$1"
+
+  grep -Eqi \
+    "RemotePairingError|tunnel connection failed|CoreDeviceError error 4|Network is down" \
+    "${log_path}" 2>/dev/null
+}
+
+log_has_apple_sign_in_provisioning_failure() {
+  local log_path="$1"
+
+  grep -Eqi \
+    "Sign In with Apple capability|com\.apple\.developer\.applesignin|Personal development teams.*Sign In with Apple" \
     "${log_path}" 2>/dev/null
 }
 
@@ -104,6 +140,11 @@ run_with_retries() {
       return 1
     fi
 
+    if log_has_tunnel_failure "${log_path}"; then
+      print_tunnel_recovery
+      return 1
+    fi
+
     refresh_pairing
 
     if (( attempt == 2 )); then
@@ -141,13 +182,25 @@ if ! verify_developer_disk_image; then
 fi
 
 echo "Building Ortio for device..."
-xcodebuild \
-  -project Ortio.xcodeproj \
-  -scheme Ortio \
-  -configuration Debug \
-  -destination "generic/platform=iOS" \
-  -derivedDataPath "${DERIVED_DATA_PATH}" \
-  -quiet build
+provisioning_args=()
+if [[ "${ORTIO_ALLOW_PROVISIONING_UPDATES:-1}" != "0" ]]; then
+  provisioning_args=(-allowProvisioningUpdates -allowProvisioningDeviceRegistration)
+fi
+
+if ! xcodebuild \
+    -project Ortio.xcodeproj \
+    -scheme Ortio \
+    -configuration Debug \
+    -destination "generic/platform=iOS" \
+    -derivedDataPath "${DERIVED_DATA_PATH}" \
+    "${provisioning_args[@]}" \
+    -quiet build >"${BUILD_LOG}" 2>&1; then
+  cat "${BUILD_LOG}" >&2
+  if log_has_apple_sign_in_provisioning_failure "${BUILD_LOG}"; then
+    print_apple_sign_in_provisioning_recovery
+  fi
+  exit 1
+fi
 
 if [[ ! -d "${APP_PATH}" ]]; then
   echo "Build succeeded, but app bundle was not found at ${APP_PATH}" >&2

@@ -7,6 +7,7 @@ Top-level app structure of the view hierarchy.
 
 import SwiftUI
 import SwiftData
+import GoogleSignIn
 
 @main
 struct OrtioApp: App {
@@ -22,6 +23,9 @@ struct OrtioApp: App {
                 ContentView()
                     .environmentObject(themeController)
                     .preferredColorScheme(themeController.selectedTheme.colorScheme)
+                    .onOpenURL { url in
+                        GIDSignIn.sharedInstance.handle(url)
+                    }
                     .task(id: themeRefreshKey) {
                         themeController.applyStoredTheme(from: users)
                     }

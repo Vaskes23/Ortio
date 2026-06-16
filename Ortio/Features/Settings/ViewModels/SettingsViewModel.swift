@@ -39,6 +39,18 @@ class SettingsViewModel {
     var name: String = "Placeholder User"
     var user: User = User()
 
+    var isSignedInWithApple: Bool {
+        user.isSignedInWithApple
+    }
+
+    var isSignedInWithGoogle: Bool {
+        user.isSignedInWithGoogle
+    }
+
+    var isAuthenticated: Bool {
+        user.isAuthenticated
+    }
+
     /// Set when a save operation fails. Drives the error alert in SettingsView.
     var errorMessage: String?
 
@@ -68,6 +80,43 @@ class SettingsViewModel {
         } catch {
             Self.logger.error("Failed to save theme: \(error)")
             errorMessage = "Failed to save theme: \(error.localizedDescription)"
+        }
+    }
+
+    func completeAppleSignIn(
+        identifier: String,
+        email: String?,
+        fullName: PersonNameComponents?,
+        context: ModelContext
+    ) {
+        do {
+            try repository.saveAppleAccount(
+                identifier: identifier,
+                email: email,
+                fullName: fullName,
+                for: user,
+                context: context
+            )
+            name = user.name
+        } catch {
+            Self.logger.error("Failed to save Apple account: \(error)")
+            errorMessage = "Failed to save Apple sign-in: \(error.localizedDescription)"
+        }
+    }
+
+    func completeGoogleSignIn(_ profile: GoogleAccountProfile, context: ModelContext) {
+        do {
+            try repository.saveGoogleAccount(
+                email: profile.email,
+                fullName: profile.fullName,
+                profileImageData: profile.avatarData,
+                for: user,
+                context: context
+            )
+            name = user.name
+        } catch {
+            Self.logger.error("Failed to save Google account: \(error)")
+            errorMessage = "Failed to save Google sign-in: \(error.localizedDescription)"
         }
     }
 
